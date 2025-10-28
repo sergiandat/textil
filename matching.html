@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matching Talleres - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab active">Matching</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Matching</h1>
+        <p class="page-subtitle" id="pedidoInfo">-</p>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="stat-card">
+        <div class="stat-value">88%</div>
+        <div class="stat-label">Compatibilidad media</div>
+        <div class="stat-hint">Ponderada por capacidad, zona, calidad</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statTalleresSugeridos">6</div>
+        <div class="stat-label">Talleres sugeridos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">~10h</div>
+        <div class="stat-label">Tiempo a primer acuerdo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">98%</div>
+        <div class="stat-label">PoD válido histórico</div>
+      </div>
+    </div>
+
+    <!-- Ranking de proveedores -->
+    <div class="section-card">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">Ranking de proveedores</h3>
+          <p class="section-subtitle">Criterios visibles para auditoría social</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-secondary" onclick="toggleFiltros()">📊 Filtros</button>
+          <select id="ordenSelector" class="form-select" style="width: auto; font-size: 0.875rem;">
+            <option value="compatibilidad">Ordenar por: Compatibilidad</option>
+            <option value="rating">Ordenar por: Rating</option>
+            <option value="precio">Ordenar por: Precio</option>
+            <option value="nivel">Ordenar por: Nivel</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Panel de filtros (colapsable) -->
+      <div id="panelFiltros" class="mb-4 p-4 bg-slate-50 rounded-xl" style="display: none;">
+        <div class="grid grid-cols-4 gap-4">
+          <div>
+            <label class="form-label mb-2">Nivel formalización:</label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="nivel" value="ORO" checked />
+              Oro
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="nivel" value="PLATA" checked />
+              Plata
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="nivel" value="BRONCE" />
+              Bronce
+            </label>
+          </div>
+          <div>
+            <label class="form-label mb-2">Ubicación:</label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="ubicacion" value="AMBA" checked />
+              AMBA
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="ubicacion" value="Interior" />
+              Interior
+            </label>
+          </div>
+          <div>
+            <label class="form-label mb-2">Rating mínimo:</label>
+            <input type="number" class="form-input" data-filter="rating" min="1" max="5" step="0.1" value="4.0" />
+          </div>
+          <div>
+            <button class="btn btn-primary btn-block" onclick="aplicarFiltros()">Aplicar filtros</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de talleres -->
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Proveedor</th>
+              <th>Zona</th>
+              <th>Compat.</th>
+              <th>Precio ref.</th>
+              <th>On-time</th>
+              <th>Badges</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="talleresTableBody">
+            <!-- Se llena dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-3 text-xs text-slate-500">
+        <strong>¿Por qué este orden?</strong> Formalización (40%), Capacidad técnica (30%), Ubicación (20%), Precio (10%)
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script>
+    // ✅ ARREGLO #1: Obtener pedido de URL con fallback a localStorage
+    const omId = getUrlParam('om');
+    let pedido = getFromLocalStorage('pedidoEnCreacion');
+
+    // ✅ ARREGLO #2: Si no hay pedido guardado, crear uno por defecto
+    if (!pedido) {
+      pedido = {
+        om_id: omId || 'OM-2025-00001',
+        tipo_prenda: 'Jean',
+        cantidad: 500,
+        prenda_id: 'jean_basic',
+        procesos: ['Corte', 'Confección', 'Lavado', 'Acabado']
+      };
+      console.log('⚠️ Usando pedido por defecto:', pedido);
+    }
+
+    // Mostrar información del pedido
+    if (pedido) {
+      document.getElementById('pedidoInfo').textContent =
+        `${pedido.om_id} | ${pedido.tipo_prenda} ${pedido.cantidad}u | ${pedido.procesos.length} procesos`;
+    }
+
+    // ✅ ARREGLO #3: Filtrar talleres con mejor lógica
+    let talleresFiltrados = talleres.filter(t => {
+      // Verificar si es Jean de múltiples formas
+      const esPrendaJean = pedido && (
+        pedido.tipo_prenda === 'Jean' || 
+        pedido.tipo_prenda.includes('Jean') ||
+        pedido.tipo_prenda.toLowerCase().includes('jean')
+      );
+
+      // Si es Jean, filtrar por especialización
+      if (esPrendaJean) {
+        const tieneCapacidad = t.especializacion.includes('Jean') || 
+                              t.especializacion.includes('Pantalón');
+        return tieneCapacidad;
+      }
+      
+      // Si no, mostrar todos los talleres
+      return true;
+    });
+
+    console.log('📊 Talleres disponibles:', talleresFiltrados.length);
+
+    // Renderizar tabla
+    function renderTalleres(talleresToRender) {
+      const tbody = document.getElementById('talleresTableBody');
+      tbody.innerHTML = '';
+
+      document.getElementById('statTalleresSugeridos').textContent = talleresToRender.length;
+
+      // ✅ ARREGLO #4: Verificar si hay talleres antes de renderizar
+      if (talleresToRender.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">No se encontraron talleres disponibles</td></tr>';
+        return;
+      }
+
+      talleresToRender.forEach((taller, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="font-medium text-slate-900">
+            ${index + 1}. ${taller.nombre}
+            <div class="text-xs text-slate-500">${taller.capacidades.join(', ')}</div>
+          </td>
+          <td>${taller.zona}</td>
+          <td>
+            <span class="pill pill-sky">${taller.compat_jean || 85}%</span>
+          </td>
+          <td>${formatMoney(taller.precio_confeccion || taller.precio_corte)}/u</td>
+          <td>${taller.ontime_rate}%</td>
+          <td>
+            ${taller.badges.map(b => `<span class="badge badge-${b.color}">${b.label}</span>`).join(' ')}
+          </td>
+          <td>
+            <button class="btn btn-primary" onclick="invitarTaller('${taller.id}', '${taller.nombre}')">
+              Invitar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Renderizar inicial
+    let talleresOrdenados = sortTalleres(talleresFiltrados, 'compatibilidad');
+    renderTalleres(talleresOrdenados);
+
+    // Cambiar orden
+    document.getElementById('ordenSelector').addEventListener('change', function() {
+      talleresOrdenados = sortTalleres(talleresFiltrados, this.value);
+      renderTalleres(talleresOrdenados);
+    });
+
+    // Toggle filtros
+    function toggleFiltros() {
+      const panel = document.getElementById('panelFiltros');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Aplicar filtros
+    function aplicarFiltros() {
+      const nivelesChecked = Array.from(document.querySelectorAll('[data-filter="nivel"]:checked'))
+        .map(cb => cb.value);
+      const ubicacionChecked = Array.from(document.querySelectorAll('[data-filter="ubicacion"]:checked'))
+        .map(cb => cb.value);
+      const ratingMin = parseFloat(document.querySelector('[data-filter="rating"]').value);
+
+      talleresFiltrados = talleres.filter(t => {
+        if (nivelesChecked.length > 0 && !nivelesChecked.includes(t.nivel)) return false;
+        if (ubicacionChecked.length > 0) {
+          const enUbicacion = ubicacionChecked.some(ub => t.ubicacion.includes(ub));
+          if (!enUbicacion) return false;
+        }
+        if (t.rating < ratingMin) return false;
+
+        // Filtro por prenda
+        const esPrendaJean = pedido && (
+          pedido.tipo_prenda === 'Jean' || 
+          pedido.tipo_prenda.includes('Jean')
+        );
+
+        if (esPrendaJean) {
+          return t.especializacion.includes('Jean') || t.especializacion.includes('Pantalón');
+        }
+        return true;
+      });
+
+      talleresOrdenados = sortTalleres(talleresFiltrados, document.getElementById('ordenSelector').value);
+      renderTalleres(talleresOrdenados);
+      showToast('Filtros aplicados: ' + talleresFiltrados.length + ' talleres encontrados', 'success');
+    }
+
+    // Invitar taller
+    function invitarTaller(tallerId, tallerNombre) {
+      showToast(`Invitación enviada a ${tallerNombre}`, 'success');
+
+      // Guardar taller seleccionado
+      saveToLocalStorage('tallerSeleccionado', {
+        taller_id: tallerId,
+        taller_nombre: tallerNombre
+      });
+
+      // Redirigir a acordar después de 1 segundo
+      setTimeout(() => {
+        window.location.href = 'acordar.html?om=' + (pedido?.om_id || omId) + '&taller=' + tallerId;
+      }, 1000);
+    }
+  </script>
+
+</body>
+</html>

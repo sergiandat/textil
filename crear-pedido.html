@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Pedido - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos: Ver en Dashboard')">Mis Pedidos</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Crear pedido</h1>
+        <p class="page-subtitle">Definí el pedido inicial y la plataforma buscará los talleres adecuados</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+
+        <!-- Sección 1: Producto -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">1) Producto</h3>
+              <p class="section-subtitle">Definí el pedido inicial y adjuntá la ficha técnica</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <div class="form-group">
+              <label class="form-label">Tipo de prenda</label>
+              <select id="tipoPrenda" class="form-select">
+                <option value="">Seleccionar...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cantidad</label>
+              <input type="number" id="cantidad" class="form-input" value="500" min="1" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha objetivo</label>
+              <input type="date" id="fechaObjetivo" class="form-input" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Archivos técnicos</label>
+            <div class="flex gap-3">
+              <button class="btn btn-secondary" onclick="alert('Subir ficha.pdf')">Subir ficha.pdf</button>
+              <button class="btn btn-secondary" onclick="alert('Subir moldería.dxf')">Subir moldería.dxf</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 2: Ruta sugerida -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">2) Ruta sugerida</h3>
+              <p class="section-subtitle">La plataforma arma la plantilla de MOs según el producto</p>
+            </div>
+          </div>
+
+          <div id="rutaSugeridaContainer" class="flex items-center gap-3 text-sm flex-wrap">
+            <span class="text-slate-500">Seleccioná un tipo de prenda...</span>
+          </div>
+        </div>
+
+        <!-- Sección 3: Requisitos & QA -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">3) Requisitos & QA</h3>
+              <p class="section-subtitle">Definí evidencias y verificación por etapa</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 text-sm">
+            <label class="flex items-center gap-2">
+              <input type="checkbox" class="form-checkbox" checked />
+              Evidencia foto por etapa
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" class="form-checkbox" checked />
+              Medidas clave (tabla)
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" class="form-checkbox" />
+              QA externo en Lavado
+            </label>
+          </div>
+        </div>
+
+        <!-- Sección 4: Logística & Pago -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">4) Logística & Pago</h3>
+              <p class="section-subtitle">Incoterm interno y escrow por hito</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Incoterm interno</label>
+              <select class="form-select">
+                <option>EXW taller (paga marca)</option>
+                <option>FCA siguiente proveedor</option>
+                <option>DDP marca (proveedor líder)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hitos y porcentajes</label>
+              <input class="form-input" value="Corte 20% · Confección 40% · Lavado 20% · Terminación 20%" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar: Resumen -->
+      <div class="col-span-4 space-y-6">
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Resumen del pedido</h3>
+          </div>
+
+          <div id="resumenPedido" class="space-y-2 text-sm text-slate-700">
+            <div><strong>Producto:</strong> <span id="resumenProducto">-</span></div>
+            <div><strong>Cantidad:</strong> <span id="resumenCantidad">500</span> uds</div>
+            <div><strong>Ruta:</strong> <span id="resumenRuta">-</span></div>
+            <div><strong>Entrega objetivo:</strong> <span id="resumenFecha">-</span></div>
+            <div><strong>Escrow:</strong> Activo por MO</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-4">
+            <div class="stat-card">
+              <div class="stat-value">92%</div>
+              <div class="stat-label text-xs">Tasa match esperada</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">~12h</div>
+              <div class="stat-label text-xs">Tiempo a acuerdo</div>
+            </div>
+          </div>
+
+          <button id="btnCrearPedido" class="btn btn-primary btn-lg btn-block mt-4" disabled>
+            Crear OM y buscar talleres
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script>
+    // Poblar selector de prendas
+    const selectPrenda = document.getElementById('tipoPrenda');
+    catalogoPrendas.forEach(prenda => {
+      const option = document.createElement('option');
+      option.value = prenda.id;
+      option.textContent = prenda.nombre;
+      selectPrenda.appendChild(option);
+    });
+
+    // Actualizar fecha mínima
+    const fechaInput = document.getElementById('fechaObjetivo');
+    const hoy = new Date();
+    const enTreintaDias = new Date(hoy.getTime() + (30 * 24 * 60 * 60 * 1000));
+    fechaInput.value = enTreintaDias.toISOString().split('T')[0];
+
+    // Actualizar resumen cuando cambia tipo de prenda
+    selectPrenda.addEventListener('change', function() {
+      const prendaId = this.value;
+      const prenda = catalogoPrendas.find(p => p.id === prendaId);
+
+      if (prenda) {
+        // Actualizar ruta sugerida
+        const rutaContainer = document.getElementById('rutaSugeridaContainer');
+        rutaContainer.innerHTML = '';
+        prenda.procesos.forEach((proceso, idx) => {
+          const pill = document.createElement('span');
+          pill.className = 'pill pill-sky';
+          pill.textContent = proceso;
+          rutaContainer.appendChild(pill);
+
+          if (idx < prenda.procesos.length - 1) {
+            const arrow = document.createElement('span');
+            arrow.textContent = '→';
+            rutaContainer.appendChild(arrow);
+          }
+        });
+
+        // Actualizar resumen
+        document.getElementById('resumenProducto').textContent = prenda.nombre;
+        document.getElementById('resumenRuta').textContent = prenda.procesos.join(' → ');
+
+        // Habilitar botón
+        document.getElementById('btnCrearPedido').disabled = false;
+      }
+    });
+
+    // Actualizar cantidad en resumen
+    document.getElementById('cantidad').addEventListener('input', function() {
+      document.getElementById('resumenCantidad').textContent = this.value;
+    });
+
+    // Actualizar fecha en resumen
+    fechaInput.addEventListener('change', function() {
+      document.getElementById('resumenFecha').textContent = formatDate(this.value);
+    });
+
+    // Inicializar fecha en resumen
+    document.getElementById('resumenFecha').textContent = formatDate(fechaInput.value);
+
+    // Botón crear pedido
+    document.getElementById('btnCrearPedido').addEventListener('click', function() {
+      const prendaId = document.getElementById('tipoPrenda').value;
+      const cantidad = document.getElementById('cantidad').value;
+      const fecha = fechaInput.value;
+
+      if (!prendaId || !cantidad || !fecha) {
+        showToast('Por favor completá todos los campos', 'warning');
+        return;
+      }
+
+      // Generar nuevo OM
+      const nuevoOmId = 'OM-2025-' + String(Math.floor(Math.random() * 1000)).padStart(5, '0');
+
+      // Guardar en localStorage
+      const nuevoPedido = {
+        om_id: nuevoOmId,
+        tipo_prenda: catalogoPrendas.find(p => p.id === prendaId).nombre,
+        prenda_id: prendaId,
+        cantidad: parseInt(cantidad),
+        fecha_objetivo: fecha,
+        procesos: catalogoPrendas.find(p => p.id === prendaId).procesos
+      };
+
+      saveToLocalStorage('pedidoEnCreacion', nuevoPedido);
+
+      showToast('✓ Pedido creado: ' + nuevoOmId, 'success');
+
+      // Redirigir a matching
+      setTimeout(() => {
+        window.location.href = 'matching.html?om=' + nuevoOmId;
+      }, 1000);
+    });
+
+    setActiveNav('crear-pedido');
+  </script>
+
+</body>
+</html>

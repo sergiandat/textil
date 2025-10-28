@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acordar Contrato - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab active">Acordar</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Acordar</h1>
+        <p class="page-subtitle" id="contratoInfo">Contrato digital - MO-1 Confección</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- Contrato digital -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Contrato digital – MO-1 Confección</h3>
+              <p class="section-subtitle">Alcance, calidad, tiempos, logística y pago</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-3">
+              <div class="form-group">
+                <label class="form-label">Alcance</label>
+                <input class="form-input" id="alcance" value="Confección de 500 uds (talles S–XL)" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Plazo</label>
+                <input class="form-input" id="plazo" value="12 días corridos (buffer 2 días)" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Evidencias</label>
+                <input class="form-input" value="Foto x tanda, tabla de medidas, video 15s (opcional)" />
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="form-group">
+                <label class="form-label">Logística</label>
+                <select class="form-select">
+                  <option>EXW taller (paga marca)</option>
+                  <option>FCA siguiente proveedor</option>
+                  <option>DDP marca</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Precio & Escrow</label>
+                <input class="form-input" id="precio" value="$1.700/u – Total: $850.000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hitos de pago</label>
+                <input class="form-input" value="50% al completar corte, 50% al completar confección" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex items-center gap-2">
+            <input id="checkboxFirma" type="checkbox" class="form-checkbox" />
+            <label for="checkboxFirma" class="text-sm text-slate-600">
+              Acepto términos y condiciones. Firmar digitalmente.
+            </label>
+          </div>
+        </div>
+
+        <!-- Historial de cambios -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Historial de cambios</h3>
+              <p class="section-subtitle">Comentarios y contraofertas</p>
+            </div>
+          </div>
+
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center gap-2">
+              • 12:40 – Taller propone plazo 14 días.
+              <span class="pill pill-amber">En revisión</span>
+            </li>
+            <li class="flex items-center gap-2">
+              • 13:05 – Marca sugiere mantener 12 días con buffer 2.
+              <span class="pill pill-sky">Respuesta</span>
+            </li>
+            <li class="flex items-center gap-2">
+              • 13:20 – Taller acepta términos.
+              <span class="pill pill-emerald">Acordado</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sidebar: Proveedor -->
+      <div class="col-span-4 space-y-6">
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Proveedor seleccionado</h3>
+          </div>
+
+          <div id="tallerInfo">
+            <div class="font-semibold text-slate-900" id="tallerNombre">-</div>
+            <div class="text-sm text-slate-500" id="tallerUbicacion">-</div>
+          </div>
+
+          <div class="mt-2 flex flex-wrap gap-1" id="tallerBadges">
+            <!-- Badges dinámicos -->
+          </div>
+
+          <div class="mt-4 grid grid-cols-3 gap-3 text-center text-sm">
+            <div class="rounded-xl border p-3">
+              <div class="text-lg font-semibold" id="tallerOntime">-</div>
+              <div class="text-xs text-slate-500">On-time</div>
+            </div>
+            <div class="rounded-xl border p-3">
+              <div class="text-lg font-semibold" id="tallerRetrabajo">-</div>
+              <div class="text-xs text-slate-500">Retrabajo</div>
+            </div>
+            <div class="rounded-xl border p-3">
+              <div class="text-lg font-semibold" id="tallerRating">-</div>
+              <div class="text-xs text-slate-500">Rating</div>
+            </div>
+          </div>
+
+          <button id="btnFirmarContrato" class="btn btn-primary btn-lg btn-block mt-4" disabled>
+            🔏 Firmar contrato digitalmente
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script>
+    // Obtener datos
+    const omId = getUrlParam('om');
+    const tallerId = getUrlParam('taller');
+    const tallerGuardado = getFromLocalStorage('tallerSeleccionado');
+
+    // Buscar taller
+    const taller = talleres.find(t => t.id === tallerId || t.id === tallerGuardado?.taller_id);
+
+    if (taller) {
+      document.getElementById('tallerNombre').textContent = taller.nombre;
+      document.getElementById('tallerUbicacion').textContent = taller.ubicacion;
+      document.getElementById('tallerOntime').textContent = taller.ontime_rate + '%';
+      document.getElementById('tallerRetrabajo').textContent = taller.retrabajo_rate + '%';
+      document.getElementById('tallerRating').textContent = taller.rating + '★';
+
+      // Badges
+      const badgesContainer = document.getElementById('tallerBadges');
+      taller.badges.forEach(badge => {
+        badgesContainer.innerHTML += `<span class="badge badge-${badge.color}">${badge.label}</span>`;
+      });
+    }
+
+    // Habilitar botón cuando se marca checkbox
+    document.getElementById('checkboxFirma').addEventListener('change', function() {
+      document.getElementById('btnFirmarContrato').disabled = !this.checked;
+    });
+
+    // Firmar contrato
+    document.getElementById('btnFirmarContrato').addEventListener('click', function() {
+      // Simular firma blockchain
+      const hash = '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+      showToast('✓ Contrato firmado. Hash blockchain: ' + hash.substring(0, 12) + '...', 'success');
+
+      // Guardar contrato
+      const contratoInfo = {
+        mo_id: 'MO-1',
+        om_id: omId,
+        taller_id: taller.id,
+        taller_nombre: taller.nombre,
+        alcance: document.getElementById('alcance').value,
+        plazo: document.getElementById('plazo').value,
+        precio: document.getElementById('precio').value,
+        hash_blockchain: hash,
+        fecha_firma: new Date().toISOString()
+      };
+
+      saveToLocalStorage('contratoActivo', contratoInfo);
+
+      // Redirigir a ejecución
+      setTimeout(() => {
+        window.location.href = 'ejecucion.html?om=' + omId;
+      }, 1500);
+    });
+  </script>
+
+</body>
+</html>

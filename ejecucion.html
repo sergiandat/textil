@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejecución - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab active">Ejecución</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Ejecución</h1>
+        <p class="page-subtitle" id="pedidoInfo">OM-2025-00045 · Jean 500 uds · QR de lote activo</p>
+      </div>
+      <div class="flex gap-2">
+        <span class="badge badge-emerald">Formalidad</span>
+        <span class="badge badge-amber">SST</span>
+        <span class="badge badge-slate">Calidad Plata</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- Timeline de MOs -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Timeline de MOs</h3>
+              <p class="section-subtitle">Seguimiento en tiempo real</p>
+            </div>
+          </div>
+
+          <div class="progress-bar mt-2">
+            <div class="progress-fill" style="width: 60%"></div>
+          </div>
+
+          <div class="timeline-labels">
+            <span>Corte</span>
+            <span>Confección</span>
+            <span>Lavado</span>
+            <span>Desgaste</span>
+            <span>Acabado</span>
+          </div>
+
+          <div class="mt-4 text-sm text-slate-700">
+            <strong>Progreso total:</strong> 60% |
+            <strong>Tiempo transcurrido:</strong> 9/35 días |
+            <strong>Estado:</strong> <span class="pill pill-sky">En tiempo</span>
+          </div>
+        </div>
+
+        <!-- Evidencias de ejecución -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Evidencias de ejecución – MO-1 Corte+Confección</h3>
+              <p class="section-subtitle">Fotos, videos y mediciones adjuntas</p>
+            </div>
+          </div>
+
+          <div class="space-y-3" id="evidenciasContainer">
+            <!-- Se llena dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Verificación trabajo decente -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Verificación trabajo decente</h3>
+              <p class="section-subtitle">Condiciones laborales en el taller</p>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Ventilación adecuada (foto subida 12/06)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Iluminación natural (foto subida 12/06)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-amber">⚠️</span>
+              <span>Certificado SST vence en 9 días</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>12 trabajadores registrados AFIP</span>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary mt-3" onclick="alert('Ver fotos del espacio de trabajo')">
+            Ver evidencias completas
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar: Riesgos & Acciones -->
+      <div class="col-span-4 space-y-6">
+        <!-- Riesgos & Alertas -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Riesgos & Alertas</h3>
+            <p class="section-subtitle">Señales por encima de umbral</p>
+          </div>
+
+          <ul class="space-y-2 text-sm text-slate-700">
+            <li class="flex items-start gap-2">
+              <span class="badge badge-amber">Atención</span>
+              <span>Pausa repetida > 3 por tanda</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="badge badge-amber">Riesgo</span>
+              <span>Tiempo real +8% vs estimado</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="badge badge-slate">Vence</span>
+              <span>Badge SST por vencer en 9 días</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Escrow -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Escrow</h3>
+            <p class="section-subtitle">Pagos por hitos</p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div class="text-sm font-semibold text-emerald-700">MO-1 Corte</div>
+              <div class="text-lg font-bold text-emerald-700">$425.000</div>
+              <div class="text-xs text-emerald-600">Se liberará al completar corte (1 día más)</div>
+            </div>
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <div class="text-sm font-semibold text-slate-700">MO-1 Confección</div>
+              <div class="text-lg font-bold text-slate-700">$425.000</div>
+              <div class="text-xs text-slate-600">Bloqueado hasta completar confección</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Acciones rápidas</h3>
+          </div>
+
+          <div class="space-y-2">
+            <button class="btn btn-primary btn-block" onclick="window.location.href='logistica.html?om=' + getUrlParam('om')">
+              Coordinar traslado
+            </button>
+            <button class="btn btn-secondary btn-block" onclick="alert('Abrir QA extraordinario')">
+              Abrir QA extraordinario
+            </button>
+            <button class="btn btn-secondary btn-block" onclick="alert('Enviar mensaje al taller')">
+              Enviar mensaje al taller
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script>
+    // Obtener pedido
+    const omId = getUrlParam('om');
+    const pedidoActual = pedidosActivos.find(p => p.om_id === omId) || pedidosActivos[0];
+
+    if (pedidoActual) {
+      document.getElementById('pedidoInfo').textContent =
+        `${pedidoActual.om_id} · ${pedidoActual.tipo_prenda} ${pedidoActual.cantidad}u · QR de lote activo`;
+    }
+
+    // Renderizar evidencias
+    const evidenciasContainer = document.getElementById('evidenciasContainer');
+
+    const evidencias = [
+      {tanda: 1, estado: 'aprobada', tiempo: '35 min'},
+      {tanda: 2, estado: 'observada', tiempo: '38 min', comentario: 'Verificar medida cintura'},
+      {tanda: 3, estado: 'aprobada', tiempo: '36 min'},
+      {tanda: 4, estado: 'en_proceso', tiempo: '- min'}
+    ];
+
+    evidencias.forEach(ev => {
+      const div = document.createElement('div');
+      div.className = 'flex items-center justify-between rounded-xl border p-3 text-sm';
+
+      const badgeColor = ev.estado === 'aprobada' ? 'emerald' :
+                         ev.estado === 'observada' ? 'amber' : 'slate';
+      const badgeText = ev.estado === 'aprobada' ? 'OK' :
+                        ev.estado === 'observada' ? 'Revisar' : 'En proceso';
+
+      div.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div style="width: 36px; height: 36px; background: var(--sky-100); border-radius: 0.5rem; display: grid; place-items: center; font-size: 0.75rem; color: var(--sky-700);">
+            QR
+          </div>
+          <div>
+            <div class="font-medium text-slate-800">Tanda #${ev.tanda}</div>
+            <div class="text-xs text-slate-500">Tiempo real: ${ev.tiempo} · Hash verificado</div>
+            ${ev.comentario ? `<div class="text-xs text-amber-600">${ev.comentario}</div>` : ''}
+          </div>
+        </div>
+        <span class="badge badge-${badgeColor}">${badgeText}</span>
+      `;
+
+      evidenciasContainer.appendChild(div);
+    });
+  </script>
+
+</body>
+</html>

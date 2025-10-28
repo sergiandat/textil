@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-icon">PT</div>
+        <h1 class="text-2xl font-bold text-slate-900">Plataforma Textil</h1>
+        <p class="text-sm text-slate-500">OIT-UNTREF | Formalización del Sector</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div class="form-group">
+          <label class="form-label">CUIT / DNI</label>
+          <input
+            type="text"
+            id="cuit"
+            class="form-input"
+            placeholder="30-91234567-5"
+            value="30-91234567-5"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            class="form-input"
+            placeholder="••••••••"
+            value="demo123"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ingresar como:</label>
+          <select id="tipoUsuario" class="form-select">
+            <option value="marca">Marca</option>
+            <option value="taller">Taller/Cooperativa</option>
+            <option value="trabajador">Trabajador Individual</option>
+            <option value="inspector">Inspector/Estado</option>
+            <option value="tripartita">Mesa Tripartita</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          Ingresar a la plataforma
+        </button>
+
+        <div class="text-center mt-3">
+          <a href="#" class="text-sm text-sky-600" onclick="alert('Funcionalidad de registro disponible próximamente'); return false;">
+            ¿No tenés cuenta? Registrate aquí
+          </a>
+        </div>
+      </form>
+
+      <div class="mt-6 p-3 bg-slate-50 rounded-xl">
+        <p class="text-xs text-slate-600 mb-2"><strong>Credenciales demo:</strong></p>
+        <p class="text-xs text-slate-500">CUIT: 30-91234567-5</p>
+        <p class="text-xs text-slate-500">Contraseña: demo123</p>
+        <p class="text-xs text-slate-500">Tipo: Marca (Urbano Kids)</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const cuit = document.getElementById('cuit').value;
+      const password = document.getElementById('password').value;
+      const tipoUsuario = document.getElementById('tipoUsuario').value;
+
+      // Simulación de verificación AFIP
+      if (cuit && password) {
+        // Guardar sesión
+        const usuario = {
+          tipo: tipoUsuario,
+          id: tipoUsuario === 'marca' ? 'marca_001' : 'tal_001',
+          nombre: tipoUsuario === 'marca' ? 'Urbano Kids' : 'Corte Sur SRL',
+          cuit: cuit
+        };
+
+        saveToLocalStorage('usuarioActivo', usuario);
+
+        // Mostrar toast de éxito
+        showToast('✓ Login exitoso. Verificación AFIP aprobada.', 'success');
+
+        // Redirigir según tipo de usuario
+        setTimeout(() => {
+          if (tipoUsuario === 'marca') {
+            window.location.href = 'dashboard.html';
+          } else if (tipoUsuario === 'taller') {
+            // Por ahora también redirigir a dashboard (v2 tendrá dashboard taller)
+            window.location.href = 'dashboard.html';
+          } else {
+            alert('Dashboard de ' + tipoUsuario + ' disponible en v2');
+          }
+        }, 1000);
+      } else {
+        showToast('Por favor completá todos los campos', 'danger');
+      }
+    });
+
+    // Pre-seleccionar tipo de usuario si viene de param
+    const tipoParam = getUrlParam('tipo');
+    if (tipoParam) {
+      document.getElementById('tipoUsuario').value = tipoParam;
+    }
+  </script>
+
+</body>
+</html>
