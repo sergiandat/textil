@@ -435,7 +435,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'indicador-formalizacion-dashboard',
-          selector: '.section-card:has(.text-emerald-600:contains("%"))',
+          selector: '.section-card',
           titulo: 'Indicador de Formalización Siempre Visible',
           descripcion: 'El nivel de formalización (95%) está siempre visible en el dashboard. No es algo que "tenés que ir a buscar", está en tu cara todos los días. Esta visibilidad constante te RECUERDA que falta un pequeño paso para llegar al 100%.',
           posicion: 'bottom',
@@ -443,7 +443,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'comision-actual',
-          selector: '.stat-card:has(.text-sm:contains("Comisión"))',
+          selector: '.stat-card',
           titulo: 'Comisión Actual vs Potencial',
           descripcion: 'Ves tu comisión ACTUAL (ej: 3.5%) y la potencial si completás formalización (3%). Esto traduce la formalización a DINERO concreto: cada punto de formalización que subís, bajás la comisión. Incentivo tangible.',
           posicion: 'bottom',
@@ -451,7 +451,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'acceso-link-formalizacion',
-          selector: '.btn:contains("Completar")',
+          selector: '.btn-primary',
           titulo: 'Link Directo a Completar Formalización',
           descripcion: 'Desde el dashboard hay un botón "Completar Formalización" que te lleva directo al checklist. No tenés que buscar "dónde se hace esto". Reducir fricción: hacer FÁCIL el camino hacia formalizar.',
           posicion: 'bottom',
@@ -466,7 +466,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'checklist-visual',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Checklist Visual con Estados Claros',
           descripcion: 'En lugar de abrumarte con "tenés que estar 100% formal", este checklist muestra: qué YA cumplís (✓ en verde), qué te FALTA (× en rojo), y qué está EN PROCESO (⏳ en amarillo). Ver el progreso motiva a completar lo faltante: "ya hice 7 de 10, solo faltan 3".',
           posicion: 'bottom',
@@ -474,7 +474,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'prioridad-items',
-          selector: '.badge:contains("Crítico")',
+          selector: '.badge',
           titulo: 'Priorización de Requisitos',
           descripcion: 'Los requisitos están priorizados: CRÍTICO (sin esto no podés operar: registro ARCA), IMPORTANTE (reduce mucho tu comisión: STESS), RECOMENDADO (mejora reputación: certificaciones). Esto te ayuda a decidir QUÉ hacer primero si no podés hacerlo todo a la vez.',
           posicion: 'bottom',
@@ -482,25 +482,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'links-tramites',
-          selector: '.btn:contains("Iniciar")',
+          selector: '.btn',
           titulo: 'Links Directos a Trámites',
           descripcion: 'Cada requisito tiene botón "Iniciar trámite" que te lleva DIRECTAMENTE al sitio oficial (ARCA, STESS, etc.). No tenés que googlear "dónde se hace esto". Reducir complejidad: darte el camino directo.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'tiempo-estimado',
-          selector: '.text-sm:contains("Tiempo estimado")',
-          titulo: 'Tiempo y Costo Estimado por Requisito',
-          descripcion: 'Cada requisito muestra: tiempo estimado (1 semana, 3 días) y costo aproximado (gratis, $5.000). Esto te permite PLANIFICAR: "empiezo por los gratis y rápidos mientras junto plata para los que cuestan".',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'ayuda-contextual',
-          selector: '.text-xs:contains("¿Necesitás ayuda?")',
-          titulo: 'Ayuda Contextual para Cada Requisito',
-          descripcion: 'Si un requisito dice "Registro en STESS" y no sabés qué es eso, hay un link "¿Qué es STESS?" que te explica. Reducir barreras de conocimiento: no asumimos que sabés todo, te ayudamos a aprender.',
           posicion: 'bottom',
           destacar: true
         }
@@ -513,7 +497,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'indicador-circular',
-          selector: '.w-24.h-24',
+          selector: '.section-card',
           titulo: 'Indicador Circular de Progreso',
           descripcion: 'El indicador circular (95%) gamifica la formalización: ves qué tan cerca estás del 100%. Esta visualización genera motivación ("casi llego, solo 5% más") en lugar de frustración ("falta mucho"). El diseño importa: hacer VISIBLE el progreso.',
           posicion: 'bottom',
@@ -521,7 +505,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'beneficios-economicos',
-          selector: '.section-card:has(.text-emerald-600)',
+          selector: '.section-card',
           titulo: 'Beneficios Económicos Concretos',
           descripcion: 'Formalizarse NO es solo "cumplir con la ley" ni "hacer lo correcto". Tiene beneficios ECONÓMICOS tangibles: comisión baja de 8% (informal) a 3% (formal). Si facturás $100.000/mes, son $5.000 de ahorro mensual ($60.000/año). ROI claro.',
           posicion: 'top',
@@ -529,25 +513,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'beneficios-reputacion',
-          selector: '.text-sm:contains("Prioridad en matching")',
+          selector: '.badge',
           titulo: 'Acceso a Mejores Pedidos',
           descripcion: 'Los talleres formales tienen PRIORIDAD en el matching. Dos talleres con misma capacidad: el formal aparece primero. Esto significa acceso a MEJORES pedidos (marcas grandes que exigen formalización, pedidos más grandes, precios mejores). Beneficio competitivo.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'roadmap-formalizacion',
-          selector: '.section-card:has(h4:contains("Próximos pasos"))',
-          titulo: 'Roadmap: Qué Hacer Ahora',
-          descripcion: 'Te muestra el PRÓXIMO paso concreto: "Para llegar a 100%, te falta: Certificación de seguridad e higiene". No es una lista abrumadora de TODO lo que falta, sino el SIGUIENTE paso. Chunking: dividir en partes manejables.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'tiempo-para-100',
-          selector: '.text-amber-600:contains("Tiempo estimado")',
-          titulo: 'Tiempo Estimado para Completar',
-          descripcion: 'Ves cuánto falta para llegar a 100%: "Tiempo estimado: 2 semanas si empezás los trámites ahora". Esta proyección te ayuda a decidir SI vale la pena (2 semanas sí, 6 meses tal vez no). Información para decidir.',
           posicion: 'bottom',
           destacar: true
         }
@@ -560,7 +528,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'cursos-formalizacion-especificos',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Cursos Específicos sobre Trámites',
           descripcion: 'Hay cursos específicos sobre: "Cómo inscribirte en ARCA paso a paso", "Qué es el registro STESS y cómo hacerlo", "Cómo hacer facturas electrónicas", "Cómo abrir cuenta bancaria para tu taller". Esta capacitación reduce la COMPLEJIDAD PERCIBIDA: cuando alguien te explica paso a paso, ves que no es tan difícil como parecía.',
           posicion: 'bottom',
@@ -568,7 +536,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'videos-tutoriales',
-          selector: '.grid:has(.badge:contains("Video"))',
+          selector: '.badge',
           titulo: 'Tutoriales en Video Paso a Paso',
           descripcion: 'Los cursos incluyen videos donde ves EXACTAMENTE cómo hacer cada trámite: dónde hacer click, qué datos poner, qué documentos subir. Esto elimina la incertidumbre: no tenés que "adivinar" cómo se hace, lo ves en acción.',
           posicion: 'bottom',
@@ -576,26 +544,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'acceso-gratuito',
-          selector: '.badge.badge-success:contains("Gratis")',
+          selector: '.badge',
           titulo: 'Capacitación Gratuita',
           descripcion: 'Todos los cursos sobre formalización son GRATUITOS. No hay excusa de "no tengo plata para capacitarme". Reducir barreras económicas: acceso universal al conocimiento necesario para formalizarse.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'certificado-completacion',
-          selector: '.text-sm:contains("Certificado")',
-          titulo: 'Certificado de Completación',
-          descripcion: 'Al completar el curso, recibís un certificado que aparece en tu perfil: "Curso: Formalización Fiscal completado". Esto no solo te ayuda a formalizarte, sino que las marcas VEN que te estás capacitando, mejorando tu reputación.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'foro-dudas',
-          selector: '.section-card:has(.text-sky-600)',
-          titulo: 'Foro para Consultar Dudas',
-          descripcion: 'Si después del curso tenés dudas, hay un foro donde podés preguntar a otros talleres que ya pasaron por el proceso o a facilitadores. Aprendizaje comunitario: reducir la sensación de "estar solo ante la burocracia".',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -607,7 +559,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'matching-favorece-formales',
-          selector: '.text-emerald-600:contains("%")',
+          selector: '.badge',
           titulo: 'La Formalización Te Da Ventaja Competitiva',
           descripcion: 'El algoritmo de matching PRIORIZA talleres con mayor nivel de formalización (95% aparece antes que 60%). Dos talleres con misma capacidad técnica: el que está más formalizado aparece primero. Esto traduce formalización en OPORTUNIDADES concretas: más pedidos, mejores clientes.',
           posicion: 'bottom',
@@ -615,7 +567,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'marcas-exigen-formalizacion',
-          selector: '.badge.badge-success:contains("✓")',
+          selector: '.badge',
           titulo: 'Marcas Grandes Exigen Formalización',
           descripcion: 'Las marcas grandes (Nike, Adidas, Zara, etc.) tienen políticas de compliance que exigen trabajar SOLO con talleres formalizados. Si no estás formalizado, automáticamente quedás EXCLUIDO de esos pedidos (que suelen ser más grandes y mejor pagos). Formalización = acceso a mejores clientes.',
           posicion: 'bottom',
@@ -623,17 +575,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'filtro-formalizacion',
-          selector: '.form-group:has(input[type="range"])',
+          selector: '.form-group',
           titulo: 'Las Marcas Pueden Filtrar por Formalización',
           descripcion: 'Cuando una marca busca talleres, puede poner filtro: "Mostrarme solo talleres con 90%+ de formalización". Si no cumplís ese umbral, ni siquiera aparecés en su búsqueda. Esto hace que la informalidad te EXCLUYA de oportunidades.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'comision-diferencial',
-          selector: '.text-sm:contains("Comisión")',
-          titulo: 'Comisión Más Baja para Formales',
-          descripcion: 'Los talleres formales pagan comisión más baja (3% vs 8% informales). En un pedido de $100.000, eso son $5.000 de diferencia. Este incentivo económico hace que la formalización SE PAGUE SOLA: ahorrás en comisiones lo que gastás en impuestos/registros.',
           posicion: 'bottom',
           destacar: true
         }
@@ -651,7 +595,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'datos-agregados-sector',
-          selector: '.grid.grid-cols-4.gap-4',
+          selector: '.stat-card',
           titulo: 'Datos del Sector en Tiempo Real',
           descripcion: 'La mesa tripartita ve métricas agregadas del sector: cantidad de talleres activos (1.247), trabajadores registrados (8.932), transacciones totales ($47M), nivel de formalización promedio (78%). Esta información COMPARTIDA permite que los 3 actores (Estado, sindicatos, cámaras) diseñen políticas basadas en DATOS REALES, no en estimaciones o en la perspectiva aislada de cada uno.',
           posicion: 'bottom',
@@ -659,7 +603,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'vista-unica-compartida',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Una Única Vista Compartida',
           descripcion: 'Antes: Estado tenía SUS datos, sindicato tenía LOS SUYOS, cámaras tenían OTROS. Nunca coincidían. Ahora: los 3 miran LA MISMA pantalla con LOS MISMOS datos. Esto evita discusiones sobre "cuál número es el correcto" y permite enfocarse en QUÉ HACER con esos datos.',
           posicion: 'bottom',
@@ -667,7 +611,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'tendencias-temporales',
-          selector: '.chart-container',
+          selector: '.section-card',
           titulo: 'Tendencias y Evolución Temporal',
           descripcion: 'Los gráficos muestran evolución en el tiempo: ¿la formalización está subiendo o bajando? ¿Hay más o menos denuncias que el mes pasado? Esta información temporal permite evaluar IMPACTO de políticas: "después de cambiar X parámetro, ¿mejoró Y indicador?".',
           posicion: 'top',
@@ -675,18 +619,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'alertas-sectoriales',
-          selector: '.section-card:has(.text-amber-600)',
+          selector: '.alert',
           titulo: 'Alertas de Problemas Sectoriales',
           descripcion: 'El sistema detecta patrones problemáticos a nivel sectorial: "aumento 30% denuncias laborales en zona X", "baja 15% formalización en rubro Y". Estas alertas permiten ARTICULAR respuestas conjuntas: el Estado inspecciona, el sindicato asiste trabajadores, las cámaras capacitan talleres.',
           posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'reuniones-basadas-datos',
-          selector: '.btn:contains("Generar reporte")',
-          titulo: 'Generar Reportes para Reuniones',
-          descripcion: 'Podés exportar reportes para reuniones tripartitas. Esto estructura la discusión: en lugar de "charlas generales", hay AGENDA basada en datos: "Punto 1: Formalización bajó 5%, ¿qué hacemos?". Articulación efectiva requiere información compartida.',
-          posicion: 'bottom',
           destacar: true
         }
       ]
@@ -698,7 +634,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'parametros-editables-conjuntos',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Ajustar Prioridades del Sistema Conjuntamente',
           descripcion: 'La mesa tripartita puede modificar pesos del algoritmo de matching. Por ejemplo: aumentar peso de "formalización" de 20% a 30% para incentivar cumplimiento, o priorizar "cercanía geográfica" al 25% para promover economía regional. Esto es ARTICULACIÓN real: los 3 actores (Estado, sindicatos, cámaras) gestionan JUNTOS las reglas del mercado.',
           posicion: 'bottom',
@@ -706,7 +642,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'politicas-reflejadas-algoritmo',
-          selector: '.form-group:has(input[type="range"])',
+          selector: '.form-group',
           titulo: 'Traducir Políticas a Parámetros',
           descripcion: 'Supongamos que en reunión tripartita acuerdan: "hay que promover trabajo local". Eso se traduce en: aumentar peso de "ubicación" en matching. Las decisiones políticas NO quedan en "declaraciones", se implementan técnicamente en el algoritmo. Articulación = alineación entre política y tecnología.',
           posicion: 'bottom',
@@ -714,26 +650,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'simulacion-cambios',
-          selector: '.btn:contains("Simular")',
+          selector: '.btn',
           titulo: 'Simular Impacto Antes de Aplicar',
           descripcion: 'Antes de cambiar parámetros en producción, podés simular: "si bajo comisión de formales a 2%, ¿cuántos talleres se formalizarían?". Esto permite diseño de políticas BASADO EN EVIDENCIA: no es intuición, es proyección con datos reales.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'aprobacion-tripartita',
-          selector: '.text-amber-600:contains("aprobación")',
-          titulo: 'Cambios Requieren Aprobación Tripartita',
-          descripcion: 'Ningún actor puede cambiar parámetros unilateralmente. Se requiere aprobación de 2 de 3 actores (mayoría). Esto balancea poder: ni el Estado ni sindicato ni cámaras pueden imponer reglas sin consenso. ARTICULACIÓN = co-gobernanza.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'registro-cambios-parametros',
-          selector: '.section-card:has(.text-sm:contains("Historial"))',
-          titulo: 'Historial de Cambios Transparente',
-          descripcion: 'Todos los cambios de parámetros quedan registrados: quién propuso, cuándo, con qué justificación, quién aprobó. Esta transparencia genera accountability: si un cambio tiene consecuencias negativas, se puede rastrear la decisión y ajustar.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -745,7 +665,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'calendario-inspecciones-compartido',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Calendario Compartido de Inspecciones',
           descripcion: 'Antes: Estado inspeccionaba un taller el lunes, sindicato el miércoles, cámara el viernes. Tres visitas al mismo taller. Ahora: calendario compartido permite COORDINAR: "vamos los 3 juntos el lunes". Esto reduce molestia al taller y permite visión integral del cumplimiento.',
           posicion: 'bottom',
@@ -753,7 +673,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'inspecciones-conjuntas',
-          selector: '.badge:contains("Conjunta")',
+          selector: '.badge',
           titulo: 'Inspecciones Tripartitas Conjuntas',
           descripcion: 'Una inspección conjunta: inspector estatal verifica registros legales, delegado sindical habla con trabajadores, representante de cámara evalúa condiciones productivas. En UNA visita se obtiene información fiscal, laboral Y técnica. Eficiencia por articulación.',
           posicion: 'bottom',
@@ -761,18 +681,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'compartir-hallazgos',
-          selector: '.section-card:has(.text-sky-600)',
+          selector: '.section-card',
           titulo: 'Compartir Hallazgos Entre Actores',
           descripcion: 'Si el sindicato inspecciona un taller y encuentra problemas, esos hallazgos son VISIBLES para Estado y cámaras. No hay "información privada" que cada uno guarda. Transparencia interna genera ARTICULACIÓN: todos saben qué encontró cada uno.',
           posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'acciones-coordinadas',
-          selector: '.text-sm:contains("Acción correctiva")',
-          titulo: 'Acciones Correctivas Coordinadas',
-          descripcion: 'Si una inspección encuentra problemas múltiples: Estado aplica sanción, sindicato asiste al trabajador afectado, cámara ofrece capacitación al taller para corregir. Respuesta ARTICULADA: cada actor aporta desde su rol, en lugar de respuestas fragmentadas.',
-          posicion: 'bottom',
           destacar: true
         }
       ]
@@ -784,7 +696,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'catalogo-unificado',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Catálogo Unificado de Capacitaciones',
           descripcion: 'El sindicato ofrece cursos técnicos (costura, patronaje), el Estado ofrece sobre formalización (ARCA, STESS), las cámaras sobre gestión (costeo, planificación). Todo en UNA plataforma. Esto es ARTICULACIÓN: en lugar de que cada actor tenga su propio sistema aislado (con diferentes logins, diferentes formatos), comparten infraestructura.',
           posicion: 'bottom',
@@ -792,7 +704,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'trayectorias-formativas',
-          selector: '.badge:contains("Trayectoria")',
+          selector: '.badge',
           titulo: 'Trayectorias Formativas Integradas',
           descripcion: 'Podés armar trayectorias que combinan cursos de diferentes actores: "Trayectoria Taller Formal" = Curso técnico (sindicato) + Formalización fiscal (Estado) + Gestión de costos (cámara). Articulación = integración de saberes complementarios.',
           posicion: 'bottom',
@@ -800,25 +712,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'certificaciones-reconocidas',
-          selector: '.text-emerald-600:contains("Certificado")',
+          selector: '.badge',
           titulo: 'Certificaciones Reconocidas por Todos',
           descripcion: 'Un certificado emitido por el sindicato es RECONOCIDO por Estado y cámaras (y viceversa). No hay "certificados de primera y de segunda". Esta equivalencia genera ARTICULACIÓN: cada actor respeta el trabajo formativo de los otros.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'capacitacion-conjunta',
-          selector: '.badge.badge-primary:contains("Co-dictado")',
-          titulo: 'Cursos Co-Dictados por Múltiples Actores',
-          descripcion: 'Algunos cursos son co-dictados: "Formalización + Gestión de costos laborales" (Estado + cámara). Esto permite abordar temas complejos desde múltiples ángulos, demostrando que los actores pueden COLABORAR, no solo coexistir.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'recursos-compartidos',
-          selector: '.text-sm:contains("Material")',
-          titulo: 'Recursos Didácticos Compartidos',
-          descripcion: 'Los materiales de capacitación (videos, manuales, ejercicios) se comparten entre actores. Si el sindicato hizo un buen video de patronaje, el Estado puede usarlo en su programa. Evitar duplicar esfuerzos: articulación = eficiencia.',
           posicion: 'bottom',
           destacar: true
         }
@@ -836,7 +732,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'fiscalizacion-dirigida-datos',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Inspecciones Dirigidas por Datos',
           descripcion: 'Antes: el Estado inspeccionaba al azar (baja efectividad) o solo por denuncia (reactivo). Ahora: la plataforma genera ALERTAS basadas en datos: taller con muchos trabajadores pero baja formalización, denuncias anónimas recurrentes, caída repentina de rating, precios anormalmente bajos. Esto permite fiscalización INTELIGENTE: ir donde realmente hay alta probabilidad de problemas.',
           posicion: 'bottom',
@@ -844,7 +740,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'priorizacion-inspecciones',
-          selector: '.badge:contains("Prioridad")',
+          selector: '.badge',
           titulo: 'Priorización Automática por Riesgo',
           descripcion: 'El sistema calcula un "score de riesgo" para cada taller basado en múltiples variables: denuncias, caída de formalización, inconsistencias en datos. Los talleres se ordenan por riesgo: alta prioridad, media, baja. Esto permite asignar recursos limitados (inspectores) a donde más se necesitan.',
           posicion: 'bottom',
@@ -852,26 +748,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'ampliacion-cobertura',
-          selector: '.grid.grid-cols-4',
+          selector: '.stat-card',
           titulo: 'Ampliar Cobertura Sin Más Inspectores',
           descripcion: 'Supongamos que hay 10 inspectores para 1.000 talleres. Sin inteligencia de datos: inspeccionan 10 random, 99% del sector sin fiscalizar. Con inteligencia: inspeccionan los 10 con mayor riesgo, desincentivando incumplimiento en TODOS (porque saben que SI incumplen, tienen alta probabilidad de inspección). Presencia efectiva sin más recursos.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'retroalimentacion-algoritmo',
-          selector: '.text-sm:contains("Modelo")',
-          titulo: 'Mejora Continua del Modelo Predictivo',
-          descripcion: 'Cada inspección retroalimenta el algoritmo: si un taller marcado "alto riesgo" efectivamente tenía problemas, el modelo aprende. Si uno marcado "bajo riesgo" tenía problemas (falso negativo), el modelo se ajusta. Machine learning aplicado a fiscalización.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'efecto-disuasivo',
-          selector: '.section-card:has(.text-emerald-600)',
-          titulo: 'Efecto Disuasivo: "El Estado Está Viendo"',
-          descripcion: 'Aunque el Estado no inspeccione físicamente a todos, el SABER que hay un sistema inteligente monitoreando genera efecto disuasivo: "si hago algo irregular, probablemente me detecten". Presencia digital = amplificación de capacidad estatal sin expandir burocracia.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -883,7 +763,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'presencia-distribuida',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Presencia Digital 24/7 en Todos los Talleres',
           descripcion: 'El Estado físicamente no puede estar en todos los talleres todo el tiempo (hay miles de talleres, pocos inspectores). Pero el sistema de denuncias anónimas funciona como presencia digital 24/7: trabajadores, clientes, vecinos pueden alertar problemas EN EL MOMENTO. Esto AMPLIFICA la capacidad estatal: en lugar de 100 inspectores, hay potencialmente 10.000 "sensores" distribuidos.',
           posicion: 'bottom',
@@ -891,7 +771,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'empoderamiento-trabajadores',
-          selector: '.badge.badge-success:contains("Anónimo")',
+          selector: '.badge',
           titulo: 'Empoderamiento de Trabajadores como Fiscalizadores',
           descripcion: 'Tradicionalmente, trabajadores no denuncian por miedo a represalias. El anonimato REAL del sistema los convierte en fiscalizadores efectivos: ellos saben mejor que nadie si hay irregularidades (están ahí 8hs/día). Al darles voz sin riesgo, el Estado gana información de primera mano, inaccesible por otros medios.',
           posicion: 'bottom',
@@ -899,18 +779,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'triaje-automatico',
-          selector: '.section-card:has(.text-amber-600)',
+          selector: '.alert',
           titulo: 'Triaje Automático de Denuncias',
           descripcion: 'No todas las denuncias son igual de urgentes. El sistema hace triaje automático: denuncia de trabajo infantil = inspección INMEDIATA (en 48hs), denuncia de salario levemente bajo = auditoría programada (en 30 días). Esto permite gestionar volumen alto de denuncias con recursos limitados.',
           posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'deteccion-patrones',
-          selector: '.text-sky-600:contains("Patrón")',
-          titulo: 'Detección de Patrones Sectoriales',
-          descripcion: 'Si múltiples denuncias de diferentes talleres mencionan el MISMO problema ("nos pagan por debajo del convenio"), el sistema detecta el patrón y alerta: "posible problema sectorial". Esto permite al Estado intervenir a nivel MACRO, no solo caso a caso.',
-          posicion: 'bottom',
           destacar: true
         }
       ]
@@ -922,7 +794,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'vision-integral-sector',
-          selector: '.grid.grid-cols-4.gap-4',
+          selector: '.stat-card',
           titulo: 'Ver Todo el Sector en Tiempo Real',
           descripcion: 'El Estado ve métricas actualizadas del sector: cuántos talleres operan (1.247), cuántos trabajadores registrados (8.932), tendencias de formalización (78% promedio), zonas con más problemas. Esta VISIBILIDAD en tiempo real permite actuar PROACTIVAMENTE: ver problemas emergentes antes de que escalen, no reaccionar cuando ya explotaron.',
           posicion: 'bottom',
@@ -930,7 +802,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'antes-estado-ciego',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'De "Estado Ciego" a "Estado con Visibilidad"',
           descripcion: 'Antes: el Estado tenía datos fragmentados (ARCA con su base, STESS con otra, sindicatos con otra), actualizados con meses de retraso. Era como manejar mirando el espejo retrovisor. Ahora: datos integrados en tiempo real. De "no sabemos qué pasa" a "sabemos exactamente qué pasa, cuándo y dónde".',
           posicion: 'bottom',
@@ -938,26 +810,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'mapas-calor',
-          selector: '.chart-container',
+          selector: '.section-card',
           titulo: 'Mapas de Calor de Problemas',
           descripcion: 'Los gráficos y mapas muestran concentración geográfica de problemas: "en zona X hay 40% de talleres con denuncias, en zona Y solo 5%". Esto permite FOCALIZACIÓN de recursos: enviar más inspectores donde hay más problemas, campañas de formalización donde más se necesitan.',
           posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'evaluacion-politicas',
-          selector: '.text-emerald-600:contains("Impacto")',
-          titulo: 'Evaluación de Impacto de Políticas',
-          descripcion: 'El dashboard permite evaluar: "después de campaña de formalización en zona X, ¿mejoró el nivel de formalización?". Antes era imposible saber si las políticas funcionaban. Ahora: evaluación basada en evidencia = diseño de políticas más efectivas.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'transparencia-gestion',
-          selector: '.btn:contains("Publicar")',
-          titulo: 'Transparencia de la Gestión Estatal',
-          descripcion: 'El dashboard puede publicarse parcialmente (datos agregados, sin identificar talleres). Esto genera ACCOUNTABILITY: la sociedad puede ver si el Estado está actuando efectivamente. Presión para EFICACIA: si los datos muestran que el Estado no inspecciona zonas problemáticas, eso es visible.',
-          posicion: 'bottom',
           destacar: true
         }
       ]
@@ -969,7 +825,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'enfoque-preventivo',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Ayudar a Cumplir, No Solo Sancionar',
           descripcion: 'El checklist de formalización permite al Estado trabajar en PREVENCIÓN: alertar al taller "te falta esto para cumplir" ANTES de sancionar. Esto es más eficaz que fiscalización puramente punitiva: se logra más cumplimiento con menos conflicto. El Estado como facilitador, no solo como sancionador.',
           posicion: 'bottom',
@@ -977,7 +833,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'asistencia-tecnica',
-          selector: '.btn:contains("Iniciar trámite")',
+          selector: '.btn',
           titulo: 'Asistencia Técnica para Formalización',
           descripcion: 'Los links directos a trámites (ARCA, STESS) son asistencia técnica: el Estado no solo dice "tenés que formalizarte", sino que te AYUDA a hacerlo. Esto reduce la carga administrativa percibida: "no sé cómo hacer el trámite" deja de ser excusa.',
           posicion: 'bottom',
@@ -985,26 +841,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'plazos-gracia',
-          selector: '.text-amber-600:contains("plazo")',
+          selector: '.alert',
           titulo: 'Plazos de Gracia para Regularización',
           descripcion: 'Si un taller está irregular, el sistema le da un PLAZO para regularizarse (ej: 60 días para sacar registro faltante) antes de sancionar. Esta "segunda chance" incentiva formalización voluntaria: es más barato regularizarse que pagar multas.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'reduccion-multas',
-          selector: '.text-emerald-600:contains("Reducción")',
-          titulo: 'Reducción de Multas por Autocorrección',
-          descripcion: 'Si un taller detecta y corrige una irregularidad ANTES de que el Estado inspeccione, la multa se reduce 70%. Esto incentiva autocorrección: genera cultura de cumplimiento proactivo, no reactivo ("cumplo solo si me agarran").',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'cambio-cultural',
-          selector: '.section-card:has(.text-sky-600)',
-          titulo: 'De "Evasión" a "Cumplimiento"',
-          descripcion: 'El enfoque preventivo + asistencia técnica + incentivos cambia la relación Estado-sector: de "el Estado es el enemigo que hay que evadir" a "el Estado ayuda a cumplir y es mejor cumplir". Este cambio cultural es más efectivo que aumentar sanciones.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -1021,7 +861,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'catalogo-dual-tecnico-gerencial',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Capacitación Técnica Y Gerencial',
           descripcion: 'Hay cursos de TÉCNICAS (costura de punto, patronaje industrial, control de calidad, operación de maquinaria) y GERENCIALES (costeo y fijación de precios, gestión de equipos, planificación de producción, administración de taller). Esta combinación dual eleva capacidades de forma INTEGRAL: no solo saber HACER bien, sino también saber GESTIONAR eficientemente.',
           posicion: 'bottom',
@@ -1029,7 +869,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'niveles-progresivos',
-          selector: '.badge:contains("Nivel")',
+          selector: '.badge',
           titulo: 'Niveles Progresivos de Aprendizaje',
           descripcion: 'Los cursos están organizados por niveles: Básico, Intermedio, Avanzado. No es "todo o nada": podés empezar desde tu nivel actual y progresar. Por ejemplo: "Costura Básica" → "Costura de Prendas Complejas" → "Supervisión de Equipo de Costura". Trayectoria clara de desarrollo profesional.',
           posicion: 'bottom',
@@ -1037,26 +877,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'certificaciones-verificables',
-          selector: '.badge.badge-success:contains("Certificado")',
+          selector: '.badge',
           titulo: 'Certificaciones Verificables en tu Perfil',
           descripcion: 'Al completar una capacitación, recibís un certificado digital verificable que aparece en tu perfil público. Las marcas pueden ver qué certificaciones tenés, lo cual mejora tu matching (certificados = competencias demostrables). Esto incentiva la capacitación continua: no solo aprendés, sino que podés DEMOSTRAR que aprendiste.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'formato-flexible',
-          selector: '.text-sm:contains("Online")',
-          titulo: 'Formato Flexible: Online y Presencial',
-          descripcion: 'Los cursos están disponibles online (videos, materiales) y presenciales (talleres prácticos). Esto reduce barreras de acceso: si no podés ir presencial (distancia, horarios), hacés online. Combinar formatos: teoría online + práctica presencial. Flexibilidad = acceso universal.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'comunidad-aprendizaje',
-          selector: '.section-card:has(.text-sky-600)',
-          titulo: 'Foros y Comunidad de Práctica',
-          descripcion: 'Cada curso tiene foro donde podés consultar dudas a instructores y compartir experiencias con otros talleres. Esto genera COMUNIDAD DE PRÁCTICA: aprender no es solo consumir contenido, sino interactuar con pares que enfrentan problemas similares. Aprendizaje social.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -1068,7 +892,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'seccion-certificaciones',
-          selector: '.section-card:has(.badge:contains("Certificado"))',
+          selector: '.section-card',
           titulo: 'Tus Certificaciones Son Visibles para Clientes',
           descripcion: 'Las certificaciones que obtenés en capacitaciones aparecen en una sección destacada de tu dashboard y perfil público. Las marcas las ven al evaluar talleres para un pedido. Por ejemplo: "Certificado en Patronaje Industrial" mejora tu matching para pedidos de ropa con cortes complejos. Esto crea un INCENTIVO tangible: capacitarte mejora tus chances de conseguir mejores pedidos.',
           posicion: 'bottom',
@@ -1076,7 +900,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'badges-especializacion',
-          selector: '.badge.badge-primary',
+          selector: '.badge',
           titulo: 'Badges de Especialización',
           descripcion: 'Algunas combinaciones de certificados generan "badges de especialización": ej: si tenés certificados en "Costura de Punto", "Control de Calidad Textil" y "Gestión de Equipos", obtenés badge "Taller Especializado en Tejido de Punto". Estos badges son shortcuts para que marcas te encuentren fácilmente.',
           posicion: 'bottom',
@@ -1084,18 +908,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'progreso-capacitacion',
-          selector: '.text-sm:contains("Cursos completados")',
+          selector: '.stat-card',
           titulo: 'Tracking de Tu Desarrollo Profesional',
           descripcion: 'El dashboard muestra: cursos completados (12), en progreso (2), horas totales de capacitación (87hs). Esta gamificación motiva continuar: "ya hice 12, voy por más". Ver tu propio progreso genera motivación intrínseca para seguir capacitándote.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'recomendaciones-cursos',
-          selector: '.section-card:has(.text-amber-600)',
-          titulo: 'Recomendaciones de Cursos',
-          descripcion: 'Basándose en tus certificaciones actuales y los pedidos que más recibís, el sistema recomienda: "Considerá hacer el curso X para mejorar tu matching". Por ejemplo: si tenés muchos pedidos de camisas pero no certificación en "Confección de Cuellos", te sugiere ese curso. Desarrollo dirigido por demanda.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -1107,7 +923,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'links-contextuales-cursos',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Capacitación en el Momento que la Necesitás',
           descripcion: 'Si el checklist muestra que te falta "Facturación Electrónica" para completar formalización, hay un link directo al curso sobre ese tema. Esto es aprendizaje CONTEXTUAL o "just-in-time": aprendés justo cuando necesitás aplicarlo, no en abstracto ("algún día me va a servir"). Aumenta retención y aplicación práctica.',
           posicion: 'bottom',
@@ -1115,7 +931,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'microlearning',
-          selector: '.badge:contains("15 min")',
+          selector: '.badge',
           titulo: 'Micro-Módulos de Aprendizaje Rápido',
           descripcion: 'Algunos contenidos están en formato micro (15 min): "Cómo sacar CUIT en 5 pasos", "Cómo calcular precio de una prenda". No tenés que hacer un curso de 10hs cuando solo necesitás aprender UNA cosa específica. Reducir fricción: aprendizaje en dosis pequeñas.',
           posicion: 'bottom',
@@ -1123,17 +939,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'aplicacion-inmediata',
-          selector: '.btn:contains("Aplicar")',
+          selector: '.btn',
           titulo: 'Botón "Aplicar lo Aprendido"',
           descripcion: 'Después de ver un micro-módulo (ej: "Cómo hacer factura electrónica"), hay botón "Aplicar ahora" que te lleva directamente a hacerlo en la plataforma. De aprender a HACER en segundos. Esto cierra el loop de aprendizaje: conocimiento → acción → resultado.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'historial-capacitacion',
-          selector: '.text-sm:contains("Última capacitación")',
-          titulo: 'Recordatorios de Capacitación',
-          descripcion: 'Si hace más de 6 meses que no hacés ningún curso, aparece sugerencia: "¿Querés ver qué cursos nuevos hay?". Esto mantiene el momentum: capacitación como hábito continuo, no evento único. Desarrollo profesional permanente, no esporádico.',
           posicion: 'bottom',
           destacar: true
         }
@@ -1151,7 +959,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'nivel-formalizacion-visible',
-          selector: '.section-card:has(.text-emerald-600:contains("%"))',
+          selector: '.section-card',
           titulo: 'Tu Nivel de Formalización es Público',
           descripcion: 'El nivel de formalización (95%) aparece VISIBLEMENTE en tu perfil. No podés ocultarlo. Esto nivela la cancha: los talleres formales no compiten "en desventaja" contra informales que ocultan su situación. Las marcas VEN claramente quién cumple y quién no, y deciden conscientemente con quién trabajar.',
           posicion: 'bottom',
@@ -1159,7 +967,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'badges-cumplimiento-laboral',
-          selector: '.badge.badge-success:contains("✓")',
+          selector: '.badge',
           titulo: 'Badges de Cumplimiento Laboral',
           descripcion: 'Los badges (✓ ARCA, ✓ STESS, ✓ SOIVA) son verificaciones de cumplimiento en tiempo real. Si un taller NO tiene estos badges, las marcas saben que hay riesgo. Esto protege a talleres formales: su esfuerzo por cumplir se hace VISIBLE y VALORADO.',
           posicion: 'bottom',
@@ -1167,7 +975,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'costo-real-transparente',
-          selector: '.text-sm:contains("Comisión")',
+          selector: '.stat-card',
           titulo: 'Comisión Diferenciada Hace Visible el Costo Real',
           descripcion: 'Los talleres formales pagan 3% comisión, los informales 8%. Esto COMPENSA la "ventaja" de no pagar impuestos/registros: el taller informal no puede ofrecer precio mucho más bajo porque la comisión se lleva ese ahorro. Nivelación económica: formalización no te deja en desventaja competitiva.',
           posicion: 'bottom',
@@ -1182,7 +990,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'formalizacion-criterio-matching',
-          selector: '.text-emerald-600:contains("%")',
+          selector: '.badge',
           titulo: 'Formalización como Criterio de Matching',
           descripcion: 'El nivel de formalización (95%, 60%, etc.) es VISIBLE para todas las marcas y afecta el matching. Un taller informal no puede "hacerse pasar" por formal ni competir ocultando su situación. El algoritmo PRIORIZA talleres formales: si dos tienen misma capacidad, el formal aparece primero. Competencia basada en CUMPLIMIENTO, no en evasión.',
           posicion: 'bottom',
@@ -1190,7 +998,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'desglose-formalizacion',
-          selector: '.grid:has(.bg-emerald-50)',
+          selector: '.badge',
           titulo: 'Desglose Detallado de Cumplimiento',
           descripcion: 'No es solo un "95% formal". Ves el DESGLOSE: ✓ Registro ARCA, ✓ Trabajadores en STESS, ✓ Convenio SOIVA, × Certificación de seguridad (falta). Las marcas pueden evaluar QUÉ aspectos cumplen y cuáles no. Transparencia granular = decisión informada.',
           posicion: 'bottom',
@@ -1198,17 +1006,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'precio-vs-riesgo',
-          selector: '.text-2xl.font-bold:contains("$")',
+          selector: 'table',
           titulo: 'Las Marcas Ven Precio Y Riesgo',
           descripcion: 'Las marcas ven el precio del taller JUNTO con su nivel de formalización. Pueden decidir: "acepto pagar 10% más por un taller 100% formal" o "el ahorro de 10% no justifica el riesgo legal de trabajar con 60% informal". Competencia NO es solo precio, es precio + riesgo + cumplimiento.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'filtro-formalizacion-marcas',
-          selector: '.form-group:has(input[type="range"])',
-          titulo: 'Las Marcas Pueden Filtrar por Cumplimiento',
-          descripcion: 'Las marcas pueden filtrar: "mostrarme solo talleres 90%+ formalizados". Si estás informal, quedás EXCLUIDO de esos pedidos (que suelen ser de marcas grandes con mejores condiciones). Esta exclusión es INCENTIVO poderoso: formalizarse = acceder a mejores clientes.',
           posicion: 'bottom',
           destacar: true
         }
@@ -1221,7 +1021,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'clausulas-laborales-automaticas',
-          selector: '.section-card:has(.text-emerald-600)',
+          selector: '.section-card',
           titulo: 'Cláusulas Laborales Mínimas Automáticas',
           descripcion: 'TODOS los acuerdos incluyen automáticamente condiciones laborales mínimas: salario no menor a $X/hora (convenio colectivo), registración de trabajadores en STESS, jornada máxima 48hs/semana, condiciones de seguridad. NO son opcionales ni negociables. Esto evita que talleres hagan dumping social (bajar precios explotando trabajadores) para ganar pedidos.',
           posicion: 'bottom',
@@ -1229,7 +1029,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'salario-minimo-convenio',
-          selector: '.text-sm:contains("Salario")',
+          selector: '.section-card',
           titulo: 'Salario Mínimo del Convenio Colectivo',
           descripcion: 'El sistema CALCULA automáticamente el salario mínimo según convenio colectivo vigente para el tipo de tarea. No es "lo que el taller quiera pagar", es el MÍNIMO LEGAL actualizado. Si un taller ofrece menos, el sistema ALERTA a la marca: "este precio no cubre salarios mínimos".',
           posicion: 'bottom',
@@ -1237,26 +1037,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'registracion-obligatoria',
-          selector: '.badge:contains("STESS")',
+          selector: '.badge',
           titulo: 'Registración en STESS Obligatoria',
           descripcion: 'El acuerdo exige que los trabajadores asignados al pedido estén registrados en STESS. Durante la ejecución, el sistema VERIFICA esto en tiempo real. Si detecta trabajadores no registrados, SUSPENDE el pedido y alerta. No hay forma de "hacer trampa": el cumplimiento se monitorea activamente.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'penalidades-incumplimiento',
-          selector: '.text-amber-600:contains("Penalidad")',
-          titulo: 'Penalidades por Incumplimiento Laboral',
-          descripcion: 'Si un taller incumple cláusulas laborales (se detecta salario bajo convenio, trabajadores no registrados), hay penalidades: retención de pago, baja de rating, suspensión temporal. Esto hace COSTOSO el dumping social: el "ahorro" de explotar se pierde en penalidades.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'marca-coresponsable',
-          selector: '.section-card:has(.text-sky-600)',
-          titulo: 'La Marca es Co-Responsable',
-          descripcion: 'Al firmar el acuerdo, la marca acepta co-responsabilidad por cumplimiento laboral. Si el taller explota trabajadores, la marca TAMBIÉN puede ser sancionada. Esto incentiva a las marcas a trabajar SOLO con talleres formales: el "ahorro" de contratar informal no vale el riesgo legal.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -1268,7 +1052,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'comision-diferenciada-formalizacion',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Comisión Diferenciada Según Formalización',
           descripcion: 'La mesa tripartita puede ajustar la comisión de plataforma según nivel de formalización: 3% para talleres 100% formales, 4% para 80-99%, 6% para 60-79%, 8% para <60%. Esto hace que la informalidad sea ECONÓMICAMENTE INVIABLE: el "ahorro" que obtienen no pagando impuestos/registros se lo lleva la comisión de plataforma. Incentivo poderoso para formalizarse.',
           posicion: 'bottom',
@@ -1276,7 +1060,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'peso-formalizacion-matching',
-          selector: '.form-group:has(input[type="range"])',
+          selector: '.form-group',
           titulo: 'Aumentar Peso de Formalización en Matching',
           descripcion: 'El parámetro "Peso de Formalización" controla cuánto afecta el cumplimiento al matching. Si la mesa tripartita aumenta este peso de 20% a 40%, un taller 100% formal tendrá MUY ALTA prioridad sobre uno 60% informal (aunque el informal sea más barato). Política sectorial = reglas del algoritmo.',
           posicion: 'bottom',
@@ -1284,17 +1068,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'precio-minimo-seguridad',
-          selector: '.text-sm:contains("Precio mínimo")',
+          selector: '.section-card',
           titulo: 'Precio Mínimo de Seguridad',
           descripcion: 'El sistema puede establecer un "precio mínimo" por tipo de prenda basado en costos laborales del convenio. Si un taller ofrece muy por debajo (señal de dumping social), aparece alerta: "Este precio es sospechosamente bajo, puede indicar explotación". Las marcas son ADVERTIDAS antes de contratar.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'simulacion-impacto',
-          selector: '.btn:contains("Simular")',
-          titulo: 'Simular Impacto de Cambios en Competencia',
-          descripcion: 'Antes de cambiar parámetros, se puede simular: "si aumento comisión de informales a 10%, ¿cuántos se formalizarían? ¿cómo cambia la distribución de pedidos?". Esto permite diseño BASADO EN EVIDENCIA de políticas contra dumping social.',
           posicion: 'bottom',
           destacar: true
         }
@@ -1307,7 +1083,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'deteccion-dumping-social',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Detectar Talleres con Dumping Social',
           descripcion: 'El dashboard puede mostrar talleres con SEÑALES DE DUMPING: precios anormalmente bajos (30% por debajo del promedio) + baja formalización (<60%) + denuncias laborales recientes. Esta combinación indica alta probabilidad de explotación laboral para competir con precios bajos. Permite fiscalización DIRIGIDA: ir a inspeccionar exactamente donde hay mayor riesgo.',
           posicion: 'bottom',
@@ -1315,7 +1091,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'mapa-calor-precios',
-          selector: '.chart-container',
+          selector: '.section-card',
           titulo: 'Mapa de Calor de Precios vs Formalización',
           descripcion: 'Un gráfico muestra precios vs formalización: ves clusters de "precios bajos + formalización baja" (dumping) vs "precios justos + formalización alta" (competencia leal). Esto hace VISIBLE el problema a nivel sectorial: cuántos talleres están haciendo dumping, dónde están, cuánto del mercado capturan.',
           posicion: 'top',
@@ -1323,25 +1099,9 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'impacto-dumping-sector',
-          selector: '.stat-card:has(.text-amber-600)',
+          selector: '.stat-card',
           titulo: 'Cuantificar Impacto del Dumping en el Sector',
           descripcion: 'El dashboard calcula: "X% de pedidos van a talleres con señales de dumping", "trabajadores en talleres con dumping ganan Y% menos que el promedio". Esta cuantificación del IMPACTO genera sentido de urgencia para actuar: no es un problema teórico, es X% del sector compitiendo deslealmente.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'tendencias-dumping',
-          selector: '.text-emerald-600:contains("Tendencia")',
-          titulo: 'Tendencias: ¿El Dumping Está Bajando?',
-          descripcion: 'Al ver la evolución temporal: "hace 6 meses, 30% de talleres tenían señales de dumping; hoy, 18%", se puede evaluar EFECTIVIDAD de políticas implementadas. Si el dumping baja después de aumentar comisión a informales, eso confirma que la política funciona.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'acciones-coordinadas-anti-dumping',
-          selector: '.btn:contains("Programar campaña")',
-          titulo: 'Planificar Acciones Anti-Dumping Coordinadas',
-          descripcion: 'Desde el dashboard, la mesa tripartita puede lanzar campañas coordinadas: Estado aumenta inspecciones en zona X, sindicato ofrece asesoría sobre derechos laborales, cámaras dan incentivos para formalización. Respuesta ARTICULADA basada en datos compartidos.',
           posicion: 'bottom',
           destacar: true
         }
