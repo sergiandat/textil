@@ -1,0 +1,607 @@
+/**
+ * VISION-GENERAL.CSS
+ * Estilos para la página de visión general de la plataforma
+ * Diseñado para ser consumido en 2-3 minutos
+ */
+
+/* ============================================
+   VARIABLES Y RESET
+   ============================================ */
+
+:root {
+  --vg-primary: #10b981;
+  --vg-primary-dark: #059669;
+  --vg-bg-light: #ecfdf5;
+  --vg-bg-lighter: #d1fae5;
+  --vg-text-dark: #0f172a;
+  --vg-text-medium: #475569;
+  --vg-text-light: #64748b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--vg-bg-light);
+  color: var(--vg-text-dark);
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+.vg-hero {
+  background: linear-gradient(135deg, var(--vg-primary) 0%, var(--vg-primary-dark) 100%);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.vg-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.vg-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  letter-spacing: -1px;
+}
+
+.vg-subtitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  opacity: 0.95;
+}
+
+.vg-tagline {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vg-org {
+  font-size: 14px;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+/* ============================================
+   CONTAINER Y SECCIONES
+   ============================================ */
+
+.vg-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.vg-section {
+  padding: 80px 20px;
+  background: white;
+}
+
+.vg-section-alt {
+  background: var(--vg-bg-light);
+}
+
+.vg-section-title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 15px 0;
+  color: var(--vg-text-dark);
+}
+
+.vg-section-intro {
+  font-size: 16px;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 50px;
+  color: var(--vg-text-medium);
+  line-height: 1.6;
+}
+
+/* ============================================
+   DIAGRAMA HUB-AND-SPOKE (CENTRAL)
+   ============================================ */
+
+.vg-diagram-hub {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 700px;
+  margin: 0 auto;
+}
+
+/* Centro del hub */
+.vg-hub-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  background: linear-gradient(135deg, var(--vg-primary) 0%, var(--vg-primary-dark) 100%);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  z-index: 10;
+}
+
+.vg-hub-icon {
+  font-size: 60px;
+  margin-bottom: 8px;
+}
+
+.vg-hub-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Spokes (rayos) - Posicionamiento radial */
+.vg-barrier-spoke {
+  position: absolute;
+}
+
+/* B1 - Top */
+.vg-b1 {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* B2 - Top Right */
+.vg-b2 {
+  top: 8%;
+  right: 10%;
+}
+
+/* B3 - Right */
+.vg-b3 {
+  top: 40%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* B4 - Bottom Right */
+.vg-b4 {
+  bottom: 8%;
+  right: 10%;
+}
+
+/* B5 - Bottom */
+.vg-b5 {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* B6 - Bottom Left */
+.vg-b6 {
+  bottom: 8%;
+  left: 10%;
+}
+
+/* B7 - Left */
+.vg-b7 {
+  top: 40%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* Spoke cards */
+.vg-spoke-card {
+  background: white;
+  border: 2px solid var(--vg-primary);
+  border-radius: 12px;
+  padding: 15px;
+  width: 160px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.vg-spoke-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+  border-color: var(--vg-primary-dark);
+}
+
+.vg-spoke-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.vg-spoke-label {
+  background: var(--vg-primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.vg-spoke-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vg-text-dark);
+  margin-bottom: 5px;
+}
+
+.vg-spoke-solution {
+  font-size: 12px;
+  color: var(--vg-text-medium);
+  line-height: 1.4;
+}
+
+/* Líneas conectoras (se pueden mejorar con SVG si necesario) */
+.vg-spoke-line {
+  position: absolute;
+  background: var(--vg-primary);
+  opacity: 0.3;
+}
+
+/* ============================================
+   GRID DE ACTORES (2x2)
+   ============================================ */
+
+.vg-actors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.vg-actor-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.vg-actor-card:hover {
+  border-color: var(--vg-primary);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+  transform: translateY(-4px);
+}
+
+.vg-actor-icon {
+  font-size: 56px;
+  margin-bottom: 15px;
+}
+
+.vg-actor-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: var(--vg-text-dark);
+}
+
+.vg-actor-desc {
+  font-size: 14px;
+  color: var(--vg-text-medium);
+  line-height: 1.6;
+  margin: 0 0 15px 0;
+}
+
+.vg-actor-screens {
+  font-size: 12px;
+  color: var(--vg-text-light);
+  background: var(--vg-bg-light);
+  padding: 10px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.vg-actor-screens strong {
+  color: var(--vg-primary-dark);
+}
+
+/* ============================================
+   FLUJO TIMELINE (HORIZONTAL)
+   ============================================ */
+
+.vg-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.vg-flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 200px;
+  max-width: 220px;
+  transition: all 0.3s ease;
+}
+
+.vg-flow-step:hover {
+  border-color: var(--vg-primary);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.vg-flow-number {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--vg-primary) 0%, var(--vg-primary-dark) 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.vg-flow-content {
+  flex: 1;
+}
+
+.vg-flow-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vg-text-dark);
+  margin: 0 0 5px 0;
+}
+
+.vg-flow-desc {
+  font-size: 12px;
+  color: var(--vg-text-medium);
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.vg-flow-barriers {
+  font-size: 11px;
+  color: white;
+  background: var(--vg-primary);
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.vg-flow-arrow {
+  font-size: 28px;
+  color: var(--vg-primary);
+  font-weight: 700;
+}
+
+/* ============================================
+   CALL-TO-ACTION
+   ============================================ */
+
+.vg-cta {
+  background: linear-gradient(135deg, var(--vg-bg-light) 0%, var(--vg-bg-lighter) 100%);
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.vg-cta-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  color: var(--vg-text-dark);
+}
+
+.vg-cta-desc {
+  font-size: 16px;
+  color: var(--vg-text-medium);
+  margin: 0 0 40px 0;
+}
+
+.vg-badges-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.vg-badge {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 15px 20px;
+  min-width: 120px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.vg-badge:hover {
+  border-color: var(--vg-primary);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  transform: translateY(-2px);
+}
+
+.vg-badge-icon {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.vg-badge-label {
+  background: var(--vg-primary);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.vg-badge-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vg-text-dark);
+}
+
+.vg-cta-actions {
+  margin-top: 30px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .vg-title {
+    font-size: 32px;
+  }
+
+  .vg-subtitle {
+    font-size: 18px;
+  }
+
+  .vg-section-title {
+    font-size: 24px;
+  }
+
+  .vg-container {
+    padding: 0 20px;
+  }
+
+  .vg-section {
+    padding: 50px 20px;
+  }
+
+  /* Diagrama hub - ajustar para mobile */
+  .vg-diagram-hub {
+    height: 900px;
+  }
+
+  .vg-hub-center {
+    width: 140px;
+    height: 140px;
+  }
+
+  .vg-hub-icon {
+    font-size: 48px;
+  }
+
+  .vg-hub-title {
+    font-size: 14px;
+  }
+
+  .vg-spoke-card {
+    width: 130px;
+    padding: 12px;
+  }
+
+  .vg-spoke-icon {
+    font-size: 24px;
+  }
+
+  .vg-spoke-name {
+    font-size: 12px;
+  }
+
+  .vg-spoke-solution {
+    font-size: 11px;
+  }
+
+  /* Flow timeline - stack vertical en mobile */
+  .vg-flow {
+    flex-direction: column;
+  }
+
+  .vg-flow-arrow {
+    transform: rotate(90deg);
+  }
+
+  /* Actors grid */
+  .vg-actors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Badges */
+  .vg-badges-grid {
+    justify-content: center;
+  }
+
+  .vg-badge {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vg-hero {
+    padding: 50px 20px;
+  }
+
+  .vg-logo {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  .vg-title {
+    font-size: 28px;
+  }
+
+  .vg-diagram-hub {
+    height: 1000px;
+  }
+
+  .vg-flow-step {
+    min-width: unset;
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vg-section {
+  animation: fadeInUp 0.6s ease;
+}
