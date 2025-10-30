@@ -468,12 +468,12 @@ class CrearPedidoOnboarding {
       {
         id: 'producto',
         title: 'Definí el producto',
-        description: 'Seleccioná la prenda, la cantidad y la fecha objetivo para activar la búsqueda de talleres.',
+        description: 'Objetivo: transparentar la necesidad de la marca para construir confianza y reducir costos de formalización (B2, B3).',
         target: '#productoSection',
         tips: [
-          'Elegí un tipo de prenda para generar la ruta sugerida automáticamente.',
-          'Ajustá la cantidad estimada según tu orden de producción.',
-          'Definí una fecha objetivo realista para alinear la capacidad de los talleres.'
+          'Colaboración: la marca documenta prenda y ficha técnica; talleres y federaciones anticipan capacidad para el matching.',
+          'Impacto en barreras: datos completos generan trazabilidad temprana (B1) y evitan retrabajos que sostienen la informalidad (B3).',
+          'Adjuntá ficha técnica y moldes para respaldar la evidencia que necesitan sindicatos y consumidores conscientes.'
         ],
         validate: () => {
           const prendaSelect = document.getElementById('tipoPrenda');
@@ -504,12 +504,12 @@ class CrearPedidoOnboarding {
       {
         id: 'ruta',
         title: 'Revisá la ruta sugerida',
-        description: 'Chequeá que los procesos sugeridos coincidan con la manera en la que trabajás el producto.',
+        description: 'Objetivo: visibilizar la secuencia productiva para asegurar trazabilidad y coordinación entre actores (B1, B4).',
         target: '#rutaSection',
         tips: [
-          'La ruta se arma automáticamente según la prenda que definiste.',
-          'Podés ajustar procesos específicos más adelante desde el matching.',
-          'Asegurate de que no falten etapas críticas para la calidad del pedido.'
+          'Colaboración: técnicos de marca, INTI y talleres afinan la plantilla de procesos para que todos operen con el mismo mapa.',
+          'Impacto en barreras: una ruta acordada expone cuellos y reduce desconfianza al documentar hitos evaluables (B1, B2).',
+          'Si necesitás variantes, anotarlas permite que la plataforma proponga talleres con capacidades reales.'
         ],
         validate: () => {
           const resumenRuta = document.getElementById('resumenRuta');
@@ -522,12 +522,12 @@ class CrearPedidoOnboarding {
       {
         id: 'requisitos',
         title: 'Configura requisitos y QA',
-        description: 'Detallá la evidencia que necesitás y si habrá control externo en alguna etapa.',
+        description: 'Objetivo: establecer evidencias compartidas que sostengan confianza y verificación colectiva (B1, B2).',
         target: '#requisitosSection',
         tips: [
-          'Las opciones marcadas definen qué necesita subir el taller en cada hito.',
-          'Podés agregar QA externo cuando se trate de procesos críticos.',
-          'Mantené al menos una evidencia activa para asegurar el seguimiento.'
+          'Colaboración: talleres suben evidencias; sindicatos y certificadores pueden auditarlas sin frenar producción.',
+          'Impacto en barreras: checklists comunes facilitan formalización progresiva (B3) y evitan clausuras sorpresivas (B5).',
+          'Mantené al menos una evidencia activa por etapa para que la plataforma pueda alertar desvíos.'
         ],
         validate: () => {
           const checked = document.querySelectorAll('#requisitosSection input[type="checkbox"]:checked');
@@ -539,13 +539,13 @@ class CrearPedidoOnboarding {
       },
       {
         id: 'logistica',
-        title: 'Define logística y pagos',
-        description: 'Revisá incoterm interno y cómo se liberará el escrow en cada etapa.',
+        title: 'Definí logística y pagos',
+        description: 'Objetivo: coordinar logística y pagos garantizados que premien el cumplimiento y protejan a cada actor (B2, B5).',
         target: '#logisticaSection',
         tips: [
-          'Ajustá el incoterm según quién retira y entrega la producción.',
-          'Documentá cómo se reparte el pago por hitos para evitar confusiones.',
-          'El escrow asegura los fondos: confirmá que cubra todas las etapas acordadas.'
+          'Colaboración: la marca define incoterm interno junto a cooperativas, sindicatos y transportistas para repartir responsabilidades.',
+          'Impacto en barreras: acuerdos de escrow documentan alternativas a la clausura total (B5) y refuerzan confianza multiactor (B2).',
+          'Alineá los hitos de pago con la ruta para que cada liberación tenga evidencia asociada.'
         ],
         validate: () => {
           const hitosInput = document.querySelector('#logisticaSection input.form-input');
@@ -559,12 +559,12 @@ class CrearPedidoOnboarding {
       {
         id: 'resumen',
         title: 'Validá el resumen',
-        description: 'Confirmá que toda la información del pedido esté correcta antes de crearlo.',
+        description: 'Objetivo: confirmar que los datos estén listos para lanzar un pedido trazable y transparente (B1, B2, B7).',
         target: '#resumenCard',
         tips: [
-          'El resumen muestra los datos que enviaremos al matching.',
-          'El botón “Crear OM” se habilita cuando el producto está completo.',
-          'Volvé a pasos anteriores con “Anterior” si querés ajustar algo.'
+          'Colaboración: la marca revisa y comparte el resumen; talleres y federaciones pueden usarlo para acuerdos y capacitaciones (B6).',
+          'Impacto en barreras: mostrar el plan completo facilita diálogo con el Estado y consumidores sobre trabajo decente.',
+          'Si algo no cierra, usá "Anterior" para ajustar sin perder consistencia.'
         ],
         validate: () => {
           const createButton = document.getElementById('btnCrearPedido');

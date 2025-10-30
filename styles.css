@@ -493,6 +493,50 @@ body {
   color: var(--red-700);
 }
 
+.onboarding-card {
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  background: linear-gradient(155deg, var(--sky-50) 0%, #ffffff 55%, var(--sky-100) 100%);
+  box-shadow: 0 15px 40px rgba(14, 165, 233, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 65%);
+  pointer-events: none;
+}
+
+.onboarding-card .section-title {
+  color: var(--sky-700);
+}
+
+.onboarding-card .btn-primary {
+  background: linear-gradient(135deg, var(--sky-500) 0%, var(--sky-700) 100%);
+  border-color: transparent;
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
+}
+
+.onboarding-card .btn-secondary {
+  border-color: rgba(14, 165, 233, 0.4);
+  color: var(--sky-700);
+}
+
+.onboarding-card .btn-secondary:hover {
+  border-color: var(--sky-600);
+  color: var(--sky-600);
+}
+
+.onboarding-card .onboarding-link {
+  color: var(--sky-700);
+}
+
+.onboarding-card .onboarding-link:hover {
+  color: var(--sky-800);
+}
+
 .onboarding-progress {
   height: 6px;
   background: var(--slate-200);
@@ -573,9 +617,14 @@ body {
   transition: outline 0.2s ease, box-shadow 0.2s ease;
 }
 
-#crearPedidoOnboarding.onboarding-muted {
+.onboarding-card.onboarding-muted {
   border: 1px dashed var(--slate-300);
   background: var(--slate-50);
+  box-shadow: none;
+}
+
+.onboarding-card.onboarding-muted::before {
+  display: none;
 }
 
 .onboarding-caption {
