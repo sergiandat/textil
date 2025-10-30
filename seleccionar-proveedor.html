@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleccionar Proveedor - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido-v1.3.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos: Ver en Dashboard')">Mis Pedidos</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button class="btn btn-secondary" onclick="window.location.href='perfil-marca.html'" style="display: flex; align-items: center; gap: 0.5rem;">
+          👤 Mi Perfil
+        </button>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <!-- Header contextual -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Seleccionar Proveedor para Proceso</h1>
+        <p class="page-subtitle">Matching context-aware: solo talleres compatibles con este proceso específico</p>
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='crear-pedido-v1.3.html'">
+        ← Volver a Crear Pedido
+      </button>
+    </div>
+
+    <!-- Contexto del proceso -->
+    <div class="alert alert-info mb-6">
+      <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">
+        🎯 Seleccionando proveedor para:
+      </div>
+      <div style="font-size: 1.125rem; font-weight: 700; color: var(--sky-700);">
+        <span id="procesoNombre">Corte</span> | <span id="prendaNombre">Jean</span> <span id="cantidad">500</span> unidades
+      </div>
+      <div style="font-size: 0.875rem; color: var(--slate-600); margin-top: 0.5rem;">
+        Fecha objetivo: <span id="fechaObjetivo">15/08/2025</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Sidebar: Filtros -->
+      <div class="col-span-3">
+        <div class="section-card sticky" style="top: 80px;">
+          <h3 class="section-title mb-4">Filtros</h3>
+
+          <div class="form-group">
+            <label class="form-label">Nivel de formalización</label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="nivel" value="ORO" checked />
+              Oro
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="nivel" value="PLATA" checked />
+              Plata
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" data-filter="nivel" value="BRONCE" />
+              Bronce
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ubicación</label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" checked />
+              AMBA
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" />
+              Interior
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Rating mínimo</label>
+            <input type="number" class="form-input" min="1" max="5" step="0.1" value="4.0" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Capacidad disponible</label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" class="form-checkbox" checked />
+              Puede entregar antes de fecha objetivo
+            </label>
+          </div>
+
+          <button class="btn btn-primary btn-block">
+            Aplicar filtros
+          </button>
+          <button class="btn btn-secondary btn-block mt-2">
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div class="col-span-9">
+        <!-- Barra de ordenamiento y acciones -->
+        <div class="section-card mb-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-sm text-slate-600">Mostrando <strong id="countResultados">3</strong> talleres compatibles con <strong>Corte</strong></span>
+            </div>
+            <div class="flex items-center gap-3">
+              <select id="ordenSelector" class="form-select" style="width: auto;">
+                <option value="compatibilidad">Ordenar por: Compatibilidad</option>
+                <option value="rating">Ordenar por: Rating</option>
+                <option value="precio">Ordenar por: Precio</option>
+                <option value="cercania">Ordenar por: Cercanía</option>
+              </select>
+              <button class="btn btn-secondary" onclick="invitarACotizar()">
+                ✉ Invitar seleccionados a cotizar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explicación del algoritmo -->
+        <div class="alert alert-info mb-4" style="font-size: 0.875rem;">
+          <strong>💡 Algoritmo de compatibilidad:</strong> Formalización 40%, Capacidad 30%, Ubicación 20%, Rating 10%. Solo se muestran talleres que pueden realizar "<strong>Corte</strong>".
+        </div>
+
+        <!-- Tabla de talleres -->
+        <div class="section-card">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="p-2 text-left"><input type="checkbox" id="selectAll" /></th>
+                <th class="p-2 text-left">Taller</th>
+                <th class="p-2 text-center">Nivel</th>
+                <th class="p-2 text-center">Rating</th>
+                <th class="p-2 text-center">Capacidad</th>
+                <th class="p-2 text-center">Ubicación</th>
+                <th class="p-2 text-center">Compatibilidad</th>
+                <th class="p-2 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Taller 1 -->
+              <tr class="border-t hover:bg-slate-50">
+                <td class="p-2"><input type="checkbox" class="taller-checkbox" data-id="tal_001" /></td>
+                <td class="p-2">
+                  <div class="font-semibold text-slate-900">Corte Sur SRL</div>
+                  <div class="text-xs text-slate-500">CUIT: 30-12345678-9</div>
+                </td>
+                <td class="p-2 text-center">
+                  <span class="badge badge-amber">ORO</span>
+                </td>
+                <td class="p-2 text-center">
+                  <span class="text-amber-700">4.9★</span>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-slate-900">1500/mes</div>
+                  <div class="text-xs text-emerald-600">✓ Disponible</div>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-slate-900">La Matanza, BA</div>
+                  <div class="text-xs text-slate-500">12 km</div>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-xl font-bold text-emerald-700">95%</div>
+                </td>
+                <td class="p-2 text-center">
+                  <button class="btn btn-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="seleccionarProveedor('tal_001', 'Corte Sur SRL')">
+                    ✓ Seleccionar
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Taller 2 -->
+              <tr class="border-t hover:bg-slate-50">
+                <td class="p-2"><input type="checkbox" class="taller-checkbox" data-id="tal_005" /></td>
+                <td class="p-2">
+                  <div class="font-semibold text-slate-900">Taller Los Pinos</div>
+                  <div class="text-xs text-slate-500">CUIT: 30-87654321-0</div>
+                </td>
+                <td class="p-2 text-center">
+                  <span class="badge badge-slate">PLATA</span>
+                </td>
+                <td class="p-2 text-center">
+                  <span class="text-amber-700">4.6★</span>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-slate-900">800/mes</div>
+                  <div class="text-xs text-amber-600">⚠ Justo</div>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-slate-900">Avellaneda, BA</div>
+                  <div class="text-xs text-slate-500">8 km</div>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-xl font-bold text-sky-700">82%</div>
+                </td>
+                <td class="p-2 text-center">
+                  <button class="btn btn-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="seleccionarProveedor('tal_005', 'Taller Los Pinos')">
+                    ✓ Seleccionar
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Taller 3 -->
+              <tr class="border-t hover:bg-slate-50">
+                <td class="p-2"><input type="checkbox" class="taller-checkbox" data-id="tal_006" /></td>
+                <td class="p-2">
+                  <div class="font-semibold text-slate-900">Textil Roca</div>
+                  <div class="text-xs text-slate-500">CUIT: 30-11223344-5</div>
+                </td>
+                <td class="p-2 text-center">
+                  <span class="badge badge-amber">ORO</span>
+                </td>
+                <td class="p-2 text-center">
+                  <span class="text-amber-700">4.8★</span>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-slate-900">2000/mes</div>
+                  <div class="text-xs text-emerald-600">✓ Sobrada</div>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-slate-900">Morón, BA</div>
+                  <div class="text-xs text-slate-500">18 km</div>
+                </td>
+                <td class="p-2 text-center">
+                  <div class="text-xl font-bold text-sky-700">88%</div>
+                </td>
+                <td class="p-2 text-center">
+                  <button class="btn btn-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="seleccionarProveedor('tal_006', 'Textil Roca')">
+                    ✓ Seleccionar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Sección de cotizaciones (después de invitar) -->
+        <div class="section-card mt-6">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Cotizaciones Recibidas</h3>
+              <p class="section-subtitle">Comparación lado a lado</p>
+            </div>
+          </div>
+
+          <div class="alert alert-warning mb-4" style="font-size: 0.875rem;">
+            <strong>📋 Funcionalidad wireframe:</strong> Después de invitar talleres a cotizar, las cotizaciones aparecerían aquí para comparación.
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <!-- Cotización 1 (ejemplo) -->
+            <div class="p-4 border-2 border-emerald-600 rounded-xl bg-emerald-50">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-semibold text-slate-900">Corte Sur SRL</div>
+                <span class="badge badge-emerald">Recomendado</span>
+              </div>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Precio/unidad:</span>
+                  <span class="font-bold">$340</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Plazo:</span>
+                  <span class="font-bold">7 días</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Inicio:</span>
+                  <span>01/08/2025</span>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-block mt-3" onclick="seleccionarProveedor('tal_001', 'Corte Sur SRL')">
+                ✓ Seleccionar esta cotización
+              </button>
+            </div>
+
+            <!-- Cotización 2 (ejemplo) -->
+            <div class="p-4 border rounded-xl">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-semibold text-slate-900">Taller Los Pinos</div>
+              </div>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Precio/unidad:</span>
+                  <span class="font-bold">$320</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Plazo:</span>
+                  <span class="font-bold">10 días</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Inicio:</span>
+                  <span>05/08/2025</span>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-block mt-3" onclick="seleccionarProveedor('tal_005', 'Taller Los Pinos')">
+                Seleccionar
+              </button>
+            </div>
+
+            <!-- Sin cotización aún -->
+            <div class="p-4 border-2 border-dashed rounded-xl text-center text-slate-400">
+              <div class="text-2xl mb-2">⏳</div>
+              <div class="text-sm">Esperando cotización de Textil Roca</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script src="feedback-v1.3.js"></script>
+  <script>
+    // Obtener parámetros de URL
+    function getUrlParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Cargar contexto del proceso
+    const proceso = getUrlParam('proceso') || 'Corte';
+    const prenda = getUrlParam('prenda') || 'Jean';
+    const cantidad = getUrlParam('cantidad') || '500';
+
+    document.getElementById('procesoNombre').textContent = proceso;
+    document.getElementById('prendaNombre').textContent = prenda.charAt(0).toUpperCase() + prenda.slice(1);
+    document.getElementById('cantidad').textContent = cantidad;
+
+    // Seleccionar proveedor
+    function seleccionarProveedor(tallerId, tallerNombre) {
+      if (confirm(`¿Seleccionar "${tallerNombre}" como proveedor para ${proceso}?`)) {
+        showToast(`✓ ${tallerNombre} seleccionado para ${proceso}`, 'success');
+
+        // Guardar selección (simulado)
+        const seleccion = {
+          proceso: proceso,
+          tallerId: tallerId,
+          tallerNombre: tallerNombre
+        };
+        localStorage.setItem(`proveedor_${proceso}`, JSON.stringify(seleccion));
+
+        setTimeout(() => {
+          if (confirm('¿Volver a Crear Pedido para configurar el siguiente proceso?')) {
+            window.location.href = 'crear-pedido-v1.3.html';
+          }
+        }, 1000);
+      }
+    }
+
+    // Invitar a cotizar
+    function invitarACotizar() {
+      const checkboxes = document.querySelectorAll('.taller-checkbox:checked');
+      if (checkboxes.length === 0) {
+        alert('Seleccioná al menos un taller para invitar a cotizar');
+        return;
+      }
+
+      const talleresIds = Array.from(checkboxes).map(cb => cb.dataset.id);
+      showToast(`✉ Invitación enviada a ${talleresIds.length} talleres`, 'success');
+      alert(`Funcionalidad wireframe: Se enviaría invitación a cotizar a:\n${talleresIds.join(', ')}\n\nLas cotizaciones aparecerían en la sección "Cotizaciones Recibidas" más abajo.`);
+    }
+
+    // Select all
+    document.getElementById('selectAll').addEventListener('change', function() {
+      document.querySelectorAll('.taller-checkbox').forEach(cb => {
+        cb.checked = this.checked;
+      });
+    });
+  </script>
+
+</body>
+</html>

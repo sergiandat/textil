@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago y Facturación - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!--
+    PANTALLA: pago.html (Pago y Facturación)
+    BARRERAS: B1 (Trazabilidad del pago), B2 (Confianza mediante pago verificable), B7 (Formalización visible en facturación)
+    FUNCIONES: F6 - PAGAR
+    ACTORES: Marca, Taller
+    DESCRIPCIÓN: Gestión de pagos con facturación electrónica, trazabilidad completa y cumplimiento fiscal.
+                 Muestra desglose de impuestos, métodos formales de pago, y comprobantes verificables.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido-v1.3.html'">Crear Pedido</button>
+        <button class="nav-tab active">Pagos</button>
+        <button class="nav-tab" onclick="window.location.href='ejecucion.html'">Ejecución</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pago y Facturación</h1>
+        <p class="page-subtitle">Pedido #PED-2024-00142 - Confecciones Norte</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="pill pill-emerald">✓ Pedido Completado</span>
+        <span class="pill pill-amber">Pago Pendiente</span>
+      </div>
+    </div>
+
+    <!-- Alert wireframe -->
+    <div class="alert alert-info mb-6">
+      <strong>💳 Pantalla de Demostración:</strong> Esta pantalla muestra cómo la plataforma gestiona pagos formales con trazabilidad completa.
+      <strong>Resuelve 3 barreras:</strong>
+      <ul class="mt-2 ml-4 text-sm space-y-1">
+        <li><strong>B1 (Trazabilidad):</strong> Cada pago queda registrado con comprobante verificable</li>
+        <li><strong>B2 (Confianza):</strong> Transferencia bancaria garantiza que el taller reciba su pago</li>
+        <li><strong>B7 (Dumping Social):</strong> Facturación con impuestos demuestra formalización del taller</li>
+      </ul>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Columna principal -->
+      <div class="col-span-8 space-y-6">
+
+        <!-- Factura Digital -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Factura Digital</h3>
+              <p class="section-subtitle">Factura B - ARCA #00003-00001234</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="alert('En producción: Descarga PDF de factura con QR de ARCA para verificación')">
+              Descargar PDF
+            </button>
+          </div>
+
+          <!-- Datos del emisor (Taller) -->
+          <div class="p-4 bg-slate-50 rounded-xl mb-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <div class="text-xs font-medium text-slate-500 mb-1">EMISOR (Taller)</div>
+                <div class="font-semibold text-slate-900">Confecciones Norte SRL</div>
+                <div class="text-sm text-slate-600">CUIT: 30-71234567-8</div>
+                <div class="text-sm text-slate-600">Avellaneda, Buenos Aires</div>
+                <div class="text-xs text-emerald-600 mt-2">✓ Inscripto en IVA - Responsable Inscripto</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-slate-500 mb-1">RECEPTOR (Marca)</div>
+                <div class="font-semibold text-slate-900">Urbano Kids SA</div>
+                <div class="text-sm text-slate-600">CUIT: 30-91234567-5</div>
+                <div class="text-sm text-slate-600">CABA, Buenos Aires</div>
+                <div class="text-xs text-sky-600 mt-2">→ Responsable Inscripto</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detalle de la factura -->
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b-2 border-slate-200">
+                  <th class="text-left py-2 px-2 font-semibold text-slate-700">Descripción</th>
+                  <th class="text-right py-2 px-2 font-semibold text-slate-700">Cantidad</th>
+                  <th class="text-right py-2 px-2 font-semibold text-slate-700">Precio Unit.</th>
+                  <th class="text-right py-2 px-2 font-semibold text-slate-700">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-100">
+                  <td class="py-3 px-2">
+                    <div class="font-medium text-slate-900">Confección Remera Oversize</div>
+                    <div class="text-xs text-slate-500">Corte + Confección + Control de Calidad</div>
+                  </td>
+                  <td class="text-right py-3 px-2 text-slate-600">1.200 uds</td>
+                  <td class="text-right py-3 px-2 text-slate-600">AR$ 2.150</td>
+                  <td class="text-right py-3 px-2 font-semibold text-slate-900">AR$ 2.580.000</td>
+                </tr>
+                <tr class="border-b border-slate-100">
+                  <td class="py-3 px-2">
+                    <div class="font-medium text-slate-900">Comisión Plataforma (3%)</div>
+                    <div class="text-xs text-slate-500">Taller formalizado 95% - Comisión reducida</div>
+                  </td>
+                  <td class="text-right py-3 px-2 text-slate-600">-</td>
+                  <td class="text-right py-3 px-2 text-slate-600">3%</td>
+                  <td class="text-right py-3 px-2 font-semibold text-red-600">-AR$ 77.400</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Totales -->
+          <div class="border-t-2 border-slate-200 pt-4">
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600">Subtotal (sin impuestos)</span>
+                <span class="font-semibold">AR$ 2.502.600</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600">IVA (21%)</span>
+                <span class="font-semibold">AR$ 525.546</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600">Retención Ganancias (2%)</span>
+                <span class="font-semibold text-red-600">-AR$ 50.052</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600">Retención IIBB (1.5%)</span>
+                <span class="font-semibold text-red-600">-AR$ 37.539</span>
+              </div>
+              <div class="flex justify-between text-lg font-bold pt-3 border-t border-slate-200">
+                <span class="text-slate-900">TOTAL A PAGAR</span>
+                <span class="text-emerald-600">AR$ 2.940.555</span>
+              </div>
+              <div class="text-xs text-slate-500 text-right">
+                Taller recibirá: AR$ 2.502.600 (luego de retenciones en factura)
+              </div>
+            </div>
+          </div>
+
+          <!-- Verificación ARCA -->
+          <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-600 flex-shrink-0 mt-0.5">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <div class="flex-1">
+              <div class="text-sm font-semibold text-emerald-900 mb-1">Factura verificable en ARCA</div>
+              <div class="text-xs text-emerald-700">
+                Esta factura está registrada en ARCA y puede verificarse escaneando el código QR o ingresando el CAE (Código de Autorización Electrónico):
+                <span class="font-mono font-semibold">72584691357821</span>
+              </div>
+              <button class="text-xs text-emerald-600 underline mt-2" onclick="alert('En producción: Abre portal de ARCA para verificar factura')">
+                Verificar en portal ARCA →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Método de Pago</h3>
+            <p class="section-subtitle">Seleccioná cómo querés pagar</p>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Transferencia Bancaria (Recomendado) -->
+            <label class="flex items-start gap-4 p-4 border-2 border-emerald-400 bg-emerald-50 rounded-xl cursor-pointer">
+              <input type="radio" name="metodoPago" value="transferencia" class="mt-1" checked />
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="font-semibold text-slate-900">Transferencia Bancaria</div>
+                  <span class="pill pill-emerald pill-sm">Recomendado</span>
+                </div>
+                <div class="text-sm text-slate-600 mb-3">
+                  Pago trazable y formal. El taller recibe el dinero directamente en su cuenta bancaria declarada ante ARCA.
+                </div>
+
+                <!-- Datos bancarios del taller -->
+                <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                  <div class="text-xs font-medium text-slate-500 mb-2">DATOS BANCARIOS DEL TALLER</div>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div>
+                      <span class="text-slate-500">Titular:</span>
+                      <span class="font-semibold ml-1">Confecciones Norte SRL</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">CUIT:</span>
+                      <span class="font-mono font-semibold ml-1">30-71234567-8</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">Banco:</span>
+                      <span class="font-semibold ml-1">Banco Nación</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">Tipo:</span>
+                      <span class="font-semibold ml-1">Cuenta Corriente $</span>
+                    </div>
+                    <div class="col-span-2">
+                      <span class="text-slate-500">CBU:</span>
+                      <span class="font-mono font-semibold ml-1">0110599520000012345678</span>
+                    </div>
+                    <div class="col-span-2">
+                      <span class="text-slate-500">Alias:</span>
+                      <span class="font-semibold ml-1">CONFECCIONES.NORTE.SRL</span>
+                    </div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm mt-3 w-full" onclick="alert('CBU copiado al portapapeles: 0110599520000012345678')">
+                    Copiar CBU
+                  </button>
+                </div>
+
+                <div class="mt-3 text-xs text-slate-500">
+                  ✓ Cuenta verificada ante ARCA | ✓ Titular coincide con emisor de factura | ✓ Pago trazable
+                </div>
+              </div>
+            </label>
+
+            <!-- Efectivo (Desaconsejado) -->
+            <label class="flex items-start gap-4 p-4 border-2 border-slate-200 bg-slate-50 rounded-xl cursor-pointer opacity-60">
+              <input type="radio" name="metodoPago" value="efectivo" class="mt-1" disabled />
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="font-semibold text-slate-900">Efectivo</div>
+                  <span class="pill pill-red pill-sm">No disponible</span>
+                </div>
+                <div class="text-sm text-slate-600 mb-2">
+                  ⚠️ El pago en efectivo no está permitido en la plataforma para garantizar trazabilidad y cumplimiento fiscal.
+                </div>
+                <div class="text-xs text-slate-500">
+                  La plataforma solo permite métodos formales de pago que generen comprobante verificable.
+                </div>
+              </div>
+            </label>
+
+            <!-- Cheque (Disponible pero menos recomendado) -->
+            <label class="flex items-start gap-4 p-4 border-2 border-slate-200 rounded-xl cursor-pointer">
+              <input type="radio" name="metodoPago" value="cheque" class="mt-1" />
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="font-semibold text-slate-900">Cheque</div>
+                  <span class="pill pill-slate pill-sm">Disponible</span>
+                </div>
+                <div class="text-sm text-slate-600">
+                  Cheque nominal a nombre del taller. Requiere envío físico o depósito bancario.
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Botón de confirmar pago -->
+          <div class="mt-6">
+            <button class="btn btn-primary btn-lg w-full" onclick="confirmarPago()">
+              Confirmar Pago de AR$ 2.940.555
+            </button>
+            <div class="text-xs text-slate-500 text-center mt-2">
+              Al confirmar, se registrará el pago y se enviará comprobante a ambas partes
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+
+        <!-- Estado del Pedido -->
+        <div class="section-card">
+          <h4 class="font-semibold text-slate-900 mb-4">Estado del Pedido</h4>
+
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-600">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-slate-900">Pedido Completado</div>
+                <div class="text-xs text-slate-500">1.200 prendas entregadas</div>
+                <div class="text-xs text-emerald-600">15/01/2025</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-600">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-slate-900">Control de Calidad OK</div>
+                <div class="text-xs text-slate-500">0 rechazos</div>
+                <div class="text-xs text-emerald-600">14/01/2025</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-amber-600">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-slate-900">Pago Pendiente</div>
+                <div class="text-xs text-slate-500">Vence en 7 días</div>
+                <div class="text-xs text-amber-600">Vence: 22/01/2025</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información del Taller -->
+        <div class="section-card">
+          <h4 class="font-semibold text-slate-900 mb-4">Información del Taller</h4>
+
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
+              CN
+            </div>
+            <div>
+              <div class="font-semibold text-slate-900">Confecciones Norte</div>
+              <div class="text-xs text-slate-500">Avellaneda, AMBA</div>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Reputación</span>
+              <span class="font-semibold text-emerald-600">8.9/10</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Pedidos completados</span>
+              <span class="font-semibold">128</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Formalización</span>
+              <span class="font-semibold text-emerald-600">95%</span>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-slate-200">
+            <button class="btn btn-secondary btn-sm w-full" onclick="alert('En producción: Ver perfil completo del taller con historial de pagos')">
+              Ver Perfil Completo
+            </button>
+          </div>
+        </div>
+
+        <!-- Historial de Pagos -->
+        <div class="section-card">
+          <h4 class="font-semibold text-slate-900 mb-4">Historial con este Taller</h4>
+
+          <div class="space-y-3 text-sm">
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-medium text-slate-900">#PED-2024-00098</span>
+                <span class="text-xs text-emerald-600">✓ Pagado</span>
+              </div>
+              <div class="text-xs text-slate-500">AR$ 1.850.000</div>
+              <div class="text-xs text-slate-400">Pagado hace 45 días</div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-medium text-slate-900">#PED-2024-00067</span>
+                <span class="text-xs text-emerald-600">✓ Pagado</span>
+              </div>
+              <div class="text-xs text-slate-500">AR$ 2.120.000</div>
+              <div class="text-xs text-slate-400">Pagado hace 78 días</div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-medium text-slate-900">#PED-2024-00034</span>
+                <span class="text-xs text-emerald-600">✓ Pagado</span>
+              </div>
+              <div class="text-xs text-slate-500">AR$ 1.950.000</div>
+              <div class="text-xs text-slate-400">Pagado hace 112 días</div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-emerald-50 rounded-lg">
+            <div class="text-xs text-emerald-700">
+              <strong>100% de cumplimiento en pagos</strong> con este taller. Promedio de días hasta pago: 3 días.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    function confirmarPago() {
+      const metodoPago = document.querySelector('input[name="metodoPago"]:checked');
+
+      if (!metodoPago) {
+        alert('Por favor seleccioná un método de pago');
+        return;
+      }
+
+      if (metodoPago.value === 'transferencia') {
+        // Simulación de confirmación de pago
+        if (confirm('¿Confirmar pago por transferencia bancaria de AR$ 2.940.555 a Confecciones Norte SRL?\n\nSe registrará el pago en la plataforma y se enviará comprobante a ambas partes.')) {
+          // Mostrar modal de éxito
+          alert('✓ Pago registrado exitosamente!\n\n' +
+                'Detalles:\n' +
+                '- Monto: AR$ 2.940.555\n' +
+                '- Método: Transferencia Bancaria\n' +
+                '- Destinatario: Confecciones Norte SRL\n' +
+                '- CBU: 0110599520000012345678\n\n' +
+                'Próximos pasos:\n' +
+                '1. Realizá la transferencia desde tu home banking\n' +
+                '2. Subí el comprobante de transferencia\n' +
+                '3. El taller recibirá notificación automática\n' +
+                '4. Una vez acreditado, el pedido se cerrará\n\n' +
+                'IMPORTANTE: La plataforma verificará que la transferencia provenga de la cuenta de Urbano Kids SA (CUIT 30-91234567-5)');
+
+          // En producción: Redirigir a pantalla de confirmación o dashboard
+          // window.location.href = 'dashboard-v1.3.html';
+        }
+      } else if (metodoPago.value === 'cheque') {
+        alert('Método de pago con cheque:\n\n' +
+              '1. Emitir cheque nominal a: Confecciones Norte SRL\n' +
+              '2. CUIT: 30-71234567-8\n' +
+              '3. Monto: AR$ 2.940.555\n' +
+              '4. Coordinar entrega o depósito con el taller\n\n' +
+              'El pago se marcará como completado cuando el taller confirme recepción del cheque.');
+      }
+    }
+
+    // Agregar listener para copiar CBU
+    document.addEventListener('DOMContentLoaded', function() {
+      // Resaltar método de pago recomendado
+      const transferencia = document.querySelector('input[value="transferencia"]');
+      if (transferencia) {
+        transferencia.checked = true;
+      }
+    });
+  </script>
+
+</body>
+</html>

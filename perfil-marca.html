@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido-v1.3.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos: Ver en Dashboard')">Mis Pedidos</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button
+          class="btn btn-secondary"
+          onclick="window.location.href='perfil-marca.html'"
+          style="display: flex; align-items: center; gap: 0.5rem;"
+        >
+          👤 Mi Perfil
+        </button>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Mi Perfil</h1>
+        <p class="page-subtitle">Editá la información de tu empresa</p>
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard-v1.3.html'">
+        ← Volver al Dashboard
+      </button>
+    </div>
+
+    <!-- Alerta indicando que es wireframe -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta pantalla resuelve el feedback: <em>"Necesito que me dé la oportunidad de acceder a mi perfil para modificarlo"</em>. Todos los campos son editables.
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- Datos Generales -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Datos Generales</h3>
+          </div>
+
+          <form id="formDatosGenerales">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-group col-span-2">
+                <label class="form-label">Razón Social *</label>
+                <input type="text" class="form-input" id="razonSocial" value="Urbano Kids S.A." required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">CUIT *</label>
+                <input type="text" class="form-input" id="cuit" value="30-91234567-5" required />
+                <span class="badge badge-emerald mt-2">✓ Verificado AFIP</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Sector/Nicho *</label>
+                <select class="form-select" id="sector" required>
+                  <option value="infantil" selected>Indumentaria Infantil</option>
+                  <option value="adulto">Indumentaria Adulto</option>
+                  <option value="deportiva">Deportiva</option>
+                  <option value="laboral">Laboral</option>
+                  <option value="lenceria">Lencería</option>
+                </select>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label class="form-label">Dirección de Planta/Oficina *</label>
+                <input type="text" class="form-input" id="direccion" value="Av. Rivadavia 1234, CABA" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Ciudad/Localidad *</label>
+                <input type="text" class="form-input" id="ciudad" value="Ciudad Autónoma de Buenos Aires" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Provincia *</label>
+                <select class="form-select" id="provincia" required>
+                  <option value="CABA" selected>Ciudad Autónoma de Buenos Aires</option>
+                  <option value="BuenosAires">Buenos Aires</option>
+                  <option value="Cordoba">Córdoba</option>
+                  <option value="SantaFe">Santa Fe</option>
+                  <!-- Otras provincias... -->
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Contactos -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Contactos</h3>
+              <p class="section-subtitle">Información de contacto principal</p>
+            </div>
+            <button class="btn btn-secondary" onclick="alert('Funcionalidad: Agregar contacto adicional')">
+              + Agregar contacto
+            </button>
+          </div>
+
+          <form id="formContactos">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Teléfono *</label>
+                <input type="tel" class="form-input" id="telefono" value="+54 11 4123-4567" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-input" id="email" value="contacto@urbanokids.com.ar" required />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label class="form-label">Sitio Web</label>
+                <input type="url" class="form-input" id="sitioWeb" value="https://www.urbanokids.com.ar" />
+              </div>
+
+              <div class="form-group col-span-2">
+                <label class="form-label">Persona de Contacto Principal</label>
+                <input type="text" class="form-input" id="contactoPrincipal" value="María González - Responsable de Producción" />
+              </div>
+            </div>
+          </form>
+
+          <!-- Vista previa de contactos adicionales -->
+          <div class="mt-4 p-3 bg-slate-50 rounded-xl text-sm text-slate-600">
+            <strong>Contactos adicionales:</strong> (Funcionalidad wireframe)
+            <ul class="list-disc pl-5 mt-2">
+              <li>Juan Pérez - Responsable Comercial - comercial@urbanokids.com.ar</li>
+              <li>Ana Martínez - Logística - logistica@urbanokids.com.ar</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Certificaciones -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Certificaciones y Compliance</h3>
+              <p class="section-subtitle">Subí certificados y documentación relevante</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Certificado 1 -->
+            <div class="p-3 border rounded-xl bg-emerald-50 border-emerald-200">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">📄</span>
+                  <div>
+                    <div class="font-semibold text-sm text-slate-900">ISO 9001 - Gestión de Calidad</div>
+                    <div class="text-xs text-slate-600">Vencimiento: 15/12/2025</div>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Ver</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">× Quitar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Certificado 2 -->
+            <div class="p-3 border rounded-xl bg-emerald-50 border-emerald-200">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">📄</span>
+                  <div>
+                    <div class="font-semibold text-sm text-slate-900">Certificado de Trabajo Decente - OIT</div>
+                    <div class="text-xs text-slate-600">Vencimiento: 30/06/2026</div>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Ver</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">× Quitar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón para subir nuevo certificado -->
+            <div class="p-4 border-2 border-dashed rounded-xl text-center cursor-pointer hover:bg-slate-50" onclick="alert('Funcionalidad: Subir certificado (.pdf, .jpg)')">
+              <div class="text-2xl mb-2">📤</div>
+              <div class="text-sm font-semibold text-slate-700">Subir nuevo certificado</div>
+              <div class="text-xs text-slate-500">Formatos: PDF, JPG, PNG (máx 5MB)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuración -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Configuración</h3>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Notificaciones -->
+            <div>
+              <label class="form-label">Notificaciones</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" checked />
+                  Recibir notificaciones por email
+                </label>
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" checked />
+                  Notificaciones en plataforma
+                </label>
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" />
+                  Notificaciones por SMS/WhatsApp
+                </label>
+              </div>
+            </div>
+
+            <!-- Tipos de notificaciones -->
+            <div>
+              <label class="form-label">¿Qué tipo de eventos querés recibir?</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" checked />
+                  Cambios de estado en pedidos
+                </label>
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" checked />
+                  Nuevas cotizaciones recibidas
+                </label>
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" checked />
+                  Alertas de riesgo (retrasos, calidad)
+                </label>
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" />
+                  Actualizaciones de la plataforma
+                </label>
+              </div>
+            </div>
+
+            <!-- Privacidad -->
+            <div>
+              <label class="form-label">Privacidad</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" />
+                  Ocultar mi empresa del directorio público
+                </label>
+                <label class="flex items-center gap-2 text-sm">
+                  <input type="checkbox" class="form-checkbox" />
+                  Solo mostrar información básica (nombre, sector)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+        <!-- Logo/Foto -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Logo de la Empresa</h3>
+          </div>
+
+          <div class="text-center">
+            <div style="width: 120px; height: 120px; margin: 0 auto; background: var(--slate-100); border-radius: 0.75rem; display: grid; place-items: center; font-size: 3rem; color: var(--slate-400); border: 2px dashed var(--slate-300);">
+              🏢
+            </div>
+            <button class="btn btn-secondary btn-block mt-3" onclick="alert('Funcionalidad: Subir logo (.jpg, .png)')">
+              📤 Subir logo
+            </button>
+            <div class="text-xs text-slate-500 mt-2">Formatos: JPG, PNG (máx 2MB)</div>
+          </div>
+        </div>
+
+        <!-- Resumen de perfil -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Visibilidad en Plataforma</h3>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
+              <div class="text-lg font-bold text-emerald-700">COMPLETO</div>
+              <div class="text-xs text-emerald-600">Perfil al 100%</div>
+            </div>
+
+            <div class="text-xs text-slate-600">
+              <strong>Información pública:</strong>
+              <ul class="list-disc pl-5 mt-1">
+                <li>Razón social</li>
+                <li>Sector</li>
+                <li>Ciudad</li>
+                <li>Teléfono y email</li>
+                <li>Certificaciones</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="section-card">
+          <h3 class="section-title mb-4">Acciones</h3>
+
+          <button id="btnGuardarCambios" class="btn btn-primary btn-lg btn-block mb-3">
+            ✓ Guardar cambios
+          </button>
+
+          <button class="btn btn-secondary btn-block" onclick="if(confirm('¿Descartar cambios?')) window.location.href='dashboard-v1.3.html'">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script src="feedback-v1.3.js"></script>
+  <script>
+    // Guardar cambios
+    document.getElementById('btnGuardarCambios').addEventListener('click', function() {
+      // Simular guardado
+      const datos = {
+        razonSocial: document.getElementById('razonSocial').value,
+        cuit: document.getElementById('cuit').value,
+        sector: document.getElementById('sector').value,
+        direccion: document.getElementById('direccion').value,
+        ciudad: document.getElementById('ciudad').value,
+        provincia: document.getElementById('provincia').value,
+        telefono: document.getElementById('telefono').value,
+        email: document.getElementById('email').value,
+        sitioWeb: document.getElementById('sitioWeb').value,
+        contactoPrincipal: document.getElementById('contactoPrincipal').value
+      };
+
+      // Guardar en localStorage (simulación)
+      localStorage.setItem('perfilMarca', JSON.stringify(datos));
+
+      showToast('✓ Perfil actualizado correctamente', 'success');
+
+      setTimeout(() => {
+        if (confirm('¿Volver al dashboard?')) {
+          window.location.href = 'dashboard-v1.3.html';
+        }
+      }, 1500);
+    });
+  </script>
+
+</body>
+</html>

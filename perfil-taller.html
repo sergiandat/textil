@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil Taller - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="alert('Ver mis pedidos en Dashboard')">Mis Pedidos</button>
+        <button class="nav-tab active" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" id="tallerNombre">-</h1>
+        <p class="page-subtitle" id="tallerUbicacion">-</p>
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='explorar-talleres.html'">
+        ← Volver a directorio
+      </button>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- Header con badges y CUIT -->
+        <div class="section-card">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="flex flex-wrap gap-2 mb-3" id="tallerBadges">
+                <!-- Badges dinámicos -->
+              </div>
+              <div class="text-sm text-slate-700">
+                <strong>CUIT:</strong> <span id="tallerCuit">-</span>
+                <span class="badge badge-emerald ml-2">✓ Verificado AFIP</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold" id="tallerNivel" style="color: var(--amber-700);">ORO</div>
+              <div class="text-lg text-amber-700" id="tallerRating">4.9★</div>
+              <div class="text-xs text-slate-500" id="tallerReviews">47 calificaciones</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sobre el taller -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Sobre el taller</h3>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="font-medium text-slate-600 mb-1">Fundado</div>
+              <div class="text-slate-900" id="tallerFundado">-</div>
+            </div>
+            <div>
+              <div class="font-medium text-slate-600 mb-1">Equipo</div>
+              <div class="text-slate-900" id="tallerTrabajadores">-</div>
+            </div>
+            <div class="col-span-2">
+              <div class="font-medium text-slate-600 mb-1">Certificaciones</div>
+              <div class="text-slate-900" id="tallerCertificaciones">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capacidades -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Capacidades</h3>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <div class="font-medium text-slate-600 mb-2 text-sm">Procesos que realiza:</div>
+              <div class="flex flex-wrap gap-2" id="tallerProcesos">
+                <!-- Pills dinámicas -->
+              </div>
+            </div>
+
+            <div>
+              <div class="font-medium text-slate-600 mb-2 text-sm">Especialización:</div>
+              <div class="flex flex-wrap gap-2" id="tallerEspecializacion">
+                <!-- Pills dinámicas -->
+              </div>
+            </div>
+
+            <div>
+              <div class="font-medium text-slate-600 mb-2 text-sm">Capacidad mensual:</div>
+              <div class="text-lg font-bold text-slate-900" id="tallerCapacidad">-</div>
+            </div>
+
+            <div>
+              <div class="font-medium text-slate-600 mb-2 text-sm">Maquinaria:</div>
+              <ul class="list-disc pl-5 text-sm text-slate-700" id="tallerMaquinaria">
+                <!-- Lista dinámica -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Historial</h3>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4">
+            <div class="stat-card">
+              <div class="stat-value" id="tallerPedidosCompletados">-</div>
+              <div class="stat-label">Pedidos completados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="tallerOntime">-</div>
+              <div class="stat-label">On-time delivery</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="tallerRetrabajo">-</div>
+              <div class="stat-label">Tasa retrabajo</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="tallerTransaccionado">-</div>
+              <div class="stat-label">Transaccionado</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reseñas -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Reseñas (últimas 5)</h3>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 border rounded-xl">
+              <div class="flex items-center justify-between mb-2">
+                <div class="font-semibold text-sm text-slate-900">Marca Consciente</div>
+                <div class="text-amber-700">★★★★★</div>
+              </div>
+              <div class="text-sm text-slate-600">"Excelente calidad, cumplieron el plazo acordado sin problemas. Muy profesionales."</div>
+              <div class="text-xs text-slate-400 mt-1">Hace 2 semanas</div>
+            </div>
+
+            <div class="p-3 border rounded-xl">
+              <div class="flex items-center justify-between mb-2">
+                <div class="font-semibold text-sm text-slate-900">Urbano Kids</div>
+                <div class="text-amber-700">★★★★★</div>
+              </div>
+              <div class="text-sm text-slate-600">"Muy buena comunicación durante todo el proceso. Recomendable."</div>
+              <div class="text-xs text-slate-400 mt-1">Hace 1 mes</div>
+            </div>
+
+            <div class="p-3 border rounded-xl">
+              <div class="flex items-center justify-between mb-2">
+                <div class="font-semibold text-sm text-slate-900">EcoStyle</div>
+                <div class="text-amber-700">★★★★☆</div>
+              </div>
+              <div class="text-sm text-slate-600">"Buen trabajo en general, pequeño retraso de 1 día pero avisaron con anticipación."</div>
+              <div class="text-xs text-slate-400 mt-1">Hace 2 meses</div>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary btn-block mt-3" onclick="alert('Ver todas las reseñas')">
+            Ver todas las reseñas
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar: Acciones -->
+      <div class="col-span-4 space-y-6">
+        <div class="section-card">
+          <h3 class="section-title mb-4">Acciones</h3>
+
+          <button class="btn btn-primary btn-lg btn-block mb-3" onclick="alert('Contactar taller: Funcionalidad disponible en v2')">
+            Contactar taller
+          </button>
+
+          <button class="btn btn-secondary btn-block" onclick="alert('Guardar en favoritos')">
+            ★ Guardar en favoritos
+          </button>
+        </div>
+
+        <!-- Estadísticas destacadas -->
+        <div class="section-card">
+          <h3 class="section-title mb-4">Estadísticas</h3>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
+              <div class="text-2xl font-bold text-emerald-700" id="statNivel">ORO</div>
+              <div class="text-xs text-emerald-600">Nivel de formalización</div>
+            </div>
+
+            <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-center">
+              <div class="text-2xl font-bold text-sky-700" id="statPuntaje">95/100</div>
+              <div class="text-xs text-sky-600">Puntaje reputación</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="section-card">
+          <h3 class="section-title mb-4">Ubicación</h3>
+
+          <div class="text-sm text-slate-700 mb-2" id="ubicacionDetalle">-</div>
+
+          <div class="p-3 bg-slate-100 rounded-xl text-center">
+            <div class="text-lg font-bold text-slate-900" id="distanciaMarca">-</div>
+            <div class="text-xs text-slate-600">Distancia desde tu ubicación</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    // Obtener taller de URL
+    const tallerId = getUrlParam('id');
+    const taller = talleres.find(t => t.id === tallerId) || talleres[0];
+
+    if (taller) {
+      // Header
+      document.getElementById('tallerNombre').textContent = taller.nombre;
+      document.getElementById('tallerUbicacion').textContent = taller.ubicacion;
+      document.getElementById('tallerCuit').textContent = taller.cuit;
+      document.getElementById('tallerNivel').textContent = taller.nivel;
+      document.getElementById('tallerRating').textContent = taller.rating + '★';
+      document.getElementById('tallerReviews').textContent = `${taller.pedidos_completados} calificaciones`;
+
+      // Badges
+      const badgesContainer = document.getElementById('tallerBadges');
+      taller.badges.forEach(badge => {
+        badgesContainer.innerHTML += `<span class="badge badge-${badge.color}">${badge.label}</span>`;
+      });
+
+      // Sobre el taller
+      document.getElementById('tallerFundado').textContent = taller.fundado;
+      document.getElementById('tallerTrabajadores').textContent = taller.trabajadores_registrados + ' trabajadores registrados';
+      document.getElementById('tallerCertificaciones').textContent = taller.certificaciones.join(' | ');
+
+      // Capacidades
+      const procesosContainer = document.getElementById('tallerProcesos');
+      taller.capacidades.forEach(cap => {
+        procesosContainer.innerHTML += `<span class="pill pill-sky">${cap}</span>`;
+      });
+
+      const especializacionContainer = document.getElementById('tallerEspecializacion');
+      taller.especializacion.forEach(esp => {
+        especializacionContainer.innerHTML += `<span class="pill pill-slate">${esp}</span>`;
+      });
+
+      document.getElementById('tallerCapacidad').textContent = taller.capacidad_mensual.toLocaleString() + ' prendas/mes';
+
+      const maquinariaList = document.getElementById('tallerMaquinaria');
+      taller.maquinaria.forEach(maq => {
+        const li = document.createElement('li');
+        li.textContent = maq;
+        maquinariaList.appendChild(li);
+      });
+
+      // Historial
+      document.getElementById('tallerPedidosCompletados').textContent = taller.pedidos_completados;
+      document.getElementById('tallerOntime').textContent = taller.ontime_rate + '%';
+      document.getElementById('tallerRetrabajo').textContent = taller.retrabajo_rate + '%';
+      document.getElementById('tallerTransaccionado').textContent = '$4.2M'; // Mock
+
+      // Sidebar stats
+      document.getElementById('statNivel').textContent = taller.nivel;
+      document.getElementById('statPuntaje').textContent = taller.puntaje + '/100';
+
+      // Ubicación
+      document.getElementById('ubicacionDetalle').textContent = taller.ubicacion;
+      document.getElementById('distanciaMarca').textContent = (taller.distancia_marca || 10.5) + ' km';
+    }
+  </script>
+
+</body>
+</html>

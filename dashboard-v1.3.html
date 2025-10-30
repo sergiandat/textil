@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard v1.3 - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!--
+    PANTALLA: dashboard-v1.3.html (Dashboard Marca)
+    BARRERAS: B1 (Trazabilidad - monitoreo), B2 (Desconfianza - transparencia), B4 (Articulación - conexión)
+    FUNCIONES: ENCONTRAR (acceso), ACORDAR (acceso), EJECUTAR (monitoreo), VERIFICAR (estado)
+    ACTORES: Marca (principal), Taller (secundario)
+    DESCRIPCIÓN: Dashboard principal para marcas con acceso a crear pedidos, monitorear ejecución y acceder a perfil.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: <span id="marcaNombre">Urbano Kids</span></div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab active" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido-v1.3.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos: Ver en Dashboard')">Mis Pedidos</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- NUEVO: Link a Mi Perfil -->
+        <button
+          class="btn btn-secondary"
+          onclick="window.location.href='perfil-marca.html'"
+          style="display: flex; align-items: center; gap: 0.5rem;"
+        >
+          👤 Mi Perfil
+        </button>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard v1.3 - Wireframe</h1>
+        <p class="page-subtitle">Vista actualizada con acceso a perfil</p>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="window.location.href='crear-pedido-v1.3.html'">
+        + Crear nuevo pedido
+      </button>
+    </div>
+
+    <!-- Alerta indicando que es wireframe -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta es una versión de diseño para validar cambios propuestos. La funcionalidad principal es el <strong>acceso a "Mi Perfil"</strong> en la topbar. El resto del dashboard funciona igual que v1.1.
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="stat-card">
+        <div class="stat-label">Pedidos activos</div>
+        <div class="stat-value" id="statPedidosActivos">3</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completados</div>
+        <div class="stat-value" id="statPedidosCompletados">47</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Monto transaccionado</div>
+        <div class="stat-value" id="statMontoTransaccionado">$12.5M</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Rating promedio</div>
+        <div class="stat-value" id="statRating">4.8★</div>
+      </div>
+    </div>
+
+    <!-- Pedidos activos -->
+    <div class="section-card mb-6">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">Pedidos activos</h3>
+          <p class="section-subtitle">Seguimiento en tiempo real</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Pedido 1 -->
+        <div class="card-hover p-4 border rounded-xl" style="cursor: pointer;" onclick="window.location.href='ejecucion.html?om=OM-2025-00045'">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <div class="font-semibold text-slate-900">OM-2025-00045 | Jean 500u</div>
+              <div class="text-xs text-slate-500">Creado: 10/07/2025 | Objetivo: 30/07/2025</div>
+            </div>
+            <div class="text-right">
+              <div class="text-lg font-bold text-sky-600">75%</div>
+              <div class="text-xs text-slate-500">5 días restantes</div>
+            </div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 75%"></div>
+          </div>
+          <div class="mt-2 text-xs text-slate-600">
+            Corte: 100% | Confección: 100% | Lavado: 100% | Desgaste: 50% | Acabado: 0%
+          </div>
+        </div>
+
+        <!-- Pedido 2 -->
+        <div class="card-hover p-4 border rounded-xl" style="cursor: pointer;">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <div class="font-semibold text-slate-900">OM-2025-00046 | Remera 1000u</div>
+              <div class="text-xs text-slate-500">Creado: 15/07/2025 | Objetivo: 05/08/2025</div>
+            </div>
+            <div class="text-right">
+              <div class="text-lg font-bold text-sky-600">40%</div>
+              <div class="text-xs text-slate-500">11 días restantes</div>
+            </div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 40%"></div>
+          </div>
+          <div class="mt-2 text-xs text-slate-600">
+            Corte: 100% | Confección: 60% | Estampado: 0%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas / Notificaciones -->
+    <div class="section-card mb-6">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">Alertas y notificaciones</h3>
+          <p class="section-subtitle">Acciones pendientes</p>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="alert alert-warning">
+          <div class="flex items-center justify-between">
+            <span class="text-sm">Pedido OM-2025-00045: Desgaste está +8% sobre tiempo estimado</span>
+            <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+              Ver detalles
+            </button>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <div class="flex items-center justify-between">
+            <span class="text-sm">Nueva cotización recibida de "Taller Los Pinos" para proceso Estampado</span>
+            <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+              Revisar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exportar Feedback v1.3 -->
+    <div class="section-card" style="margin-top: 2rem;">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">Feedback del Wireframe v1.3</h3>
+          <p class="section-subtitle">Exportar todas las respuestas recolectadas</p>
+        </div>
+      </div>
+
+      <div class="feedback-export-section" style="background: var(--sky-50); border: 2px dashed var(--sky-300); border-radius: 1rem; padding: 1.5rem; text-align: center;">
+        <div style="font-size: 1rem; font-weight: 600; color: var(--slate-900); margin-bottom: 0.5rem;">
+          📝 Exportar Feedback v1.3
+        </div>
+        <div style="font-size: 0.875rem; color: var(--slate-600); margin-bottom: 1rem;">
+          Descargá todas las respuestas del wireframe v1.3 para análisis
+        </div>
+        <div class="feedback-count" style="justify-content: center; margin-bottom: 1rem;">
+          <span>Respuestas recolectadas:</span>
+          <span class="feedback-count-number" id="feedbackCountTotal">0</span>
+        </div>
+        <button
+          class="feedback-export-btn"
+          id="exportFeedbackBtn"
+          onclick="exportarFeedbackCompleto()"
+          style="padding: 0.75rem 1.5rem; background: var(--sky-600); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;"
+        >
+          📥 Descargar Feedback v1.3
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script src="feedback-v1.3.js"></script>
+  <script>
+    // Función para exportar feedback completo
+    function exportarFeedbackCompleto() {
+      const txtContent = FeedbackManager.exportAllFeedback();
+
+      // Crear blob y descargar
+      const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `feedback-mvp-v1.3-wireframe-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast('✓ Feedback v1.3 exportado correctamente', 'success');
+    }
+
+    // Actualizar contador de respuestas
+    function actualizarContadorFeedback() {
+      const responses = JSON.parse(localStorage.getItem('feedbackResponses_v12') || '{}');
+
+      let totalAnswered = 0;
+
+      // Contar respuestas del panel
+      Object.keys(responses).forEach(page => {
+        const pageResponses = responses[page];
+        Object.values(pageResponses).forEach(value => {
+          if (Array.isArray(value) && value.length > 0) totalAnswered++;
+          else if (value && value !== '') totalAnswered++;
+        });
+      });
+
+      document.getElementById('feedbackCountTotal').textContent = totalAnswered;
+    }
+
+    // Ejecutar al cargar
+    actualizarContadorFeedback();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Pedido v1.3 - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .proceso-item {
+      background: var(--slate-50);
+      border: 2px solid var(--slate-200);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s;
+    }
+    .proceso-item:hover {
+      border-color: var(--sky-400);
+      background: white;
+    }
+    .proceso-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .proceso-item.seleccionado {
+      background: var(--sky-50);
+      border-color: var(--sky-600);
+    }
+    .proceso-badge {
+      background: var(--slate-200);
+      color: var(--slate-700);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .proceso-badge.proveedor-seleccionado {
+      background: var(--emerald-100);
+      color: var(--emerald-700);
+    }
+    .checkpoint-qa {
+      background: var(--amber-50);
+      border: 1px solid var(--amber-200);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
+    }
+    .archivo-adjunto {
+      background: var(--sky-50);
+      border: 1px solid var(--sky-200);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='crear-pedido-v1.3.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos: Ver en Dashboard')">Mis Pedidos</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button class="btn btn-secondary" onclick="window.location.href='perfil-marca.html'" style="display: flex; align-items: center; gap: 0.5rem;">
+          👤 Mi Perfil
+        </button>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Crear Pedido v1.3 - REDISEÑADO</h1>
+        <p class="page-subtitle">Flujo mejorado: procesos editables + archivos técnicos + QA transversal</p>
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard-v1.3.html'">
+        ← Volver al Dashboard
+      </button>
+    </div>
+
+    <!-- Alerta explicativa -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Este flujo resuelve los hallazgos críticos:
+      <ul style="margin-top: 0.5rem; list-style: disc; padding-left: 1.5rem;">
+        <li><strong>Procesos editables</strong>: Podés reordenar, agregar o quitar procesos</li>
+        <li><strong>Archivos técnicos</strong>: Subir moldes, fichas, specs por proceso</li>
+        <li><strong>QA transversal</strong>: Checkpoints de calidad en cada proceso (no como eslabón separado)</li>
+        <li><strong>Matching por proceso</strong>: Seleccionar proveedor para cada etapa individualmente</li>
+      </ul>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- PASO 1: Información Básica -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Paso 1: Información Básica</h3>
+              <p class="section-subtitle">Define qué querés producir</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Tipo de Prenda *</label>
+              <select class="form-select" id="tipoPrenda">
+                <option value="">Seleccionar...</option>
+                <option value="jean">Jean/Vaquero</option>
+                <option value="remera">Remera</option>
+                <option value="campera">Campera</option>
+                <option value="buzo">Buzo/Hoodie</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Variante</label>
+              <select class="form-select" id="variante">
+                <option value="clasico">Clásico</option>
+                <option value="roturas">Con roturas</option>
+                <option value="stonewash">Stone wash</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Cantidad *</label>
+              <input type="number" class="form-input" id="cantidad" value="500" min="1" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Fecha Objetivo *</label>
+              <input type="date" class="form-input" id="fechaObjetivo" value="2025-08-15" />
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 2: Definir Cadena de Producción (NUEVO) -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Paso 2: Definir Cadena de Producción</h3>
+              <p class="section-subtitle">Procesos EDITABLES: reordenar, agregar o quitar</p>
+            </div>
+            <button class="btn btn-secondary" onclick="agregarProceso()">
+              + Agregar proceso
+            </button>
+          </div>
+
+          <div class="alert alert-warning mb-4" style="font-size: 0.875rem;">
+            <strong>💡 Sugerencia automática:</strong> Según "Jean 500u", te sugerimos esta cadena. Podés editarla a tu necesidad.
+          </div>
+
+          <div id="listaProcesos">
+            <!-- Proceso 1 -->
+            <div class="proceso-item" id="proceso-1">
+              <div class="proceso-item-header">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-900">1. Corte</span>
+                  <span class="proceso-badge">Sin proveedor</span>
+                </div>
+                <div class="flex gap-1">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverArriba(1)">↑</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverAbajo(1)">↓</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="eliminarProceso(1)">× Quitar</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="toggleConfiguracion(1)">⚙ Config</button>
+                </div>
+              </div>
+              <div class="proceso-config" id="config-1" style="display: none;">
+                <!-- Se expande al hacer click en Config -->
+              </div>
+            </div>
+
+            <!-- Proceso 2 -->
+            <div class="proceso-item" id="proceso-2">
+              <div class="proceso-item-header">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-900">2. Confección</span>
+                  <span class="proceso-badge">Sin proveedor</span>
+                </div>
+                <div class="flex gap-1">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverArriba(2)">↑</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverAbajo(2)">↓</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="eliminarProceso(2)">× Quitar</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="toggleConfiguracion(2)">⚙ Config</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Proceso 3 -->
+            <div class="proceso-item" id="proceso-3">
+              <div class="proceso-item-header">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-900">3. Lavandería</span>
+                  <span class="proceso-badge">Sin proveedor</span>
+                </div>
+                <div class="flex gap-1">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverArriba(3)">↑</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverAbajo(3)">↓</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="eliminarProceso(3)">× Quitar</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="toggleConfiguracion(3)">⚙ Config</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Proceso 4 -->
+            <div class="proceso-item" id="proceso-4">
+              <div class="proceso-item-header">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-900">4. Desgaste</span>
+                  <span class="proceso-badge">Sin proveedor</span>
+                </div>
+                <div class="flex gap-1">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverArriba(4)">↑</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverAbajo(4)">↓</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="eliminarProceso(4)">× Quitar</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="toggleConfiguracion(4)">⚙ Config</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Proceso 5 -->
+            <div class="proceso-item" id="proceso-5">
+              <div class="proceso-item-header">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-900">5. Acabado</span>
+                  <span class="proceso-badge">Sin proveedor</span>
+                </div>
+                <div class="flex gap-1">
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverArriba(5)">↑</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="moverAbajo(5)">↓</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="eliminarProceso(5)">× Quitar</button>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="toggleConfiguracion(5)">⚙ Config</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 3: Configurar Cada Proceso (NUEVO) -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Paso 3: Configurar Cada Proceso</h3>
+              <p class="section-subtitle">Archivos técnicos + QA transversal + Seleccionar proveedor</p>
+            </div>
+          </div>
+
+          <div class="alert alert-info mb-4" style="font-size: 0.875rem;">
+            <strong>👉 Expandí cada proceso:</strong> Hacé click en "⚙ Config" arriba para configurar archivos, QA y proveedor por proceso.
+          </div>
+
+          <!-- EJEMPLO: Configuración del Proceso 1 (Corte) expandido -->
+          <div class="p-4 border-2 border-sky-600 rounded-xl bg-sky-50">
+            <div class="font-semibold text-slate-900 mb-3">Ejemplo: Configuración de "1. Corte"</div>
+
+            <!-- Archivos técnicos -->
+            <div class="mb-4">
+              <label class="form-label">Archivos Técnicos</label>
+              <div class="space-y-2 mb-2">
+                <div class="archivo-adjunto">
+                  <span>📄</span>
+                  <span class="flex-1">molde-jean-talle-8.dwg (2.1 MB)</span>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.125rem 0.375rem;">×</button>
+                </div>
+                <div class="archivo-adjunto">
+                  <span>📄</span>
+                  <span class="flex-1">ficha-tecnica-corte.pdf (890 KB)</span>
+                  <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.125rem 0.375rem;">×</button>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="alert('Funcionalidad: Subir archivo técnico (.pdf, .dwg, .jpg, .xlsx)')">
+                📤 Subir archivo técnico
+              </button>
+            </div>
+
+            <!-- Checkpoints de QA (Transversal) -->
+            <div class="checkpoint-qa mb-4">
+              <div class="font-semibold mb-2" style="color: var(--amber-700);">🔍 Checkpoints de Calidad (QA Transversal)</div>
+              <label class="flex items-center gap-2 text-sm mb-1">
+                <input type="checkbox" class="form-checkbox" checked />
+                Verificar precisión de corte (tolerancia ±2mm)
+              </label>
+              <label class="flex items-center gap-2 text-sm mb-1">
+                <input type="checkbox" class="form-checkbox" checked />
+                Inspeccionar defectos en tela
+              </label>
+              <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" class="form-checkbox" />
+                Registro fotográfico de primera pieza
+              </label>
+            </div>
+
+            <!-- Seleccionar proveedor para este proceso -->
+            <div>
+              <label class="form-label">Proveedor para este proceso</label>
+              <button
+                class="btn btn-primary btn-block"
+                onclick="window.location.href='seleccionar-proveedor.html?proceso=Corte&prenda=jean&cantidad=500'"
+              >
+                🔍 Buscar y seleccionar proveedor para "Corte"
+              </button>
+              <div class="text-xs text-slate-500 mt-1">
+                Esto te llevará al matching específico para el proceso "Corte"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 4: Logística -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Paso 4: Logística entre Procesos</h3>
+              <p class="section-subtitle">Define los traslados</p>
+            </div>
+          </div>
+
+          <div class="text-sm text-slate-600 mb-3">
+            Se identificaron <strong>4 traslados</strong> necesarios entre procesos:
+          </div>
+
+          <div class="space-y-2">
+            <div class="p-3 border rounded-xl">
+              <div class="font-semibold text-sm">Traslado 1: Corte → Confección</div>
+              <div class="text-xs text-slate-600 mt-1">
+                <select class="form-select" style="width: auto; font-size: 0.75rem;">
+                  <option>EXW (Proveedor entrega)</option>
+                  <option>FCA (Coordino yo)</option>
+                  <option>Contratar desde plataforma</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="p-3 border rounded-xl">
+              <div class="font-semibold text-sm">Traslado 2: Confección → Lavandería</div>
+              <div class="text-xs text-slate-600 mt-1">
+                <select class="form-select" style="width: auto; font-size: 0.75rem;">
+                  <option selected>EXW (Proveedor entrega)</option>
+                  <option>FCA (Coordino yo)</option>
+                  <option>Contratar desde plataforma</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Más traslados... -->
+          </div>
+        </div>
+
+        <!-- PASO 5: Resumen y Confirmar -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Paso 5: Resumen y Confirmar</h3>
+              <p class="section-subtitle">Revisá antes de crear el pedido</p>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-sm">
+            <div class="p-3 bg-slate-50 rounded-xl">
+              <div class="font-semibold text-slate-700 mb-1">Información básica:</div>
+              <div class="text-slate-600">Jean 500u | Entrega: 15/08/2025</div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl">
+              <div class="font-semibold text-slate-700 mb-1">Cadena de producción (5 procesos):</div>
+              <div class="text-slate-600">Corte → Confección → Lavandería → Desgaste → Acabado</div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl">
+              <div class="font-semibold text-slate-700 mb-1">Proveedores seleccionados:</div>
+              <div class="text-amber-600">⚠ Aún no seleccionaste proveedores para los procesos</div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-lg btn-block mt-4" onclick="crearPedido()">
+            ✓ Crear Pedido
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar: Ayuda -->
+      <div class="col-span-4 space-y-6">
+        <div class="section-card">
+          <h3 class="section-title mb-3">Ayuda Contextual</h3>
+
+          <div class="space-y-3 text-sm">
+            <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl">
+              <div class="font-semibold text-sky-700 mb-1">Procesos Editables</div>
+              <div class="text-xs text-slate-600">
+                Usá los botones ↑↓ para reordenar, o "× Quitar" para eliminar un proceso. Podés agregar nuevos con "+ Agregar proceso".
+              </div>
+            </div>
+
+            <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+              <div class="font-semibold text-amber-700 mb-1">QA Transversal</div>
+              <div class="text-xs text-slate-600">
+                Control de calidad NO es un eslabón separado. Son checkpoints que aplicás a cada proceso según necesidad.
+              </div>
+            </div>
+
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div class="font-semibold text-emerald-700 mb-1">Archivos Técnicos</div>
+              <div class="text-xs text-slate-600">
+                Subí moldes (.dwg), fichas técnicas (.pdf), fotos (.jpg), especificaciones (.xlsx) por cada proceso.
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <div class="font-semibold text-slate-700 mb-1">Matching por Proceso</div>
+              <div class="text-xs text-slate-600">
+                Al hacer click en "Buscar proveedor", irás a una pantalla de matching ESPECÍFICA para ese proceso (no para todo el pedido).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h3 class="section-title mb-3">Estado del Pedido</h3>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Info básica:</span>
+              <span class="badge badge-emerald">✓ Completo</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Cadena definida:</span>
+              <span class="badge badge-emerald">✓ 5 procesos</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Proveedores:</span>
+              <span class="badge badge-amber">0/5 seleccionados</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Archivos:</span>
+              <span class="badge badge-emerald">✓ 2 archivos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script src="feedback-v1.3.js"></script>
+  <script>
+    // Funciones de wireframe (simuladas)
+    function moverArriba(id) {
+      showToast(`Funcionalidad wireframe: Mover proceso ${id} hacia arriba`, 'success');
+    }
+
+    function moverAbajo(id) {
+      showToast(`Funcionalidad wireframe: Mover proceso ${id} hacia abajo`, 'success');
+    }
+
+    function eliminarProceso(id) {
+      if (confirm(`¿Eliminar el proceso ${id}?`)) {
+        showToast(`Funcionalidad wireframe: Proceso ${id} eliminado`, 'success');
+      }
+    }
+
+    function toggleConfiguracion(id) {
+      showToast(`Funcionalidad wireframe: Expandir configuración del proceso ${id}`, 'success');
+      alert('En la versión funcional, esto expandiría la sección de configuración (archivos + QA + proveedor) para el proceso ' + id);
+    }
+
+    function agregarProceso() {
+      const nuevoProceso = prompt('¿Qué proceso querés agregar? (ej: Bordado, Planchado, etc.)');
+      if (nuevoProceso) {
+        showToast(`Funcionalidad wireframe: Agregar proceso "${nuevoProceso}"`, 'success');
+      }
+    }
+
+    function crearPedido() {
+      if (confirm('¿Crear pedido con la configuración actual?')) {
+        showToast('✓ Pedido creado correctamente', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard-v1.3.html';
+        }, 1500);
+      }
+    }
+  </script>
+
+</body>
+</html>

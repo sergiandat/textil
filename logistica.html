@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logística - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab active">Logística</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Logística</h1>
+        <p class="page-subtitle">Coordinar traslados entre eslabones de producción</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- Traslado activo -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Coordinar Traslado</h3>
+              <p class="section-subtitle">MO-1 Corte+Confección → MO-2 Lavado</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div class="text-xs font-medium text-emerald-700 mb-1">Origen</div>
+              <div class="font-semibold text-slate-900">Corte Sur SRL</div>
+              <div class="text-sm text-slate-600">Avellaneda, AMBA</div>
+              <div class="text-xs text-emerald-600 mt-2">✓ Corte+Confección completado</div>
+            </div>
+
+            <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl">
+              <div class="text-xs font-medium text-sky-700 mb-1">Destino</div>
+              <div class="font-semibold text-slate-900">Lavandería BlueDenim</div>
+              <div class="text-sm text-slate-600">San Martín, AMBA</div>
+              <div class="text-xs text-sky-600 mt-2">→ Lavado por iniciar</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="stat-card">
+              <div class="stat-value">6.3 km</div>
+              <div class="stat-label">Distancia</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">~45 kg</div>
+              <div class="stat-label">Peso estimado</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">500 uds</div>
+              <div class="stat-label">Cantidad</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Opciones de logística</label>
+            <div class="space-y-2">
+              <label class="flex items-start gap-3 p-3 border rounded-xl cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="logistica" value="exw" class="mt-1" />
+                <div>
+                  <div class="font-semibold text-sm">EXW (Ex Works) - Yo busco las prendas</div>
+                  <div class="text-xs text-slate-600">La marca coordina y paga el transporte. Costo: $0 (marca gestiona)</div>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-3 border rounded-xl cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="logistica" value="fca" class="mt-1" />
+                <div>
+                  <div class="font-semibold text-sm">FCA (Free Carrier) - Taller entrega al siguiente</div>
+                  <div class="text-xs text-slate-600">Taller origen coordina entrega al taller destino. Costo: $4.500</div>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-3 border rounded-xl cursor-pointer hover:bg-slate-50 bg-sky-50">
+                <input type="radio" name="logistica" value="plataforma" class="mt-1" checked />
+                <div>
+                  <div class="font-semibold text-sm">Contratar transporte desde plataforma</div>
+                  <div class="text-xs text-slate-600">Plataforma coordina con transportista certificado. Costo: $3.200</div>
+                  <div class="badge badge-sky mt-1">Recomendado</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="alert alert-warning">
+            <strong>Importante:</strong> El traslado debe realizarse dentro de las 48hs posteriores a completar MO-1 para mantener los plazos del pedido.
+          </div>
+        </div>
+
+        <!-- Próximos traslados -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Próximos traslados programados</h3>
+              <p class="section-subtitle">Después de completar lavado</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 border rounded-xl bg-slate-50">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-semibold text-slate-700">Lavandería BlueDenim → Acabados Premium</div>
+                  <div class="text-xs text-slate-500">9.1 km | ~45 kg</div>
+                </div>
+                <span class="badge badge-slate">Pendiente</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar: Resumen & Confirmación -->
+      <div class="col-span-4 space-y-6">
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Resumen del traslado</h3>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div><strong>De:</strong> Corte Sur SRL (Avellaneda)</div>
+            <div><strong>A:</strong> Lavandería BlueDenim (San Martín)</div>
+            <div><strong>Distancia:</strong> 6.3 km</div>
+            <div><strong>Peso:</strong> ~45 kg (500 uds)</div>
+            <div><strong>Opción:</strong> <span id="resumenOpcion">Transporte plataforma</span></div>
+            <div><strong>Costo:</strong> <span id="resumenCosto">$3.200</span></div>
+          </div>
+
+          <div class="mt-4 p-3 bg-slate-50 rounded-xl">
+            <div class="text-xs font-medium text-slate-600 mb-1">Tiempo estimado de entrega</div>
+            <div class="text-lg font-bold text-slate-900">~2 horas</div>
+            <div class="text-xs text-slate-500">Coordinación + traslado</div>
+          </div>
+
+          <button id="btnConfirmarTraslado" class="btn btn-primary btn-lg btn-block mt-4">
+            Confirmar traslado
+          </button>
+
+          <button class="btn btn-secondary btn-block" onclick="window.location.href='ejecucion.html?om=' + getUrlParam('om')">
+            Volver a ejecución
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    const omId = getUrlParam('om');
+
+    // Actualizar resumen según opción seleccionada
+    document.querySelectorAll('input[name="logistica"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        let opcion, costo;
+        switch(this.value) {
+          case 'exw':
+            opcion = 'EXW (yo busco)';
+            costo = '$0';
+            break;
+          case 'fca':
+            opcion = 'FCA (taller entrega)';
+            costo = '$4.500';
+            break;
+          case 'plataforma':
+            opcion = 'Transporte plataforma';
+            costo = '$3.200';
+            break;
+        }
+        document.getElementById('resumenOpcion').textContent = opcion;
+        document.getElementById('resumenCosto').textContent = costo;
+      });
+    });
+
+    // Confirmar traslado
+    document.getElementById('btnConfirmarTraslado').addEventListener('click', function() {
+      const opcionSeleccionada = document.querySelector('input[name="logistica"]:checked').value;
+
+      showToast('✓ Traslado confirmado. Se generó QR de seguimiento.', 'success');
+
+      setTimeout(() => {
+        // Simular que el traslado se programó y volver a ejecución
+        window.location.href = 'ejecucion.html?om=' + omId;
+      }, 1500);
+    });
+  </script>
+
+</body>
+</html>

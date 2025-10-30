@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validaciones - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .validacion-item {
+      padding: 1rem;
+      border: 2px solid var(--slate-200);
+      border-radius: 0.75rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s;
+    }
+    .validacion-item:hover {
+      border-color: var(--sky-400);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .validacion-item.completo {
+      background: var(--emerald-50);
+      border-color: var(--emerald-400);
+    }
+    .validacion-item.pendiente {
+      background: var(--amber-50);
+      border-color: var(--amber-400);
+    }
+    .validacion-item.falta {
+      background: var(--slate-50);
+      border-color: var(--slate-300);
+    }
+    .progress-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--sky-600) 0% 65%, var(--slate-200) 65% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .progress-circle-inner {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: validaciones.html (Checklist de Validaciones)
+    BARRERAS: B3 (Formalización compleja y costosa), B7 (Dumping Social)
+    FUNCIONES: COMPLIANCE (validación progresiva)
+    ACTORES: Taller (principal), Trabajador, Estado (ARCA, STESS)
+    DESCRIPCIÓN: Checklist interactivo de validaciones progresivas para formalización con indicadores de progreso.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Taller: Corte Sur SRL</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='validaciones.html'">Mi Formalización</button>
+        <button class="nav-tab" onclick="window.location.href='capacitaciones.html'">Capacitaciones</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos')">Mis Pedidos</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-amber">En formalización (65%)</span>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Tu Camino a la Formalización</h1>
+        <p class="page-subtitle">Checklist de validaciones progresivas - Barrera B3</p>
+      </div>
+    </div>
+
+    <!-- Alerta -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta pantalla demuestra cómo se resuelve <strong>B3 (Formalización compleja y costosa)</strong> mediante un checklist progresivo y asistido. El taller ve claramente qué falta, cómo obtenerlo y su progreso vs otros.
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Columna principal: Checklist -->
+      <div class="col-span-8 space-y-6">
+        <!-- Progreso general -->
+        <div class="section-card">
+          <div class="flex items-center gap-6">
+            <div class="progress-circle">
+              <div class="progress-circle-inner">
+                <div class="text-3xl font-bold text-sky-700">65%</div>
+                <div class="text-xs text-slate-500">completado</div>
+              </div>
+            </div>
+
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-slate-900 mb-2">Tu progreso de formalización</h3>
+              <div class="mb-3">
+                <div class="progress-bar" style="height: 12px;">
+                  <div class="progress-fill" style="width: 65%; background: var(--sky-600);"></div>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-3 text-sm">
+                <div>
+                  <div class="text-slate-600">Completadas:</div>
+                  <div class="font-bold text-emerald-700">4/8</div>
+                </div>
+                <div>
+                  <div class="text-slate-600">Pendientes:</div>
+                  <div class="font-bold text-amber-700">2/8</div>
+                </div>
+                <div>
+                  <div class="text-slate-600">No iniciadas:</div>
+                  <div class="font-bold text-slate-700">2/8</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-sky-50 border border-sky-200 rounded-xl text-sm">
+            <strong>💡 Beneficio:</strong> Con <strong>80% de formalización</strong> podés acceder a pedidos premium y mejor posicionamiento en el matching. Talleres similares tienen promedio <strong>78%</strong>.
+          </div>
+        </div>
+
+        <!-- Checklist de validaciones -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Checklist de Validaciones</h3>
+              <p class="section-subtitle">8 validaciones para formalización completa</p>
+            </div>
+          </div>
+
+          <!-- Validación 1: CUIT -->
+          <div class="validacion-item completo">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">✅</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-emerald-900">CUIT válido</div>
+                  <div class="text-sm text-emerald-700">Verificado con ARCA - 30-12345678-9</div>
+                </div>
+              </div>
+              <div class="text-sm text-emerald-700 font-semibold">Completado</div>
+            </div>
+          </div>
+
+          <!-- Validación 2: Habilitación -->
+          <div class="validacion-item completo">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">✅</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-emerald-900">Habilitación municipal</div>
+                  <div class="text-sm text-emerald-700">Certificado subido - Vencimiento: 15/08/2026</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="alert('Ver certificado subido')">
+                👁 Ver
+              </button>
+            </div>
+          </div>
+
+          <!-- Validación 3: ARCA (pendiente) -->
+          <div class="validacion-item pendiente">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">⚠️</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-amber-900">Alta en ARCA (Registro Laboral)</div>
+                  <div class="text-sm text-amber-700">Documentación en revisión - 1 observación</div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="window.location.href='progreso-formalizacion.html?seccion=arca'">
+                Ver qué falta
+              </button>
+            </div>
+            <div class="mt-2 p-2 bg-white rounded border border-amber-300 text-sm">
+              <strong>Observación:</strong> Plano de habilitación sin firma de arquitecto. <button class="text-sky-600 underline" onclick="alert('Subir documento corregido')">Re-subir →</button>
+            </div>
+          </div>
+
+          <!-- Validación 4: Certificado bomberos -->
+          <div class="validacion-item falta">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">❌</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-slate-900">Certificado de bomberos</div>
+                  <div class="text-sm text-slate-600">No iniciado - Requerido para >5 empleados</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="abrirGuia('bomberos')">
+                📖 Cómo obtenerlo
+              </button>
+            </div>
+          </div>
+
+          <!-- Validación 5: ART -->
+          <div class="validacion-item falta">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">❌</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-slate-900">ART (Aseguradora de Riesgos del Trabajo)</div>
+                  <div class="text-sm text-slate-600">No iniciado - Obligatorio para contratar personal</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="abrirGuia('art')">
+                📖 Ver opciones
+              </button>
+            </div>
+          </div>
+
+          <!-- Validación 6: Libro sueldos -->
+          <div class="validacion-item completo">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">✅</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-emerald-900">Libro de sueldos digital</div>
+                  <div class="text-sm text-emerald-700">Sistema activo - Última actualización: 25/10/2025</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="alert('Ir a libro de sueldos')">
+                → Abrir
+              </button>
+            </div>
+          </div>
+
+          <!-- Validación 7: Certificado INTI (opcional pero recomendado) -->
+          <div class="validacion-item pendiente">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">⚠️</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-amber-900">Certificación INTI (opcional)</div>
+                  <div class="text-sm text-amber-700">En proceso - Auditoría programada: 05/11/2025</div>
+                </div>
+              </div>
+              <span class="badge badge-sky">Opcional</span>
+            </div>
+            <div class="mt-2 p-2 bg-amber-50 rounded text-xs">
+              <strong>Beneficio:</strong> Con certificación INTI obtenés 50% de descuento en comisión (de 5% a 2.5%) y mejor posicionamiento.
+            </div>
+          </div>
+
+          <!-- Validación 8: Protocolo COVID/Higiene -->
+          <div class="validacion-item completo">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="text-3xl">✅</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-emerald-900">Protocolo de higiene y seguridad</div>
+                  <div class="text-sm text-emerald-700">Aprobado - Última inspección: 10/09/2025</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="alert('Ver protocolo')">
+                👁 Ver
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Próximos pasos -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Próximos Pasos Recomendados</h3>
+              <p class="section-subtitle">Prioriza estas acciones para llegar a 80%</p>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="p-3 border-2 border-amber-600 rounded-xl bg-amber-50">
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <div class="font-semibold text-amber-900">1. Corregir plano ARCA</div>
+                  <div class="text-sm text-amber-700">Tiempo estimado: 3 días | Impacto: +12.5%</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="window.location.href='progreso-formalizacion.html?seccion=arca'">
+                  → Ir
+                </button>
+              </div>
+            </div>
+
+            <div class="p-3 border rounded-xl">
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <div class="font-semibold text-slate-900">2. Obtener certificado bomberos</div>
+                  <div class="text-sm text-slate-600">Tiempo estimado: 10 días | Impacto: +12.5%</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="abrirGuia('bomberos')">
+                  📖 Guía
+                </button>
+              </div>
+            </div>
+
+            <div class="p-3 border rounded-xl">
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <div class="font-semibold text-slate-900">3. Contratar ART</div>
+                  <div class="text-sm text-slate-600">Tiempo estimado: 7 días | Impacto: +12.5%</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="abrirGuia('art')">
+                  📖 Opciones
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+        <!-- Comparativa -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Tu Posición</h3>
+
+          <div class="text-center mb-4">
+            <div class="text-4xl font-bold text-sky-700">65%</div>
+            <div class="text-sm text-slate-600">Tu progreso</div>
+          </div>
+
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Promedio talleres similares:</span>
+              <span class="font-bold">78%</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Mínimo para pedidos:</span>
+              <span class="font-bold text-emerald-700">40%</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-600">Objetivo premium:</span>
+              <span class="font-bold text-sky-700">80%</span>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-emerald-50 rounded-xl text-sm">
+            <div class="font-semibold text-emerald-900 mb-1">✓ Buen progreso</div>
+            <div class="text-emerald-700">
+              Estás por encima del mínimo. Con 15% más accedés a pedidos premium.
+            </div>
+          </div>
+        </div>
+
+        <!-- Asistencia técnica -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Asistencia Técnica</h3>
+
+          <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl mb-3">
+            <div class="font-semibold text-sky-900 mb-2">INTI - Asesoramiento gratuito</div>
+            <div class="text-sm text-sky-700 mb-3">
+              Te ayudamos a completar la formalización paso a paso.
+            </div>
+            <button class="btn btn-primary btn-block" onclick="agendarLlamada()">
+              📞 Agendar llamada
+            </button>
+          </div>
+
+          <button class="btn btn-secondary btn-block" onclick="window.location.href='capacitaciones.html?tema=formalizacion'">
+            🎓 Ver capacitaciones
+          </button>
+        </div>
+
+        <!-- Chat/FAQ -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Preguntas Frecuentes</h3>
+
+          <div class="space-y-2 text-sm">
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="abrirFAQ('arca')">
+              <div class="text-sky-700">¿Cómo obtengo habilitación ARCA?</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="abrirFAQ('art')">
+              <div class="text-sky-700">¿Qué ART me conviene?</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="abrirFAQ('costos')">
+              <div class="text-sky-700">¿Cuánto cuesta formalizarse?</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="abrirFAQ('tiempo')">
+              <div class="text-sky-700">¿Cuánto tarda el proceso?</div>
+            </button>
+          </div>
+
+          <div class="mt-4">
+            <button class="btn btn-secondary btn-block" onclick="alert('Chat con agente de ARCA/STESS')">
+              💬 Contacto directo
+            </button>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Acciones</h3>
+
+          <button class="btn btn-primary btn-block mb-2" onclick="window.location.href='progreso-formalizacion.html'">
+            📋 Ver Timeline Completo
+          </button>
+
+          <button class="btn btn-secondary btn-block mb-2" onclick="alert('Subir documentación: permite adjuntar PDFs/fotos')">
+            📤 Subir Documentación
+          </button>
+
+          <button class="btn btn-secondary btn-block" onclick="alert('Solicitar auditoría presencial de INTI')">
+            🔍 Solicitar Auditoría
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    function abrirGuia(tipo) {
+      const guias = {
+        'bomberos': 'GUÍA: Certificado de Bomberos\n\n1. Solicitar inspección en Defensa Civil de tu municipio\n2. Preparar instalaciones (matafuegos, señalización)\n3. Auditoría presencial (2-3 hs)\n4. Emisión certificado (7 días)\n\nCosto aproximado: AR$ 25.000\nDuración total: 10-15 días',
+        'art': 'OPCIONES DE ART:\n\n1. Asociart - AR$ 12.000/mes (recomendado por SOIVA)\n2. La Segunda ART - AR$ 10.500/mes\n3. Provincia ART - AR$ 11.200/mes\n\nTodas incluyen:\n- Cobertura accidentes laborales\n- Medicina laboral\n- Capacitaciones obligatorias\n\nContacto: 0800-XXX-XXXX'
+      };
+
+      alert(guias[tipo] || 'Guía no disponible');
+    }
+
+    function agendarLlamada() {
+      if (confirm('¿Agendar llamada con asesor de INTI?\n\nDisponibilidad:\n- Lunes a Viernes 9-17 hs\n- Duración: 30 minutos\n- Sin cargo')) {
+        showToast('✓ Llamada agendada para mañana 10:00 hs', 'success');
+      }
+    }
+
+    function abrirFAQ(tema) {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nAbriría sección de FAQ con respuestas detalladas sobre: ' + tema);
+    }
+  </script>
+
+</body>
+</html>

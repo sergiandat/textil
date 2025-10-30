@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parametrización del Algoritmo - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .slider-group {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--slate-50);
+      border-radius: 0.75rem;
+      border: 2px solid var(--slate-200);
+    }
+    .slider-container {
+      margin-bottom: 1.5rem;
+    }
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .slider-value {
+      font-weight: 700;
+      color: var(--sky-700);
+      font-size: 1.125rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--slate-300);
+      outline: none;
+      -webkit-appearance: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--sky-600);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--sky-600);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .simulation-box {
+      background: linear-gradient(135deg, var(--emerald-50) 0%, var(--sky-50) 100%);
+      border: 2px solid var(--emerald-300);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .impact-metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background: white;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: parametrizacion-algoritmo.html (Parametrización Algorítmica)
+    BARRERAS: B3 (Formalización), B4 (Articulación), B5 (Estado Ausente), B6 (Bajas Capacidades)
+    FUNCIONES: GOBERNAR (parametrización)
+    ACTORES: Mesa Tripartita (Estado + Empleadores + SOIVA)
+    DESCRIPCIÓN: Panel para ajustar parámetros del algoritmo de matching, reputación y comisiones mediante controles simples.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Mesa Tripartita: Parametrización</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-tripartito.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='parametrizacion-algoritmo.html'">Parametrización</button>
+        <button class="nav-tab" onclick="window.location.href='auditorias.html'">Auditorías</button>
+        <button class="nav-tab" onclick="alert('Actas Tripartitas: Historial de decisiones')">Actas</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-emerald">Tripartita</span>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Parametrización del Algoritmo de Plataforma</h1>
+        <p class="page-subtitle">Ajustar pesos de reputación, comisiones y sesgos con impacto simulado</p>
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard-tripartito.html'">
+        ← Volver al Dashboard
+      </button>
+    </div>
+
+    <!-- Alerta -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta pantalla demuestra cómo la Mesa Tripartita puede <strong>parametrizar el algoritmo</strong> mediante controles simples (sliders). Los cambios se simulan antes de votación. Resuelve <strong>B5 (Estado Ausente)</strong> dando protagonismo al Estado en decisiones algorítmicas.
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Columna principal: Sliders -->
+      <div class="col-span-8 space-y-6">
+        <!-- SECCIÓN 1: Cálculo de Reputación -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">1. Cálculo de Reputación</h3>
+              <p class="section-subtitle">Define cómo se calcula el score de cada taller (total debe sumar 100%)</p>
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Cumplimiento de plazos</span>
+                <span class="slider-value" id="valorCumplimiento">35%</span>
+              </div>
+              <input type="range" id="sliderCumplimiento" min="20" max="50" value="35" oninput="actualizarReputacion()">
+              <div class="text-xs text-slate-600 mt-1">Entregas a tiempo / Total entregas</div>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Calidad</span>
+                <span class="slider-value" id="valorCalidad">30%</span>
+              </div>
+              <input type="range" id="sliderCalidad" min="20" max="40" value="30" oninput="actualizarReputacion()">
+              <div class="text-xs text-slate-600 mt-1">Promedio de calificaciones recibidas</div>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Comunicación</span>
+                <span class="slider-value" id="valorComunicacion">20%</span>
+              </div>
+              <input type="range" id="sliderComunicacion" min="10" max="30" value="20" oninput="actualizarReputacion()">
+              <div class="text-xs text-slate-600 mt-1">Tiempo de respuesta y claridad</div>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Formalización</span>
+                <span class="slider-value" id="valorFormalizacion">25%</span>
+              </div>
+              <input type="range" id="sliderFormalizacion" min="10" max="40" value="25" oninput="actualizarReputacion()">
+              <div class="text-xs text-slate-600 mt-1">Validaciones ARCA, ART, certificados completados</div>
+            </div>
+
+            <div class="mt-3 p-3 bg-white rounded-xl border-2" id="totalReputacion">
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-slate-900">Total:</span>
+                <span class="text-2xl font-bold text-sky-700" id="totalValor">110%</span>
+              </div>
+              <div class="text-xs text-amber-700 mt-1" id="warningTotal">⚠ El total debe sumar 100%</div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-sm">
+            <strong>💡 Ejemplo de impacto:</strong> Al aumentar "Formalización" de 10% a 25%, talleres con certificaciones ARCA suben en ranking aunque tengan menos historial de pedidos. Esto incentiva la formalización.
+          </div>
+        </div>
+
+        <!-- SECCIÓN 2: Comisiones -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">2. Estructura de Comisiones</h3>
+              <p class="section-subtitle">Define la comisión de la plataforma y ajustes por volumen</p>
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Comisión base</span>
+                <span class="slider-value" id="valorComisionBase">5.0%</span>
+              </div>
+              <input type="range" id="sliderComisionBase" min="3" max="8" step="0.5" value="5" oninput="actualizarComisiones()">
+              <div class="text-xs text-slate-600 mt-1">Porcentaje sobre monto facturado</div>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Ajuste por volumen</span>
+                <span class="slider-value" id="valorAjusteVolumen">±2.0%</span>
+              </div>
+              <input type="range" id="sliderAjusteVolumen" min="0" max="5" step="0.5" value="2" oninput="actualizarComisiones()">
+              <div class="text-xs text-slate-600 mt-1">Descuento para pedidos grandes / Recargo para chicos</div>
+            </div>
+
+            <div class="mt-3">
+              <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" class="form-checkbox" id="checkExencionCoop" checked onchange="actualizarComisiones()">
+                <span class="font-semibold">Exención para cooperativas certificadas (50% descuento)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-sm mt-3">
+            <strong>✓ Política actual:</strong> Cooperativas con certificación INTI vigente pagan solo 2.5% (50% de descuento). Esto incentiva la organización cooperativa.
+          </div>
+        </div>
+
+        <!-- SECCIÓN 3: Sesgos y Prioridades -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">3. Sesgos y Prioridades en Matching</h3>
+              <p class="section-subtitle">Ajusta cómo el algoritmo prioriza talleres en el matching</p>
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Proximidad geográfica</span>
+                <span class="slider-value" id="valorProximidad">30%</span>
+              </div>
+              <input type="range" id="sliderProximidad" min="0" max="50" value="30" oninput="actualizarSesgos()">
+              <div class="text-xs text-slate-600 mt-1">Peso de la cercanía en km en el matching</div>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Priorizar talleres pequeños vs grandes</span>
+                <span class="slider-value" id="valorTamano">Equilibrado</span>
+              </div>
+              <input type="range" id="sliderTamano" min="-50" max="50" value="0" oninput="actualizarSesgos()">
+              <div class="text-xs text-slate-600 mt-1">← Favorece pequeños | Neutro | Favorece grandes →</div>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span class="text-sm font-semibold text-slate-900">Antigüedad vs Nuevos formalizados</span>
+                <span class="slider-value" id="valorAntiguedad">Equilibrado</span>
+              </div>
+              <input type="range" id="sliderAntiguedad" min="-50" max="50" value="0" oninput="actualizarSesgos()">
+              <div class="text-xs text-slate-600 mt-1">← Favorece nuevos | Neutro | Favorece con historial →</div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm mt-3">
+            <strong>⚠ Alerta del Dashboard:</strong> 15 talleres sin pedidos >90d. Sugerencia: Mover el slider "Antigüedad vs Nuevos" hacia la izquierda para dar más oportunidades a talleres recién formalizados.
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar: Simulación e Impacto -->
+      <div class="col-span-4 space-y-6">
+        <!-- Simulación -->
+        <div class="section-card sticky" style="top: 80px;">
+          <h3 class="section-title mb-3">Simulación de Impacto</h3>
+
+          <div class="simulation-box">
+            <div class="font-semibold text-emerald-900 mb-3">Si aplicás estos cambios:</div>
+
+            <div class="impact-metric">
+              <span class="text-sm">Talleres que suben en ranking:</span>
+              <span class="font-bold text-emerald-700" id="impactoSuben">23</span>
+            </div>
+
+            <div class="impact-metric">
+              <span class="text-sm">Talleres que bajan en ranking:</span>
+              <span class="font-bold text-rose-700" id="impactoBajan">15</span>
+            </div>
+
+            <div class="impact-metric">
+              <span class="text-sm">Nuevos formalizados (proyección 6m):</span>
+              <span class="font-bold text-sky-700" id="impactoFormalizados">+12%</span>
+            </div>
+
+            <div class="impact-metric">
+              <span class="text-sm">Talleres sin pedidos >90d:</span>
+              <span class="font-bold text-amber-700" id="impactoSinPedidos">15 → 8</span>
+            </div>
+
+            <div class="mt-4 p-2 bg-white rounded text-xs text-slate-600">
+              <strong>Nota:</strong> Simulación basada en datos de los últimos 90 días. Impacto real puede variar.
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button class="btn btn-secondary btn-block" onclick="abrirModalAvanzado()">
+              🔬 Ver fórmula completa (modo avanzado)
+            </button>
+            <div class="text-xs text-slate-500 mt-2 text-center">
+              Abre editor técnico con fórmulas matemáticas
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado actual -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Parametrización Actual</h3>
+
+          <div class="text-sm space-y-2">
+            <div class="flex justify-between">
+              <span class="text-slate-600">Última modificación:</span>
+              <span class="font-semibold">15/10/2025</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Acta Tripartita:</span>
+              <span class="font-semibold">2025-10-15</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Vigencia desde:</span>
+              <span class="font-semibold">16/10/2025</span>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-slate-50 rounded-xl text-xs">
+            <div class="font-semibold text-slate-900 mb-1">Cambio anterior:</div>
+            <div class="text-slate-700">
+              "Formalización" aumentado de 10% a 25% para incentivar certificaciones ARCA.
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Acciones</h3>
+
+          <button class="btn btn-primary btn-block mb-2" onclick="proponerCambios()">
+            📝 Proponer a Mesa Tripartita
+          </button>
+
+          <button class="btn btn-secondary btn-block mb-2" onclick="resetearValores()">
+            ↺ Resetear a valores actuales
+          </button>
+
+          <button class="btn btn-secondary btn-block" onclick="window.location.href='dashboard-tripartito.html'">
+            ← Volver al Dashboard
+          </button>
+
+          <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs">
+            <strong>⚠ Importante:</strong> Los cambios NO se aplican automáticamente. Requieren votación tripartita y registro en Acta (blockchain).
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    // Variables globales
+    let valoresActuales = {
+      cumplimiento: 35,
+      calidad: 30,
+      comunicacion: 20,
+      formalizacion: 25,
+      comisionBase: 5.0,
+      ajusteVolumen: 2.0,
+      exencionCoop: true,
+      proximidad: 30,
+      tamano: 0,
+      antiguedad: 0
+    };
+
+    // Actualizar reputación
+    function actualizarReputacion() {
+      const cumplimiento = parseInt(document.getElementById('sliderCumplimiento').value);
+      const calidad = parseInt(document.getElementById('sliderCalidad').value);
+      const comunicacion = parseInt(document.getElementById('sliderComunicacion').value);
+      const formalizacion = parseInt(document.getElementById('sliderFormalizacion').value);
+
+      document.getElementById('valorCumplimiento').textContent = cumplimiento + '%';
+      document.getElementById('valorCalidad').textContent = calidad + '%';
+      document.getElementById('valorComunicacion').textContent = comunicacion + '%';
+      document.getElementById('valorFormalizacion').textContent = formalizacion + '%';
+
+      const total = cumplimiento + calidad + comunicacion + formalizacion;
+      document.getElementById('totalValor').textContent = total + '%';
+
+      const warningDiv = document.getElementById('warningTotal');
+      const totalDiv = document.getElementById('totalReputacion');
+
+      if (total === 100) {
+        warningDiv.textContent = '✓ Total correcto';
+        warningDiv.className = 'text-xs text-emerald-700 mt-1';
+        totalDiv.style.borderColor = 'var(--emerald-400)';
+      } else {
+        warningDiv.textContent = '⚠ El total debe sumar 100%';
+        warningDiv.className = 'text-xs text-amber-700 mt-1';
+        totalDiv.style.borderColor = 'var(--amber-400)';
+      }
+
+      actualizarSimulacion();
+    }
+
+    // Actualizar comisiones
+    function actualizarComisiones() {
+      const base = parseFloat(document.getElementById('sliderComisionBase').value);
+      const ajuste = parseFloat(document.getElementById('sliderAjusteVolumen').value);
+
+      document.getElementById('valorComisionBase').textContent = base.toFixed(1) + '%';
+      document.getElementById('valorAjusteVolumen').textContent = '±' + ajuste.toFixed(1) + '%';
+
+      actualizarSimulacion();
+    }
+
+    // Actualizar sesgos
+    function actualizarSesgos() {
+      const proximidad = parseInt(document.getElementById('sliderProximidad').value);
+      const tamano = parseInt(document.getElementById('sliderTamano').value);
+      const antiguedad = parseInt(document.getElementById('sliderAntiguedad').value);
+
+      document.getElementById('valorProximidad').textContent = proximidad + '%';
+
+      if (tamano < -20) {
+        document.getElementById('valorTamano').textContent = 'Favorece pequeños';
+      } else if (tamano > 20) {
+        document.getElementById('valorTamano').textContent = 'Favorece grandes';
+      } else {
+        document.getElementById('valorTamano').textContent = 'Equilibrado';
+      }
+
+      if (antiguedad < -20) {
+        document.getElementById('valorAntiguedad').textContent = 'Favorece nuevos';
+      } else if (antiguedad > 20) {
+        document.getElementById('valorAntiguedad').textContent = 'Favorece con historial';
+      } else {
+        document.getElementById('valorAntiguedad').textContent = 'Equilibrado';
+      }
+
+      actualizarSimulacion();
+    }
+
+    // Actualizar simulación de impacto
+    function actualizarSimulacion() {
+      // Simulación simple basada en los cambios
+      const formalizacion = parseInt(document.getElementById('sliderFormalizacion').value);
+      const antiguedad = parseInt(document.getElementById('sliderAntiguedad').value);
+
+      // Más peso en formalización = más talleres formalizados suben
+      const suben = 23 + Math.floor((formalizacion - 25) * 0.5);
+      const bajan = 15 - Math.floor((formalizacion - 25) * 0.3);
+
+      // Favorecer nuevos reduce talleres sin pedidos
+      const sinPedidos = antiguedad < 0 ? 8 : 15;
+
+      document.getElementById('impactoSuben').textContent = Math.max(0, suben);
+      document.getElementById('impactoBajan').textContent = Math.max(0, bajan);
+      document.getElementById('impactoSinPedidos').textContent = `15 → ${sinPedidos}`;
+    }
+
+    // Abrir modal avanzado
+    function abrirModalAvanzado() {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nEsto abriría un modal (parametrizacion-avanzada.html) con:\n- Fórmulas matemáticas visibles\n- Editor de componentes del algoritmo\n- Simulador con datos reales (top 20 talleres antes/después)\n- Registro de Acta Tripartita al aprobar');
+    }
+
+    // Proponer cambios a Mesa Tripartita
+    function proponerCambios() {
+      const total = parseInt(document.getElementById('totalValor').textContent);
+
+      if (total !== 100) {
+        alert('ERROR: El total de reputación debe sumar 100% antes de proponer cambios.');
+        return;
+      }
+
+      if (confirm('¿Proponer estos cambios a la Mesa Tripartita para votación?\n\nSe generará un Acta con los nuevos parámetros que requerirá votación (Estado, Empleadores, SOIVA).')) {
+        showToast('✓ Propuesta enviada a Mesa Tripartita para votación', 'success');
+        setTimeout(() => {
+          alert('FUNCIONALIDAD WIREFRAME:\n\nSe generaría:\n- Acta de Propuesta 2025-10-29\n- Notificación a los 3 actores tripartitos\n- Período de votación (7 días)\n- Si hay consenso → Implementación automática\n- Registro en blockchain');
+        }, 1000);
+      }
+    }
+
+    // Resetear valores
+    function resetearValores() {
+      if (confirm('¿Resetear todos los valores a la parametrización actual vigente?')) {
+        document.getElementById('sliderCumplimiento').value = 35;
+        document.getElementById('sliderCalidad').value = 30;
+        document.getElementById('sliderComunicacion').value = 20;
+        document.getElementById('sliderFormalizacion').value = 25;
+        document.getElementById('sliderComisionBase').value = 5;
+        document.getElementById('sliderAjusteVolumen').value = 2;
+        document.getElementById('checkExencionCoop').checked = true;
+        document.getElementById('sliderProximidad').value = 30;
+        document.getElementById('sliderTamano').value = 0;
+        document.getElementById('sliderAntiguedad').value = 0;
+
+        actualizarReputacion();
+        actualizarComisiones();
+        actualizarSesgos();
+
+        showToast('✓ Valores reseteados a parametrización actual', 'success');
+      }
+    }
+
+    // Inicializar al cargar
+    actualizarReputacion();
+    actualizarComisiones();
+    actualizarSesgos();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capacitaciones - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .curso-card {
+      padding: 1.25rem;
+      border: 2px solid var(--slate-200);
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .curso-card:hover {
+      border-color: var(--sky-400);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .curso-card.en-progreso {
+      border-color: var(--sky-600);
+      background: var(--sky-50);
+    }
+    .curso-card.completado {
+      border-color: var(--emerald-600);
+      background: var(--emerald-50);
+    }
+    .chat-rag {
+      background: linear-gradient(135deg, var(--sky-50) 0%, var(--purple-50) 100%);
+      border: 2px solid var(--sky-300);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      min-height: 300px;
+    }
+    .mensaje-chat {
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      margin-bottom: 0.75rem;
+      max-width: 80%;
+    }
+    .mensaje-chat.usuario {
+      background: var(--sky-600);
+      color: white;
+      margin-left: auto;
+    }
+    .mensaje-chat.sistema {
+      background: white;
+      border: 1px solid var(--slate-200);
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: capacitaciones.html (Academia y Aprendizaje)
+    BARRERAS: B6 (Bajas Capacidades)
+    FUNCIONES: APRENDER (capacitación y certificación)
+    ACTORES: Taller (principal), Trabajador, Marca
+    DESCRIPCIÓN: Catálogo de capacitaciones, progreso personal, certificados y sistema RAG (IA asistente).
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Academia de la Plataforma</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='capacitaciones.html'">Capacitaciones</button>
+        <button class="nav-tab" onclick="window.location.href='validaciones.html'">Mi Formalización</button>
+        <button class="nav-tab" onclick="alert('Mis Certificados')">Mis Certificados</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Academia de la Plataforma Textil</h1>
+        <p class="page-subtitle">Capacitaciones, certificaciones y asistente IA</p>
+      </div>
+    </div>
+
+    <!-- Alerta -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta pantalla resuelve <strong>B6 (Bajas Capacidades)</strong> ofreciendo capacitaciones gratuitas, certificados verificables y un asistente IA (RAG) que responde preguntas contextuales.
+    </div>
+
+    <!-- Filtros -->
+    <div class="section-card mb-6">
+      <div class="flex items-center gap-4 flex-wrap">
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Filtrar por tema</label>
+          <select class="form-select" style="width: auto;" id="filtroTema" onchange="filtrarCursos()">
+            <option value="">Todos los temas</option>
+            <option value="gestion">Gestión</option>
+            <option value="calidad">Calidad</option>
+            <option value="formalizacion">Formalización</option>
+            <option value="tecnologia">Tecnología</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Modalidad</label>
+          <select class="form-select" style="width: auto;" id="filtroModalidad" onchange="filtrarCursos()">
+            <option value="">Todas</option>
+            <option value="online">Online</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Duración</label>
+          <select class="form-select" style="width: auto;" id="filtroDuracion" onchange="filtrarCursos()">
+            <option value="">Todas</option>
+            <option value="corto">< 4 horas</option>
+            <option value="medio">4-8 horas</option>
+            <option value="largo">> 8 horas</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary" style="margin-top: 1.5rem;" onclick="limpiarFiltros()">
+          Limpiar filtros
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Catálogo de cursos -->
+      <div class="col-span-8 space-y-6">
+        <!-- Mis cursos en progreso -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Mis Cursos en Progreso</h3>
+              <p class="section-subtitle">Continuá donde lo dejaste</p>
+            </div>
+          </div>
+
+          <div class="curso-card en-progreso" onclick="abrirCurso('admin-taller')">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="text-3xl">📊</div>
+                <div>
+                  <div class="font-bold text-sky-900">Administración de taller textil</div>
+                  <div class="text-sm text-sky-700">8 hs • Online • INTI</div>
+                </div>
+              </div>
+              <span class="badge badge-sky">En progreso</span>
+            </div>
+
+            <div class="mb-2">
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-sky-800">Progreso: 60%</span>
+                <span class="text-sky-700">Módulo 3 de 5</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%; background: var(--sky-600);"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-sm text-sky-800">
+              <span>📅 Próximo módulo:</span>
+              <span class="font-semibold">Gestión de costos y presupuestación</span>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-3" onclick="event.stopPropagation(); continuarCurso('admin-taller')">
+              → Continuar curso
+            </button>
+          </div>
+        </div>
+
+        <!-- Cursos recomendados -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Recomendados para Vos</h3>
+              <p class="section-subtitle">Basado en tu perfil y objetivos</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Curso 1: Formalización -->
+            <div class="curso-card" onclick="verDetalleCurso('formalizacion-basico')">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="text-3xl">📋</div>
+                <div class="flex-1">
+                  <div class="font-bold text-slate-900">Primeros pasos en la formalización</div>
+                  <div class="text-sm text-slate-600">4 hs • Online • Gratis</div>
+                </div>
+                <span class="badge badge-amber">⭐ Destacado</span>
+              </div>
+              <div class="text-sm text-slate-700 mb-2">
+                Aprendé los pasos básicos para formalizar tu taller: CUIT, ARCA, habilitaciones y certificaciones.
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="pill pill-emerald">Certificado oficial</span>
+                <span class="pill pill-sky">+15% en matching</span>
+              </div>
+            </div>
+
+            <!-- Curso 2: Control de calidad -->
+            <div class="curso-card" onclick="verDetalleCurso('control-calidad')">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="text-3xl">✓</div>
+                <div class="flex-1">
+                  <div class="font-bold text-slate-900">Control de calidad en confección</div>
+                  <div class="text-sm text-slate-600">12 hs • Presencial/Online • INTI</div>
+                </div>
+                <span class="badge badge-amber">⭐ Destacado</span>
+              </div>
+              <div class="text-sm text-slate-700 mb-2">
+                Técnicas de inspección, tolerancias, tablas de medidas y gestión de no conformidades.
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="pill pill-emerald">Certificado INTI</span>
+                <span class="pill pill-sky">+20% en reputación</span>
+              </div>
+            </div>
+
+            <!-- Curso 3: Costos -->
+            <div class="curso-card" onclick="verDetalleCurso('costos')">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="text-3xl">💰</div>
+                <div class="flex-1">
+                  <div class="font-bold text-slate-900">Costos y presupuestación</div>
+                  <div class="text-sm text-slate-600">6 hs • Online • Gratis</div>
+                </div>
+              </div>
+              <div class="text-sm text-slate-700 mb-2">
+                Calculá correctamente tus costos, determiná precios competitivos y mejorá tu rentabilidad.
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="pill pill-emerald">Certificado oficial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Catálogo completo -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Catálogo Completo</h3>
+              <p class="section-subtitle">Todas las capacitaciones disponibles</p>
+            </div>
+          </div>
+
+          <!-- Gestión -->
+          <div class="mb-4">
+            <h4 class="font-semibold text-slate-900 mb-2">Gestión (3 cursos)</h4>
+            <div class="space-y-2">
+              <div class="p-3 border rounded-xl hover:bg-slate-50 cursor-pointer" onclick="verDetalleCurso('gestion-equipos')">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-semibold text-sm">Gestión de equipos</div>
+                    <div class="text-xs text-slate-600">4 hs • Online</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); inscribirse('gestion-equipos')">
+                    Inscribirse
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calidad -->
+          <div class="mb-4">
+            <h4 class="font-semibold text-slate-900 mb-2">Calidad (2 cursos)</h4>
+            <div class="space-y-2">
+              <div class="p-3 border rounded-xl hover:bg-slate-50 cursor-pointer" onclick="verDetalleCurso('especificaciones')">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-semibold text-sm">Especificaciones técnicas</div>
+                    <div class="text-xs text-slate-600">6 hs • Online</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); inscribirse('especificaciones')">
+                    Inscribirse
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tecnología -->
+          <div class="mb-4">
+            <h4 class="font-semibold text-slate-900 mb-2">Tecnología (2 cursos)</h4>
+            <div class="space-y-2">
+              <div class="p-3 border rounded-xl hover:bg-slate-50 cursor-pointer" onclick="verDetalleCurso('maquinaria')">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-semibold text-sm">Introducción a maquinaria industrial</div>
+                    <div class="text-xs text-slate-600">16 hs • Presencial</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); inscribirse('maquinaria')">
+                    Inscribirse
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-3 border rounded-xl hover:bg-slate-50 cursor-pointer" onclick="verDetalleCurso('patronaje')">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-semibold text-sm">Patronaje digital</div>
+                    <div class="text-xs text-slate-600">12 hs • Presencial/Online</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); inscribirse('patronaje')">
+                    Inscribirse
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mis certificados -->
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Mis Certificados</h3>
+              <p class="section-subtitle">Cursos completados y certificados obtenidos</p>
+            </div>
+          </div>
+
+          <div class="curso-card completado">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="text-3xl">✓</div>
+              <div class="flex-1">
+                <div class="font-bold text-emerald-900">Primeros pasos en la formalización</div>
+                <div class="text-sm text-emerald-700">Completado el 20/09/2025</div>
+              </div>
+              <span class="badge badge-emerald">Certificado obtenido</span>
+            </div>
+            <div class="text-sm text-emerald-800 mb-3">
+              Calificación: 95/100 • Duración: 4 hs • Instructor: INTI
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="descargarCertificado('formalizacion-basico')">
+              📥 Descargar Certificado (PDF con QR verificable)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+        <!-- Mi progreso -->
+        <div class="section-card">
+          <h3 class="section-title mb-4">Mi Progreso</h3>
+
+          <div class="text-center mb-4">
+            <div class="text-4xl font-bold text-sky-700">1</div>
+            <div class="text-sm text-slate-600">Certificado obtenido</div>
+          </div>
+
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-600">En progreso:</span>
+              <span class="font-bold text-sky-700">1 curso</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Completados:</span>
+              <span class="font-bold text-emerald-700">1 curso</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Horas totales:</span>
+              <span class="font-bold">12 hs</span>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-sky-50 rounded-xl text-sm">
+            <div class="font-semibold text-sky-900 mb-1">🎯 Objetivo sugerido</div>
+            <div class="text-sky-700">
+              Con 2 certificados más mejorás tu posición en matching en +25%.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sistema RAG: IA Asistente -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">🤖 Preguntale a la Plataforma</h3>
+
+          <div class="chat-rag">
+            <div class="text-sm text-slate-700 mb-3">
+              Sistema RAG: Inteligencia artificial entrenada con contenido de capacitaciones
+            </div>
+
+            <div id="chatContainer" style="max-height: 300px; overflow-y: auto; margin-bottom: 1rem;">
+              <div class="mensaje-chat sistema">
+                <div class="text-sm">
+                  <strong>Asistente IA:</strong> ¡Hola! Podés preguntarme sobre formalización, costos, calidad, normativas, etc. ¿En qué te puedo ayudar?
+                </div>
+              </div>
+
+              <div class="mensaje-chat usuario">
+                <div class="text-sm">
+                  ¿Cómo obtengo habilitación municipal?
+                </div>
+              </div>
+
+              <div class="mensaje-chat sistema">
+                <div class="text-sm">
+                  <strong>Asistente IA:</strong> Para obtener la habilitación municipal necesitás:<br>
+                  1. Plano del local firmado por arquitecto habilitado<br>
+                  2. Certificado de bomberos<br>
+                  3. Habilitación de bromatología (si aplica)<br>
+                  4. Formulario de solicitud completado<br><br>
+                  <strong>Tiempo estimado:</strong> 15-30 días<br>
+                  <strong>Costo aproximado:</strong> AR$ 25.000-40.000<br><br>
+                  Te recomiendo el curso "Primeros pasos en formalización" que cubre este tema en detalle.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-2">
+              <input
+                type="text"
+                class="form-input"
+                id="inputPregunta"
+                placeholder="Hacé tu pregunta..."
+                style="margin: 0;"
+                onkeypress="if(event.key==='Enter') preguntarRAG()"
+              >
+              <button class="btn btn-primary" onclick="preguntarRAG()">
+                Enviar
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-3 text-xs text-slate-500">
+            El asistente IA puede cometer errores. Verificá información crítica.
+          </div>
+        </div>
+
+        <!-- Sugerencias -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Preguntas Frecuentes</h3>
+
+          <div class="space-y-2 text-sm">
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="preguntarRAGPredefinida('¿Cuánto cuesta formalizarse?')">
+              <div class="text-sky-700">¿Cuánto cuesta formalizarse?</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="preguntarRAGPredefinida('¿Qué es ARCA?')">
+              <div class="text-sky-700">¿Qué es ARCA?</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="preguntarRAGPredefinida('¿Cómo calculo el precio de una prenda?')">
+              <div class="text-sky-700">¿Cómo calculo el precio?</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    function filtrarCursos() {
+      console.log('Filtros aplicados');
+      showToast('Filtros aplicados', 'success');
+    }
+
+    function limpiarFiltros() {
+      document.getElementById('filtroTema').value = '';
+      document.getElementById('filtroModalidad').value = '';
+      document.getElementById('filtroDuracion').value = '';
+      showToast('Filtros limpiados', 'success');
+    }
+
+    function abrirCurso(id) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nAbriría interfaz del curso: ${id}\n\nIncluye:\n- Módulos con videos/lecturas\n- Ejercicios prácticos\n- Evaluaciones\n- Foro de dudas\n- Progreso guardado`);
+    }
+
+    function continuarCurso(id) {
+      alert(`Continuando curso ${id} en módulo 3...`);
+    }
+
+    function verDetalleCurso(id) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nMostraría detalle del curso: ${id}\n\n- Descripción completa\n- Temario por módulos\n- Instructor\n- Requisitos previos\n- Certificación que otorga\n- Próximas fechas (si presencial)\n- Botón inscribirse`);
+    }
+
+    function inscribirse(id) {
+      if (confirm(`¿Inscribirse al curso ${id}?\n\nModalidad: Online\nInicio: Inmediato\nCosto: Gratis`)) {
+        showToast(`✓ Inscripción exitosa. Podés comenzar el curso cuando quieras.`, 'success');
+      }
+    }
+
+    function descargarCertificado(id) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nDescargaría PDF del certificado: ${id}\n\nIncluye:\n- Nombre del alumno\n- Curso completado\n- Fecha\n- Calificación\n- Firma digital del instructor\n- QR code para verificación online`);
+      showToast('✓ Certificado descargado', 'success');
+    }
+
+    function preguntarRAG() {
+      const pregunta = document.getElementById('inputPregunta').value.trim();
+
+      if (!pregunta) return;
+
+      const chatContainer = document.getElementById('chatContainer');
+
+      // Agregar pregunta del usuario
+      const mensajeUsuario = document.createElement('div');
+      mensajeUsuario.className = 'mensaje-chat usuario';
+      mensajeUsuario.innerHTML = `<div class="text-sm">${pregunta}</div>`;
+      chatContainer.appendChild(mensajeUsuario);
+
+      // Simular respuesta del asistente
+      setTimeout(() => {
+        const respuestas = {
+          'arca': 'ARCA (Agencia de Recaudación y Control Aduanero) es el organismo que registra empleadores y trabajadores. Para darte de alta necesitás CUIT, domicilio legal y documentación municipal.',
+          'precio': 'Para calcular el precio de una prenda: Costo tela + Costo mano de obra + Overhead (15-20%) + Margen (20-30%). Te recomiendo el curso "Costos y presupuestación".',
+          'default': 'Entiendo tu consulta. Te sugiero revisar nuestro catálogo de capacitaciones o formular la pregunta de otra manera. También podés contactar con INTI para asesoramiento personalizado.'
+        };
+
+        let respuesta = respuestas.default;
+
+        if (pregunta.toLowerCase().includes('arca')) {
+          respuesta = respuestas.arca;
+        } else if (pregunta.toLowerCase().includes('precio') || pregunta.toLowerCase().includes('costo')) {
+          respuesta = respuestas.precio;
+        }
+
+        const mensajeAsistente = document.createElement('div');
+        mensajeAsistente.className = 'mensaje-chat sistema';
+        mensajeAsistente.innerHTML = `<div class="text-sm"><strong>Asistente IA:</strong> ${respuesta}</div>`;
+        chatContainer.appendChild(mensajeAsistente);
+
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 1000);
+
+      document.getElementById('inputPregunta').value = '';
+    }
+
+    function preguntarRAGPredefinida(pregunta) {
+      document.getElementById('inputPregunta').value = pregunta;
+      preguntarRAG();
+    }
+  </script>
+
+</body>
+</html>

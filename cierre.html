@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cierre Pedido - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Marca: Urbano Kids</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab active">Cierre</button>
+        <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pedido Completado</h1>
+        <p class="page-subtitle" id="pedidoInfo">OM-2025-00045 | Jean 500u | Entregado el 28/07/2025</p>
+      </div>
+      <div>
+        <span class="pill pill-emerald" style="font-size: 1rem; padding: 0.5rem 1rem;">✓ Completado</span>
+      </div>
+    </div>
+
+    <div class="alert alert-success mb-6">
+      <strong>¡Felicitaciones!</strong> El pedido se completó 2 días antes de la fecha objetivo. Todos los talleres cumplieron con los estándares de calidad y trabajo decente.
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-8 space-y-6">
+        <!-- Resumen financiero -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Resumen financiero</h3>
+              <p class="section-subtitle">Desglose de pagos por MO</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div>
+                <div class="font-semibold text-sm text-slate-900">MO-1: Corte + Confección</div>
+                <div class="text-xs text-slate-600">Corte Sur SRL | Liberado 15/07</div>
+              </div>
+              <div class="text-lg font-bold text-emerald-700">$850.000</div>
+            </div>
+
+            <div class="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div>
+                <div class="font-semibold text-sm text-slate-900">MO-2: Lavado</div>
+                <div class="text-xs text-slate-600">Lavandería BlueDenim | Liberado 22/07</div>
+              </div>
+              <div class="text-lg font-bold text-emerald-700">$650.000</div>
+            </div>
+
+            <div class="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div>
+                <div class="font-semibold text-sm text-slate-900">MO-3: Desgaste</div>
+                <div class="text-xs text-slate-600">Lavandería BlueDenim | Liberado 26/07</div>
+              </div>
+              <div class="text-lg font-bold text-emerald-700">$400.000</div>
+            </div>
+
+            <div class="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <div>
+                <div class="font-semibold text-sm text-slate-900">MO-4: Acabado</div>
+                <div class="text-xs text-slate-600">Acabados Premium | Liberado 28/07</div>
+              </div>
+              <div class="text-lg font-bold text-emerald-700">$200.000</div>
+            </div>
+
+            <div class="flex items-center justify-between p-3 bg-slate-100 border border-slate-300 rounded-xl">
+              <div>
+                <div class="font-semibold text-sm text-slate-900">Logística</div>
+                <div class="text-xs text-slate-600">2 traslados coordinados</div>
+              </div>
+              <div class="text-lg font-bold text-slate-700">$6.400</div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-4 bg-sky-50 border border-sky-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div class="text-lg font-semibold text-slate-900">Total transaccionado</div>
+              <div class="text-2xl font-bold text-sky-600">$2.106.400</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calificar talleres -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Calificar talleres</h3>
+              <p class="section-subtitle">Tu opinión ayuda a otros a elegir mejor</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Corte Sur SRL -->
+            <div class="p-4 border rounded-xl">
+              <div class="font-semibold text-slate-900 mb-2">Corte Sur SRL</div>
+              <div class="flex gap-1 mb-2">
+                <button class="text-2xl" onclick="setRating(this, 1)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 2)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 3)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 4)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 5)">☆</button>
+              </div>
+              <textarea class="form-input" placeholder="Comentario opcional..." rows="2"></textarea>
+            </div>
+
+            <!-- Lavandería BlueDenim -->
+            <div class="p-4 border rounded-xl">
+              <div class="font-semibold text-slate-900 mb-2">Lavandería BlueDenim</div>
+              <div class="flex gap-1 mb-2">
+                <button class="text-2xl" onclick="setRating(this, 1)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 2)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 3)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 4)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 5)">☆</button>
+              </div>
+              <textarea class="form-input" placeholder="Comentario opcional..." rows="2"></textarea>
+            </div>
+
+            <!-- Acabados Premium -->
+            <div class="p-4 border rounded-xl">
+              <div class="font-semibold text-slate-900 mb-2">Acabados Premium</div>
+              <div class="flex gap-1 mb-2">
+                <button class="text-2xl" onclick="setRating(this, 1)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 2)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 3)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 4)">☆</button>
+                <button class="text-2xl" onclick="setRating(this, 5)">☆</button>
+              </div>
+              <textarea class="form-input" placeholder="Comentario opcional..." rows="2"></textarea>
+            </div>
+          </div>
+
+          <button id="btnEnviarCalificaciones" class="btn btn-primary btn-lg btn-block mt-4">
+            Enviar calificaciones
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar: Trazabilidad -->
+      <div class="col-span-4 space-y-6">
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Trazabilidad</h3>
+            <p class="section-subtitle">Verificable en blockchain</p>
+          </div>
+
+          <div class="text-center mb-4">
+            <div style="width: 120px; height: 120px; margin: 0 auto; background: var(--sky-100); border-radius: 0.75rem; display: grid; place-items-center; font-size: 0.875rem; color: var(--sky-700); border: 2px solid var(--sky-200);">
+              QR ÚNICO<br/>500 prendas
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div><strong>Hash blockchain:</strong></div>
+            <div class="p-2 bg-slate-100 rounded font-mono text-xs break-all">
+              0x7a3f2b...9c8e
+            </div>
+            <a href="#" class="text-sky-600 text-xs" onclick="alert('Ver en Polygonscan'); return false;">
+              Ver en Polygonscan →
+            </a>
+          </div>
+
+          <div class="mt-4 p-3 bg-slate-50 rounded-xl text-xs text-slate-600">
+            Cada prenda tiene un QR único que lleva a una landing page pública con toda la información: talleres, trabajadores, fechas, certificaciones, hash blockchain.
+          </div>
+
+          <button class="btn btn-secondary btn-block mt-3" onclick="alert('Ver landing page pública')">
+            Ver landing page pública
+          </button>
+        </div>
+
+        <!-- Timeline visual -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Timeline completado</h3>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Corte (15/07)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Confección (15/07)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Lavado (22/07)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Desgaste (26/07)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-emerald">✓</span>
+              <span>Acabado (28/07)</span>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center">
+            <button class="btn btn-primary btn-block" onclick="window.location.href='dashboard.html'">
+              Volver al dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    const omId = getUrlParam('om');
+
+    // Rating stars
+    function setRating(button, rating) {
+      const container = button.parentElement;
+      const buttons = container.querySelectorAll('button');
+
+      buttons.forEach((btn, index) => {
+        btn.textContent = index < rating ? '★' : '☆';
+        btn.style.color = index < rating ? 'var(--amber-700)' : 'var(--slate-400)';
+      });
+    }
+
+    // Enviar calificaciones
+    document.getElementById('btnEnviarCalificaciones').addEventListener('click', function() {
+      showToast('✓ Calificaciones enviadas. ¡Gracias por tu feedback!', 'success');
+
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1500);
+    });
+  </script>
+
+</body>
+</html>

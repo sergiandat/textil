@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Taller - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+  <!--
+    PANTALLA: dashboard-taller.html (Dashboard Taller)
+    BARRERAS: B3 (Formalización visible), B6 (Capacidades - acceso a formación), B7 (Competencia - beneficios de formalización)
+    FUNCIONES: ENCONTRAR (pedidos disponibles), EJECUTAR (monitoreo), COMPLIANCE (estado formalización), APRENDER (acceso)
+    ACTORES: Taller/Cooperativa
+    DESCRIPCIÓN: Dashboard principal para talleres con monitoreo de pedidos activos, estado de formalización,
+                 pedidos entrantes, y acceso a capacitación.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Taller: Confecciones Norte</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab active">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='validaciones.html'">Mi Formalización</button>
+        <button class="nav-tab" onclick="window.location.href='capacitaciones.html'">Capacitaciones</button>
+        <button class="nav-tab" onclick="window.location.href='perfil-taller.html'">Mi Perfil</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-emerald">Formalización: 95%</span>
+        <span class="pill pill-sky">v1.3</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard Taller</h1>
+        <p class="page-subtitle">Confecciones Norte SRL - CUIT 30-71234567-8</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn btn-primary" onclick="alert('En producción: Ver pedidos disponibles que coinciden con tu capacidad')">
+          Ver Pedidos Disponibles
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert wireframe -->
+    <div class="alert alert-info mb-6">
+      <strong>🏭 Dashboard del Taller:</strong> Esta pantalla muestra cómo un taller visualiza su estado general:
+      pedidos activos, ingresos, estado de formalización, y reputación.
+      <strong>Resuelve 3 barreras:</strong> B3 (visibiliza progreso de formalización),
+      B6 (acceso rápido a capacitaciones), B7 (muestra beneficios de estar formalizado).
+    </div>
+
+    <!-- KPIs principales -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="stat-card">
+        <div class="stat-label">Pedidos activos</div>
+        <div class="stat-value">2</div>
+        <div class="stat-trend positive">↑ +1 vs mes anterior</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Facturación (mes)</div>
+        <div class="stat-value">AR$ 2.8M</div>
+        <div class="stat-trend positive">↑ +18% vs mes anterior</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Reputación</div>
+        <div class="stat-value">8.9/10</div>
+        <div class="stat-trend neutral">→ Estable</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Comisión actual</div>
+        <div class="stat-value">3%</div>
+        <div class="stat-trend positive">Formal: 95%</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Columna principal -->
+      <div class="col-span-8 space-y-6">
+
+        <!-- Pedidos activos -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Pedidos Activos</h3>
+              <p class="section-subtitle">En ejecución</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Pedido 1 -->
+            <div class="p-4 border-2 border-emerald-200 bg-emerald-50 rounded-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <div class="font-semibold text-slate-900">#PED-2024-00142 - Urbano Kids</div>
+                  <div class="text-sm text-slate-600">Remera Oversize x 1.200 uds</div>
+                  <div class="text-xs text-slate-500 mt-1">Fecha compromiso: 15/01/2025 (en 3 días)</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-bold text-emerald-600">95%</div>
+                  <div class="text-xs text-slate-500">1.140 / 1.200</div>
+                </div>
+              </div>
+
+              <div class="progress-bar mb-3">
+                <div class="progress-fill bg-emerald-500" style="width: 95%"></div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 text-xs mb-3">
+                <div class="p-2 bg-white rounded border border-emerald-200">
+                  <div class="text-slate-500">Precio unitario</div>
+                  <div class="font-semibold">AR$ 2.150</div>
+                </div>
+                <div class="p-2 bg-white rounded border border-emerald-200">
+                  <div class="text-slate-500">Total estimado</div>
+                  <div class="font-semibold">AR$ 2.580.000</div>
+                </div>
+                <div class="p-2 bg-white rounded border border-emerald-200">
+                  <div class="text-slate-500">Comisión (3%)</div>
+                  <div class="font-semibold text-red-600">-AR$ 77.400</div>
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                <button class="btn btn-primary btn-sm flex-1" onclick="alert('En producción: Actualizar progreso del pedido')">
+                  Actualizar Progreso
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="alert('En producción: Comunicarse con Urbano Kids')">
+                  Contactar Marca
+                </button>
+              </div>
+            </div>
+
+            <!-- Pedido 2 -->
+            <div class="p-4 border border-slate-200 rounded-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <div class="font-semibold text-slate-900">#PED-2024-00138 - TrendyWear</div>
+                  <div class="text-sm text-slate-600">Jean Slim Fit x 500 uds</div>
+                  <div class="text-xs text-slate-500 mt-1">Fecha compromiso: 20/01/2025 (en 8 días)</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-bold text-sky-600">60%</div>
+                  <div class="text-xs text-slate-500">300 / 500</div>
+                </div>
+              </div>
+
+              <div class="progress-bar mb-3">
+                <div class="progress-fill bg-sky-500" style="width: 60%"></div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 text-xs mb-3">
+                <div class="p-2 bg-slate-50 rounded">
+                  <div class="text-slate-500">Precio unitario</div>
+                  <div class="font-semibold">AR$ 3.200</div>
+                </div>
+                <div class="p-2 bg-slate-50 rounded">
+                  <div class="text-slate-500">Total estimado</div>
+                  <div class="font-semibold">AR$ 1.600.000</div>
+                </div>
+                <div class="p-2 bg-slate-50 rounded">
+                  <div class="text-slate-500">Comisión (3%)</div>
+                  <div class="font-semibold text-red-600">-AR$ 48.000</div>
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                <button class="btn btn-primary btn-sm flex-1" onclick="alert('En producción: Actualizar progreso del pedido')">
+                  Actualizar Progreso
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="alert('En producción: Comunicarse con TrendyWear')">
+                  Contactar Marca
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pedidos Entrantes / Disponibles -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Pedidos Entrantes</h3>
+              <p class="section-subtitle">Nuevas oportunidades que coinciden con tu perfil</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Pedido entrante 1 -->
+            <div class="p-4 border border-sky-200 bg-sky-50 rounded-xl">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <div class="font-semibold text-slate-900">Pedido de ModaPlus SA</div>
+                    <span class="pill pill-sky pill-sm">Nueva</span>
+                  </div>
+                  <div class="text-sm text-slate-600 mb-2">Buzo Canguro x 800 uds - Plazo: 25 días</div>
+
+                  <div class="grid grid-cols-3 gap-2 text-xs mb-2">
+                    <div>
+                      <span class="text-slate-500">Precio ofrecido:</span>
+                      <span class="font-semibold ml-1">AR$ 4.200/ud</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">Total:</span>
+                      <span class="font-semibold ml-1">AR$ 3.360.000</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">Match:</span>
+                      <span class="font-semibold text-emerald-600 ml-1">92%</span>
+                    </div>
+                  </div>
+
+                  <div class="text-xs text-slate-500">
+                    <strong>Por qué te matcheamos:</strong> Historial en buzos (8 pedidos completados),
+                    capacidad 900 uds/mes, reputación alta (8.9/10)
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-2 mt-3">
+                <button class="btn btn-primary btn-sm" onclick="alert('En producción: Ver detalle completo y aceptar pedido')">
+                  Ver Detalle y Aceptar
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="alert('En producción: Rechazar pedido o contraofertar')">
+                  Rechazar
+                </button>
+              </div>
+            </div>
+
+            <!-- Pedido entrante 2 -->
+            <div class="p-4 border border-slate-200 rounded-xl">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <div class="font-semibold text-slate-900">Pedido de FashionCore</div>
+                    <span class="pill pill-slate pill-sm">Hace 2 días</span>
+                  </div>
+                  <div class="text-sm text-slate-600 mb-2">Camisa Clásica x 600 uds - Plazo: 20 días</div>
+
+                  <div class="grid grid-cols-3 gap-2 text-xs mb-2">
+                    <div>
+                      <span class="text-slate-500">Precio ofrecido:</span>
+                      <span class="font-semibold ml-1">AR$ 2.800/ud</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">Total:</span>
+                      <span class="font-semibold ml-1">AR$ 1.680.000</span>
+                    </div>
+                    <div>
+                      <span class="text-slate-500">Match:</span>
+                      <span class="font-semibold text-sky-600 ml-1">78%</span>
+                    </div>
+                  </div>
+
+                  <div class="text-xs text-slate-500">
+                    <strong>Por qué te matcheamos:</strong> Experiencia en corte+confección, zona geográfica cercana
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-2 mt-3">
+                <button class="btn btn-primary btn-sm" onclick="alert('En producción: Ver detalle completo')">
+                  Ver Detalle
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="alert('En producción: Rechazar pedido')">
+                  Rechazar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+
+        <!-- Estado de Formalización -->
+        <div class="section-card">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-semibold text-slate-900">Estado de Formalización</h4>
+            <button class="btn btn-secondary btn-sm" onclick="window.location.href='validaciones.html'">
+              Ver Detalle
+            </button>
+          </div>
+
+          <div class="relative mb-4">
+            <div class="w-24 h-24 mx-auto">
+              <svg viewBox="0 0 36 36" class="circular-progress">
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#e2e8f0"
+                  stroke-width="3"
+                />
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#10b981"
+                  stroke-width="3"
+                  stroke-dasharray="95, 100"
+                />
+              </svg>
+              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                <div class="text-2xl font-bold text-emerald-600">95%</div>
+                <div class="text-xs text-slate-500">Completo</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">✅ Registro ARCA</span>
+              <span class="text-emerald-600 font-semibold">OK</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">✅ Alta en STESS</span>
+              <span class="text-emerald-600 font-semibold">OK</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">✅ ART activa</span>
+              <span class="text-emerald-600 font-semibold">OK</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">⚠️ Hab. Bomberos</span>
+              <span class="text-amber-600 font-semibold">Vence pronto</span>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+            <div class="text-xs text-emerald-700">
+              <strong>Beneficio actual:</strong> Comisión reducida al 3% (vs 7% para talleres informales)
+            </div>
+          </div>
+        </div>
+
+        <!-- Reputación y Estadísticas -->
+        <div class="section-card">
+          <h4 class="font-semibold text-slate-900 mb-4">Mi Reputación</h4>
+
+          <div class="text-center mb-4">
+            <div class="text-4xl font-bold text-emerald-600 mb-1">8.9/10</div>
+            <div class="text-sm text-slate-500">Basado en 128 pedidos</div>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-slate-600">Cumplimiento de plazos</span>
+                <span class="font-semibold">8.9/10</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill bg-emerald-500" style="width: 89%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-slate-600">Calidad del producto</span>
+                <span class="font-semibold">9.2/10</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill bg-emerald-500" style="width: 92%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-slate-600">Comunicación</span>
+                <span class="font-semibold">8.5/10</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill bg-sky-500" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2 bg-slate-50 rounded text-center">
+              <div class="font-semibold text-lg">97%</div>
+              <div class="text-slate-500">Entrega a tiempo</div>
+            </div>
+            <div class="p-2 bg-slate-50 rounded text-center">
+              <div class="font-semibold text-lg">0.8%</div>
+              <div class="text-slate-500">Tasa rechazo</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capacitaciones Recomendadas -->
+        <div class="section-card">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-semibold text-slate-900">Capacitaciones</h4>
+            <button class="btn btn-secondary btn-sm" onclick="window.location.href='capacitaciones.html'">
+              Ver Todas
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 border border-sky-200 bg-sky-50 rounded-lg">
+              <div class="flex items-start gap-2 mb-2">
+                <div class="w-8 h-8 rounded bg-sky-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                  📚
+                </div>
+                <div class="flex-1">
+                  <div class="font-semibold text-sm text-slate-900 mb-1">Control de Calidad Avanzado</div>
+                  <div class="text-xs text-slate-600">2hs • 4.8★ • Certificado verificable</div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm w-full" onclick="alert('En producción: Ir a curso de Control de Calidad')">
+                Iniciar Curso
+              </button>
+            </div>
+
+            <div class="p-3 border border-slate-200 rounded-lg">
+              <div class="flex items-start gap-2 mb-2">
+                <div class="w-8 h-8 rounded bg-slate-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                  📊
+                </div>
+                <div class="flex-1">
+                  <div class="font-semibold text-sm text-slate-900 mb-1">Cálculo de Costos Reales</div>
+                  <div class="text-xs text-slate-600">90min • 4.6★</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm w-full" onclick="alert('En producción: Ir a curso de Costos')">
+                Ver Curso
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-3 text-xs text-center text-slate-500">
+            1 certificado obtenido | 1 en progreso
+          </div>
+        </div>
+
+        <!-- Próximos Pagos -->
+        <div class="section-card">
+          <h4 class="font-semibold text-slate-900 mb-4">Próximos Pagos</h4>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="font-semibold text-sm text-slate-900">#PED-2024-00142</div>
+                  <div class="text-xs text-slate-500">Urbano Kids</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold text-emerald-600">AR$ 2.5M</div>
+                  <div class="text-xs text-emerald-600">Al completar</div>
+                </div>
+              </div>
+              <div class="text-xs text-slate-600">
+                Progreso: 95% • Falta: 60 uds
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-lg">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="font-semibold text-sm text-slate-900">#PED-2024-00138</div>
+                  <div class="text-xs text-slate-500">TrendyWear</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold text-slate-900">AR$ 1.6M</div>
+                  <div class="text-xs text-slate-500">En 8 días</div>
+                </div>
+              </div>
+              <div class="text-xs text-slate-600">
+                Progreso: 60% • Falta: 200 uds
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-sky-50 rounded-lg">
+            <div class="text-xs text-sky-700">
+              <strong>Total pendiente de cobro:</strong> AR$ 4.1M
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+
+</body>
+</html>
