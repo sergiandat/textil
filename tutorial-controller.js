@@ -149,6 +149,9 @@ class TutorialController {
     const paso = tutorialData.pasos[index];
     this.pasoActual = index;
 
+    console.log(`📚 Tutorial paso ${index + 1}/${tutorialData.pasos.length}: ${paso.titulo}`);
+    console.log(`🔍 Buscando selector: ${paso.selector}`);
+
     // Limpiar highlights anteriores
     this.limpiarHighlights();
 
@@ -156,11 +159,15 @@ class TutorialController {
     const elemento = this.buscarElemento(paso.selector);
 
     if (!elemento) {
-      console.warn(`Elemento no encontrado: ${paso.selector}`);
-      // Mostrar tooltip sin highlight
+      console.warn(`⚠️ Elemento no encontrado: ${paso.selector}`);
+      console.log('ℹ️ Mostrando tooltip centrado sin highlight');
+      // Mostrar tooltip sin highlight (centrado)
       this.crearTooltip(paso, null, index, tutorialData.pasos.length);
+      this.actualizarBarraProgreso(index + 1, tutorialData.pasos.length);
       return;
     }
+
+    console.log(`✓ Elemento encontrado, aplicando highlight`);
 
     // Scroll al elemento
     this.scrollToElement(elemento);
@@ -169,6 +176,7 @@ class TutorialController {
     setTimeout(() => {
       if (paso.destacar) {
         this.aplicarHighlight(elemento);
+        console.log(`✨ Spotlight aplicado`);
       }
 
       // Crear tooltip
@@ -183,15 +191,50 @@ class TutorialController {
     try {
       // Intentar selector directo
       let elemento = document.querySelector(selector);
-      if (elemento) return elemento;
-
-      // Intentar con selectores alternativos comunes
-      // Por ejemplo, si el selector es un ID sin #
-      if (!selector.startsWith('#') && !selector.startsWith('.')) {
-        elemento = document.getElementById(selector);
-        if (elemento) return elemento;
+      if (elemento) {
+        console.log(`✓ Elemento encontrado con selector: "${selector}"`);
+        return elemento;
       }
 
+      // Si el selector tiene :contains(), intentar buscar por texto
+      if (selector.includes(':contains')) {
+        const match = selector.match(/^(.+):contains\("(.+)"\)$/);
+        if (match) {
+          const [, baseSelector, texto] = match;
+          const elementos = document.querySelectorAll(baseSelector || '*');
+          for (const el of elementos) {
+            if (el.textContent.includes(texto)) {
+              console.log(`✓ Elemento encontrado con :contains("${texto}")`);
+              return el;
+            }
+          }
+        }
+      }
+
+      // Intentar selectores más simples si el selector es complejo
+      if (selector.includes('.')) {
+        const clases = selector.match(/\.[a-zA-Z0-9_-]+/g);
+        if (clases && clases.length > 1) {
+          // Intentar solo con la primera clase
+          const selectorSimple = clases[0];
+          elemento = document.querySelector(selectorSimple);
+          if (elemento) {
+            console.log(`✓ Elemento encontrado con selector simplificado: "${selectorSimple}"`);
+            return elemento;
+          }
+        }
+      }
+
+      // Intentar con selectores alternativos comunes
+      if (!selector.startsWith('#') && !selector.startsWith('.')) {
+        elemento = document.getElementById(selector);
+        if (elemento) {
+          console.log(`✓ Elemento encontrado por ID: "${selector}"`);
+          return elemento;
+        }
+      }
+
+      console.warn(`✗ Elemento NO encontrado con selector: "${selector}"`);
       return null;
     } catch (error) {
       console.error(`Error al buscar elemento con selector "${selector}":`, error);

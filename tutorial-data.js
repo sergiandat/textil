@@ -85,7 +85,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'kpis-principales',
-          selector: '.grid.grid-cols-4.gap-4',
+          selector: '.stat-card',
           titulo: 'KPIs de Tu Actividad',
           descripcion: 'Estas métricas te dan una vista rápida: pedidos activos, completados, monto total transaccionado y tu rating promedio. Toda esta información es trazable y verificable.',
           posicion: 'bottom',
@@ -93,7 +93,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'pedidos-en-ejecucion',
-          selector: '.section-card:has(h3:contains("Pedidos en Ejecución"))',
+          selector: '.section-card',
           titulo: 'Monitoreo en Tiempo Real',
           descripcion: 'Acá ves el progreso detallado de cada pedido activo. El porcentaje global muestra el avance total, y abajo ves el desglose por cada proceso de la cadena. Hacé click en un pedido para ver trazabilidad completa: qué trabajador está en qué tarea ahora mismo.',
           posicion: 'top',
@@ -101,7 +101,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'badges-verificacion',
-          selector: '.badge.badge-success:contains("✓")',
+          selector: '.badge',
           titulo: 'Badges de Verificación',
           descripcion: 'Estos badges muestran verificaciones en tiempo real: ARCA (fiscal), STESS (laboral), SOIVA (sindicato). Si un proveedor pierde alguna verificación durante la ejecución, recibirás una alerta inmediata.',
           posicion: 'bottom',
@@ -220,7 +220,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'kpis-confianza',
-          selector: '.grid.grid-cols-4.gap-4',
+          selector: '.stat-card',
           titulo: 'KPIs con Fuentes Verificables',
           descripcion: 'Las métricas que ves (pedidos activos, completados, monto, rating) no son auto-reportadas. Provienen de datos registrados en la plataforma y verificados por terceros. Esto genera CONFIANZA: no dependés de que el taller te diga "soy bueno", ves evidencia objetiva de su desempeño.',
           posicion: 'bottom',
@@ -228,7 +228,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'badges-verificacion-real',
-          selector: '.badge.badge-success:contains("✓")',
+          selector: '.badge',
           titulo: 'Badges de Verificación en Tiempo Real',
           descripcion: 'Los badges de verificación (✓ ARCA, ✓ STESS, ✓ SOIVA) no son decorativos. Son verificaciones EN TIEMPO REAL de que el proveedor cumple con registros fiscales, laborales y sindicales. Si un taller pierde alguna verificación (ej: vence su registro ARCA), el badge cambia instantáneamente y recibís una alerta.',
           posicion: 'bottom',
@@ -236,7 +236,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'pedidos-con-trazabilidad',
-          selector: '.section-card:has(h3:contains("Pedidos"))',
+          selector: '.section-card',
           titulo: 'Pedidos con Trazabilidad Verificable',
           descripcion: 'El progreso de cada pedido no es estimado por el taller: está basado en registros verificables (piezas completadas, checkpoints QA aprobados). Esta trazabilidad genera confianza porque reduce la incertidumbre: sabés realmente en qué estado está tu pedido.',
           posicion: 'top',
@@ -244,7 +244,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'historial-cumplimiento',
-          selector: '.text-sm:contains("Pedidos completados")',
+          selector: '.stat-value',
           titulo: 'Historial de Cumplimiento',
           descripcion: 'El número de pedidos completados (12) y la tasa de cumplimiento de plazos son datos históricos verificables, no promesas a futuro. Podés ver el TRACK RECORD real del taller, no solo lo que dicen que pueden hacer. Esta transparencia genera confianza basada en evidencia.',
           posicion: 'bottom',
@@ -252,7 +252,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'alertas-cambios',
-          selector: '.section-card:has(.text-amber-600)',
+          selector: '.alert',
           titulo: 'Alertas de Cambios en Estado del Proveedor',
           descripcion: 'Si un proveedor tiene cambios negativos (pierde verificación, baja rating, recibe denuncias), aparecen alertas automáticas en el dashboard. Esto permite actuar proactivamente ante señales de problemas, generando confianza en el SISTEMA de monitoreo.',
           posicion: 'top',
