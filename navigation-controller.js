@@ -9,7 +9,8 @@ const FLUJOS_BARRERAS = {
   'libre': {
     nombre: 'Navegación Libre',
     descripcion: 'Explora todas las pantallas sin restricciones',
-    pantallas: 'all' // Todas permitidas
+    pantallas: 'all', // Todas permitidas
+    inicio: 'dashboard-v1.3.html'
   },
 
   'B1': {
