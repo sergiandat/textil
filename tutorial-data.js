@@ -115,18 +115,26 @@ const TUTORIALES_BARRERAS = {
       contextoBarrera: 'Aprende a seleccionar proveedores con información verificada y transparente sobre su desempeño.',
       pasos: [
         {
-          id: 'algoritmo-matching',
-          selector: '.section-card:nth-of-type(1)',
-          titulo: 'Score de Compatibilidad',
-          descripcion: 'El sistema calcula automáticamente qué tan compatible es cada taller con tu pedido (92%, 88%, etc.). Este score considera: capacidad productiva, especialización en el producto, ubicación, historial de cumplimiento, y nivel de formalización.',
+          id: 'contexto-proceso',
+          selector: '.alert-info',
+          titulo: 'Contexto del Proceso',
+          descripcion: 'Aquí ves para qué proceso estás seleccionando proveedor: el tipo de prenda, cantidad y plazo. Esta información es clave porque el algoritmo de matching busca talleres que tengan capacidad y especialización en ESTE producto específico.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'verificaciones-proveedor',
-          selector: '.grid:has(.bg-emerald-50)',
-          titulo: 'Verificaciones en Tiempo Real',
-          descripcion: 'Antes de seleccionar, ves todas las verificaciones del taller: ARCA (situación fiscal), STESS (trabajadores registrados), SOIVA (convenio colectivo). Esto genera CONFIANZA basada en datos verificables, no en promesas.',
+          id: 'tabla-talleres',
+          selector: 'table',
+          titulo: 'Listado de Talleres con Score de Compatibilidad',
+          descripcion: 'El sistema calcula automáticamente qué tan compatible es cada taller con tu pedido. Este score considera: capacidad productiva, especialización en el producto, ubicación, historial de cumplimiento, y nivel de formalización.',
+          posicion: 'bottom',
+          destacar: true
+        },
+        {
+          id: 'badges-nivel',
+          selector: '.badge',
+          titulo: 'Nivel de Formalización Visible',
+          descripcion: 'Antes de seleccionar, ves el nivel de formalización del taller (ORO, PLATA, BRONCE). Los talleres con mayor nivel tienen prioridad en el matching y pagan menor comisión. Esto genera CONFIANZA basada en datos verificables.',
           posicion: 'top',
           destacar: true
         }
@@ -139,7 +147,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'terminos-acuerdo',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.form-group',
           titulo: 'Términos del Acuerdo',
           descripcion: 'Todos los términos quedan documentados: especificaciones técnicas, plazos, precio, condiciones de calidad, y condiciones laborales mínimas. Este registro es la base de la trazabilidad contractual.',
           posicion: 'bottom',
@@ -154,7 +162,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'progreso-procesos',
-          selector: '.section-card:has(h3:contains("Progreso"))',
+          selector: '.progress-bar',
           titulo: 'Trazabilidad Proceso a Proceso',
           descripcion: 'Ves el avance de cada proceso de la cadena: % completado, trabajadores asignados, materiales utilizados. Esta granularidad permite detectar problemas temprano.',
           posicion: 'bottom',
@@ -162,7 +170,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'trabajadores-asignados',
-          selector: '.grid:has(.text-xs:contains("Trabajador"))',
+          selector: '.section-card',
           titulo: 'Trazabilidad hasta el Trabajador',
           descripcion: 'Sabés exactamente QUÉ TRABAJADOR está haciendo QUÉ TAREA. Esto no solo da trazabilidad completa, sino que también permite reconocer el trabajo individual y detectar irregularidades laborales.',
           posicion: 'top',
@@ -177,7 +185,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'seguimiento-envio',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.section-card',
           titulo: 'Trazabilidad del Transporte',
           descripcion: 'El traslado de productos también está trazado: fecha de envío, transportista, tracking en tiempo real. Sabés exactamente dónde están tus productos en cada momento.',
           posicion: 'bottom',
@@ -192,7 +200,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'factura-digital',
-          selector: '.section-card:has(h3:contains("Factura"))',
+          selector: 'table',
           titulo: 'Factura Digital Verificada',
           descripcion: 'La factura electrónica está verificada por ARCA en tiempo real. Ves el desglose completo: subtotal, IVA, retenciones, comisión de plataforma. Todo documentado y trazable.',
           posicion: 'bottom',
@@ -200,7 +208,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'pago-bancarizado',
-          selector: '.section-card:has(.font-mono:contains("CBU"))',
+          selector: '.form-group',
           titulo: 'Pago Bancarizado Obligatorio',
           descripcion: 'El pago DEBE ser por transferencia bancaria (no efectivo). Esto deja registro del flujo financiero completo, cerrando la trazabilidad de punta a punta: desde la especificación del pedido hasta el pago final.',
           posicion: 'top',
@@ -266,50 +274,34 @@ const TUTORIALES_BARRERAS = {
       contextoBarrera: 'La reputación de los talleres se basa en datos verificables, no en promesas ni publicidad.',
       pasos: [
         {
-          id: 'score-matching',
-          selector: '.text-emerald-600:contains("%")',
-          titulo: 'Score de Compatibilidad Explicable',
-          descripcion: 'El score de matching (92%) no es una "caja negra". Te muestra EXACTAMENTE por qué este taller matchea con tu pedido: capacidad (90%), especialización en el producto (95%), ubicación (80%), historial (95%). Esta transparencia genera confianza en el algoritmo.',
+          id: 'filtros-sidebar',
+          selector: '.section-card',
+          titulo: 'Filtros para Búsqueda Específica',
+          descripcion: 'Podés filtrar talleres por nivel de formalización, ubicación, capacidad, y especialización. Esto permite encontrar EXACTAMENTE el tipo de taller que necesitás, no solo "cualquier taller".',
+          posicion: 'right',
+          destacar: true
+        },
+        {
+          id: 'tabla-talleres',
+          selector: 'table',
+          titulo: 'Listado con Datos Verificables',
+          descripcion: 'Cada taller muestra información verificable: nivel de formalización (ORO/PLATA/BRONCE), ubicación, capacidad, y rating. Esta información NO es auto-reportada, proviene de verificaciones oficiales y desempeño histórico.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'rating-desglosado',
-          selector: '.text-2xl.font-bold:contains("/")',
-          titulo: 'Rating Basado en Cumplimiento Real',
-          descripcion: 'El rating (8.9/10) no es arbitrario ni auto-reportado. Se calcula basándose en: cumplimiento de plazos (9/10), calidad verificada en checkpoints (8.5/10), ausencia de denuncias laborales (10/10), y feedback de otros clientes (8.5/10). Es VERIFICABLE porque está respaldado por datos registrados.',
+          id: 'badges-nivel',
+          selector: '.badge',
+          titulo: 'Nivel de Formalización Verificado',
+          descripcion: 'Los badges (ORO, PLATA, BRONCE) no son decorativos. Representan verificaciones REALES con ARCA, STESS y SOIVA. Un taller no puede mentir sobre su nivel: el sistema verifica directamente con las bases de datos oficiales.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'verificaciones-detalladas',
-          selector: '.grid:has(.bg-emerald-50)',
-          titulo: 'Verificaciones Gubernamentales en Tiempo Real',
-          descripcion: 'Las verificaciones (ARCA, STESS, SOIVA) no son "papeles que el taller muestra". La plataforma consulta DIRECTAMENTE las bases de datos oficiales en tiempo real. Si un registro venció ayer, lo ves AHORA. No hay forma de "trucar" el sistema mostrando documentos viejos.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'historial-trabajos',
-          selector: '.section-card:has(h4:contains("Trabajos"))',
-          titulo: 'Historial de Trabajos Anteriores',
-          descripcion: 'Ves los trabajos anteriores del taller con marcas reales que usaron la plataforma. No son referencias "arregladas", son datos de pedidos realmente ejecutados. Podés ver: productos similares hechos, plazos cumplidos, calificaciones recibidas. Esto es reputación TRANSPARENTE.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'señales-alerta',
-          selector: '.text-amber-600',
-          titulo: 'Señales de Alerta Visibles',
-          descripcion: 'Si un taller tiene señales de riesgo (denuncias recientes, caída de rating, pérdida de verificaciones), aparecen claramente marcadas. La plataforma NO oculta información negativa. Esta honestidad genera confianza: sabés que si ves todo "verde", es porque realmente está bien.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'capacidad-real',
-          selector: '.text-sm:contains("Capacidad")',
-          titulo: 'Capacidad Productiva Verificada',
-          descripcion: 'La capacidad productiva (900 uds/mes) no es lo que el taller "dice que puede hacer". Se calcula basándose en: trabajadores registrados en STESS, maquinaria declarada, y VELOCIDAD REAL observada en pedidos anteriores. Datos, no promesas.',
+          id: 'ordenamiento',
+          selector: '#ordenSelector',
+          titulo: 'Ordenar por Diferentes Criterios',
+          descripcion: 'Podés ordenar por: compatibilidad (recomendado por el algoritmo), rating (calidad histórica), precio (más económico), o cercanía (menos costo logístico). Esto te permite priorizar según lo que más te importa.',
           posicion: 'bottom',
           destacar: true
         }
@@ -321,43 +313,27 @@ const TUTORIALES_BARRERAS = {
       contextoBarrera: 'Los acuerdos incluyen mecanismos de garantía que reducen el riesgo para ambas partes, generando confianza mutua.',
       pasos: [
         {
-          id: 'terminos-explicitos',
-          selector: '.section-card:nth-of-type(1)',
+          id: 'formulario-acuerdo',
+          selector: '.form-group',
           titulo: 'Términos Explícitos y Registrados',
           descripcion: 'Cada término del acuerdo (especificaciones, plazos, precio, calidad) queda REGISTRADO en la plataforma. No es un "acuerdo de palabra" que cada uno interpreta diferente. Hay una ÚNICA versión verificable de qué se acordó, reduciendo conflictos futuros.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'checkpoints-qa',
-          selector: '.text-sm:contains("checkpoints")',
-          titulo: 'Checkpoints de QA Acordados',
-          descripcion: 'Los checkpoints de calidad (30%, 70%, 100%) están ACORDADOS por ambas partes desde el inicio. El taller sabe en qué puntos será evaluado, y la marca sabe cuándo podrá verificar. Expectativas claras = menos conflictos.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'condiciones-laborales',
-          selector: '.section-card:has(.text-emerald-600)',
-          titulo: 'Condiciones Laborales Mínimas',
-          descripcion: 'El acuerdo incluye condiciones laborales que el taller DEBE cumplir: salario mínimo convenio, trabajadores registrados, jornada máxima. Esto protege a la marca de riesgos legales y al trabajador de explotación. Genera confianza en toda la cadena.',
+          id: 'historial-cambios',
+          selector: '.section-card',
+          titulo: 'Historial de Negociación Transparente',
+          descripcion: 'Todos los cambios en el acuerdo quedan registrados con fecha y hora: quién propuso qué, cuándo se aceptó. Esta trazabilidad evita conflictos sobre "qué se acordó realmente". Ambas partes pueden revisar el historial completo.',
           posicion: 'top',
           destacar: true
         },
         {
-          id: 'plazos-pago',
-          selector: '.text-sm:contains("pago")',
-          titulo: 'Plazos de Pago Claros',
-          descripcion: 'El taller sabe EXACTAMENTE cuándo cobrará: "pago a X días de entrega conforme". No queda a criterio de la marca decidir "cuándo le conviene pagar". Esta previsibilidad genera confianza del taller hacia la plataforma.',
+          id: 'boton-firmar',
+          selector: '#btnFirmarContrato',
+          titulo: 'Firma Digital del Acuerdo',
+          descripcion: 'La firma digital queda registrada con timestamp. Una vez firmado por ambas partes, el acuerdo no puede modificarse unilateralmente. Esto genera seguridad jurídica: lo acordado es vinculante.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'resolucion-disputas',
-          selector: '.section-card:has(.text-amber-600)',
-          titulo: 'Mecanismo de Resolución de Disputas',
-          descripcion: 'Si hay conflictos (ej: la marca dice que la calidad es mala, el taller dice que está bien), hay un PROCESO definido de resolución: revisión de checkpoints previos, auditoría independiente, arbitraje. No queda librado al "poder de negociación" de cada uno.',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -369,7 +345,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'formulario-anonimo',
-          selector: '.section-card:nth-of-type(1)',
+          selector: '.form-group',
           titulo: 'Formulario de Denuncia Completamente Anónimo',
           descripcion: 'No se piden datos del denunciante, no hay login requerido, no se guarda IP. El denunciante recibe un código de seguimiento aleatorio para consultar el estado de su denuncia sin revelar identidad. ANONIMATO real, no solo prometido.',
           posicion: 'bottom',
@@ -377,34 +353,18 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'tipos-denuncias',
-          selector: '.grid:has(label:contains("Tipo"))',
+          selector: '.form-select',
           titulo: 'Tipos de Irregularidades Denunciables',
           descripcion: 'Podés denunciar: trabajo infantil, salarios por debajo del convenio, condiciones inseguras, jornadas excesivas, falta de registración de trabajadores. Esta claridad sobre QUÉ es denunciable genera confianza: sabés que el sistema toma en serio estas cuestiones.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'evidencia-opcional',
-          selector: '.form-group:has(input[type="file"])',
-          titulo: 'Evidencia Opcional pero Útil',
-          descripcion: 'Podés adjuntar fotos, recibos de pago, registros, sin que eso rompa el anonimato (metadatos se limpian automáticamente). La evidencia hace más creíble la denuncia y acelera la investigación, pero NO es obligatoria para denunciar.',
+          id: 'boton-enviar',
+          selector: '.btn-primary',
+          titulo: 'Enviar Denuncia de Forma Segura',
+          descripcion: 'Al enviar la denuncia, recibís un código de seguimiento. Guardá este código para consultar el estado más adelante sin revelar tu identidad. El sistema protege activamente a quien denuncia.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'seguimiento-denuncia',
-          selector: '.section-card:has(.text-sky-600)',
-          titulo: 'Seguimiento de Tu Denuncia',
-          descripcion: 'Con tu código de seguimiento, podés ver el estado: "Recibida", "En investigación", "Auditoria programada", "Resuelta". Esta transparencia genera confianza: sabés que tu denuncia NO fue ignorada, se está actuando.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'proteccion-represalias',
-          selector: '.section-card:has(.text-amber-600)',
-          titulo: 'Protección contra Represalias',
-          descripcion: 'Si el denunciante es un trabajador y el taller intenta identificarlo/despedirlo por la denuncia, eso MISMO es denunciable y genera una auditoría inmediata. El sistema protege activamente a quien denuncia, no solo pasivamente "no revela datos".',
-          posicion: 'top',
           destacar: true
         }
       ]
@@ -415,42 +375,26 @@ const TUTORIALES_BARRERAS = {
       contextoBarrera: 'Las auditorías públicas generan confianza al mostrar que hay control real y seguimiento de cumplimiento.',
       pasos: [
         {
-          id: 'historial-auditorias',
-          selector: '.section-card:nth-of-type(1)',
+          id: 'listado-auditorias',
+          selector: '.section-card',
           titulo: 'Historial Completo de Auditorías',
           descripcion: 'Todas las auditorías (fecha, inspector, hallazgos, acciones correctivas) quedan PÚBLICAMENTE registradas en el perfil del taller. No se pueden "esconder" auditorías negativas. Esta transparencia genera confianza: si un taller no tiene auditorías negativas recientes, es porque realmente cumple.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'origen-auditoria',
-          selector: '.badge:contains("Origen")',
-          titulo: 'Origen de la Auditoría Visible',
+          id: 'badges-origen',
+          selector: '.badge',
+          titulo: 'Origen y Tipo de Auditoría',
           descripcion: 'Se ve si la auditoría fue: rutinaria (programada), por denuncia (alguien reportó algo), o por alerta del sistema (datos detectaron anomalía). Esta transparencia genera confianza en el PROCESO: no son auditorías arbitrarias.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'hallazgos-detallados',
-          selector: '.section-card:has(h4:contains("Hallazgos"))',
+          id: 'tabla-hallazgos',
+          selector: 'table',
           titulo: 'Hallazgos Detallados y Clasificados',
-          descripcion: 'Los hallazgos se clasifican por severidad: Crítico (trabajo infantil, falta de registración), Moderado (salario levemente bajo), Menor (documentación incompleta). Esta granularidad permite entender el NIVEL real de los problemas, no solo "auditoria negativa = taller malo".',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'acciones-correctivas',
-          selector: '.text-sm:contains("Acción correctiva")',
-          titulo: 'Acciones Correctivas y Seguimiento',
-          descripcion: 'Para cada hallazgo, se define acción correctiva y plazo. El seguimiento muestra: "Completada", "En progreso", "Vencida". Esto genera confianza de que las auditorías NO son solo "marcar errores", sino AYUDAR a corregir.',
-          posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'impacto-rating',
-          selector: '.section-card:has(.text-amber-600)',
-          titulo: 'Impacto en Rating del Taller',
-          descripcion: 'Las auditorías negativas bajan el rating del taller (hallazgos críticos = -2 puntos, moderados = -0.5). Las auditorías positivas lo mejoran (+0.2). Esto genera INCENTIVO real para cumplir: el cumplimiento mejora tu reputación y acceso a pedidos.',
+          descripcion: 'Los hallazgos se clasifican por severidad: Crítico (trabajo infantil, falta de registración), Moderado (salario levemente bajo), Menor (documentación incompleta). Esta granularidad permite entender el NIVEL real de los problemas.',
           posicion: 'top',
           destacar: true
         }
@@ -462,43 +406,27 @@ const TUTORIALES_BARRERAS = {
       contextoBarrera: 'El mecanismo de pago contra entrega conforme protege a ambas partes y genera confianza mutua.',
       pasos: [
         {
-          id: 'factura-verificada',
-          selector: '.section-card:has(h3:contains("Factura"))',
+          id: 'tabla-factura',
+          selector: 'table',
           titulo: 'Factura Digital Verificada por ARCA',
-          descripcion: 'La factura electrónica NO es un PDF que el taller te manda. La plataforma consulta ARCA en tiempo real y obtiene la factura directamente desde allí. Imposible de falsificar. Esta verificación automática genera confianza: sabés que la factura es legítima.',
+          descripcion: 'La factura electrónica NO es un PDF que el taller te manda. La plataforma consulta ARCA en tiempo real y obtiene la factura directamente desde allí. Imposible de falsificar. Ves cada línea: subtotal, comisión, IVA, retenciones.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'desglose-transparente',
-          selector: '.table:has(th:contains("Concepto"))',
-          titulo: 'Desglose Completo y Transparente',
-          descripcion: 'Ves cada línea: subtotal del trabajo, comisión de plataforma (-3%), IVA (+21%), retenciones (-2%). No hay "costos ocultos" que aparecen de sorpresa. Esta transparencia genera confianza en que el precio final es justo y calculado correctamente.',
+          id: 'metodos-pago',
+          selector: '.form-group',
+          titulo: 'Métodos de Pago Bancarizados',
+          descripcion: 'El pago DEBE ser por transferencia bancaria (no efectivo). Esto deja registro del flujo financiero completo. El CBU del taller está verificado: coincide con su CUIT registrado en ARCA.',
           posicion: 'bottom',
           destacar: true
         },
         {
-          id: 'pago-automatico',
-          selector: '.section-card:has(.text-emerald-600)',
-          titulo: 'Pago Automático al Confirmar Recepción',
-          descripcion: 'Cuando la marca confirma "recibido conforme", el pago se DISPARA AUTOMÁTICAMENTE al taller. No depende de que la marca "se acuerde" o "tenga ganas" de pagar. Esto genera CONFIANZA del taller: sabe que si cumple, cobra SÍ O SÍ.',
-          posicion: 'top',
-          destacar: true
-        },
-        {
-          id: 'cbu-verificado',
-          selector: '.font-mono:contains("CBU")',
-          titulo: 'CBU del Taller Verificado',
-          descripcion: 'El CBU donde se deposita está verificado: coincide con el CUIT del taller registrado en ARCA. Imposible que un tercero intercepte el pago. Esta seguridad genera confianza de que el dinero llega al destino correcto.',
+          id: 'boton-pagar',
+          selector: '.btn-primary',
+          titulo: 'Confirmar Pago Seguro',
+          descripcion: 'Cuando confirmás el pago, se DISPARA AUTOMÁTICAMENTE la transferencia. No depende de que "te acuerdes" o "tengas ganas". Esto genera CONFIANZA del taller: si cumple, cobra SÍ O SÍ.',
           posicion: 'bottom',
-          destacar: true
-        },
-        {
-          id: 'periodo-garantia',
-          selector: '.text-amber-600:contains("garantía")',
-          titulo: 'Periodo de Garantía Post-Entrega',
-          descripcion: 'Aunque el pago es automático al confirmar recepción, hay un periodo de garantía (7 días). Si aparecen problemas (defectos ocultos), podés abrir reclamo. El sistema BALANCEA: pago rápido para el taller + seguridad para la marca.',
-          posicion: 'top',
           destacar: true
         }
       ]
