@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casos de Uso Potenciales - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <link rel="stylesheet" href="vision-general.css">
+  <link rel="stylesheet" href="casos-uso-futuros.css">
+</head>
+<body>
+
+  <!--
+    PANTALLA: casos-uso-futuros.html
+    FUNCIONES: Mostrar capacidades potenciales de la plataforma organizadas por función
+    ACTORES: Stakeholders, investigadores, desarrolladores
+    DESCRIPCIÓN: Listado simple de casos de uso potenciales y problemas que resuelven (sin roadmap ni fases)
+  -->
+
+  <!-- Hero Section -->
+  <section class="vg-hero">
+    <div class="vg-container">
+      <div class="vg-logo">🚀</div>
+      <h1 class="vg-title">Casos de Uso Potenciales</h1>
+      <h2 class="vg-subtitle">Capacidades expandidas de la plataforma</h2>
+      <p class="vg-tagline">Problemáticas específicas que el ecosistema digital puede resolver</p>
+    </div>
+  </section>
+
+  <!-- Introducción -->
+  <section class="cu-intro">
+    <div class="vg-container">
+      <p class="cu-intro-text">
+        Más allá de las funcionalidades básicas del MVP, la plataforma puede expandirse con casos de uso que resuelven problemáticas específicas de cada actor del ecosistema textil. Estos casos están organizados por <strong>función</strong>, no por fases temporales, mostrando las capacidades potenciales del sistema.
+      </p>
+    </div>
+  </section>
+
+  <!-- 1. ENCONTRAR -->
+  <section class="cu-section">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">🔍</div>
+        <h2 class="cu-function-title">ENCONTRAR</h2>
+        <p class="cu-function-desc">Matching inteligente entre marcas y talleres</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">🤝</div>
+          <h3 class="cu-card-title">Talleres pequeños se asocian para pedido grande</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Talleres pequeños no pueden cumplir pedidos grandes solos
+          </div>
+          <p class="cu-card-solution">
+            Sistema sugiere asociación entre talleres compatibles y cercanos. Ambos negocian división del trabajo, firman contrato tripartito, y el sistema divide pagos automáticamente según % completado.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🏛️</div>
+          <h3 class="cu-card-title">Estado realiza compra pública priorizando trabajo decente</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Estado necesita garantizar cumplimiento laboral en compras públicas
+          </div>
+          <p class="cu-card-solution">
+            Licitaciones con filtro obligatorio: solo nivel oro (100% formal, auditorías recientes). Contrato en blockchain para transparencia anticorrupción. Integración con portal Comprar del Estado.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">💼</div>
+          <h3 class="cu-card-title">Cooperativa incorpora nuevos miembros desde bolsa de trabajo</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Trabajadores domiciliarios no pueden incorporarse formalmente
+          </div>
+          <p class="cu-card-solution">
+            Bolsa de trabajo interna hace matching entre cooperativas con vacantes y trabajadores. Entrevistas virtuales integradas. Sistema genera documentación automática (alta AFIP, obra social).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ACORDAR -->
+  <section class="cu-section cu-section-alt">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">📝</div>
+        <h2 class="cu-function-title">ACORDAR</h2>
+        <p class="cu-function-desc">Contratos digitales formalizados y vinculantes</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">💰</div>
+          <h3 class="cu-card-title">Marca publica precio justo usando calculadora integrada</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Precios bajos obligan a talleres a precarizar trabajo
+          </div>
+          <p class="cu-card-solution">
+            Sistema calcula precio mínimo trabajo decente vía API Vestir Conciencia (IMT). Marca puede ofrecer menos pero debe justificar. Historial de precios queda registrado y visible.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">📊</div>
+          <h3 class="cu-card-title">Contratos con hitos de pago verificables</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Talleres no tienen garantía de cobrar al finalizar
+          </div>
+          <p class="cu-card-solution">
+            Sistema propone hitos estándar (40% al 50% producción, 60% al 100% entregado). Hitos vinculados a escrow: cuando taller sube evidencia válida, sistema libera automáticamente el pago.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. EJECUTAR -->
+  <section class="cu-section">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">⚙️</div>
+        <h2 class="cu-function-title">EJECUTAR</h2>
+        <p class="cu-function-desc">Seguimiento de producción en tiempo real</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">📸</div>
+          <h3 class="cu-card-title">Taller registra avance con fotos y QR</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Opacidad en cadena de producción, no se sabe quién fabrica
+          </div>
+          <p class="cu-card-solution">
+            Taller registra cada etapa (corte, confección, calidad) con foto + CUIT trabajador. Sistema genera QR único por prenda con timeline completo. Consumidor puede escanear y ver toda la historia.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">⚠️</div>
+          <h3 class="cu-card-title">Sistema detecta retraso automático y alerta</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Sorpresas de última hora en producción, falta transparencia
+          </div>
+          <p class="cu-card-solution">
+            Motor monitorea diariamente avance real vs cronograma. Si detecta delta >10%, alerta automática a ambas partes CON ANTICIPACIÓN. Taller puede proponer extensión. Renegociación registrada en blockchain.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🏭</div>
+          <h3 class="cu-card-title">Producción distribuida entre múltiples talleres</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Dificultad para coordinar producción entre varios talleres
+          </div>
+          <p class="cu-card-solution">
+            Cada taller registra su avance independientemente. Sistema consolida % total automáticamente. Marca ve dashboard único con todas las cooperativas. Coordinación logística integrada.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. VERIFICAR -->
+  <section class="cu-section cu-section-alt">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">✅</div>
+        <h2 class="cu-function-title">VERIFICAR</h2>
+        <p class="cu-function-desc">Trazabilidad punta a punta y certificaciones</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">🔗</div>
+          <h3 class="cu-card-title">Marca traza toda su cadena con blockchain</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Opacidad en cadena de producción, tercerización oculta
+          </div>
+          <p class="cu-card-solution">
+            Cada etapa productiva se registra en blockchain Polygon (timestamp inmutable). QR único por prenda permite verificar autenticidad. Marca puede demostrar ante reguladores que conoce toda su cadena.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">📱</div>
+          <h3 class="cu-card-title">Consumidor escanea QR y verifica trazabilidad</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Consumidores no pueden elegir conscientemente
+          </div>
+          <p class="cu-card-solution">
+            QR en etiqueta abre landing mobile con historia completa: taller, trabajadores registrados, fechas, timeline con fotos, certificaciones verificables, link blockchain público.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🌍</div>
+          <h3 class="cu-card-title">Marca internacional cumple normativa due diligence</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Marcas europeas deben demostrar cumplimiento ante reguladores
+          </div>
+          <p class="cu-card-solution">
+            Dashboard compliance genera reportes automáticos: talleres, trabajadores registrados, auditorías. Marca descarga PDF firmado digitalmente para presentar a reguladores. 90% menos esfuerzo administrativo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LOGÍSTICA -->
+  <section class="cu-section">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">🚚</div>
+        <h2 class="cu-function-title">LOGÍSTICA</h2>
+        <p class="cu-function-desc">Coordinación de entregas y transporte</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">📦</div>
+          <h3 class="cu-card-title">Federación crea hub logístico centralizado</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Talleres pequeños sin logística quedan excluidos de pedidos grandes
+          </div>
+          <p class="cu-card-solution">
+            Federación crea hub físico centralizado. Marcas entregan tela al hub en 1 viaje. Federación distribuye a cooperativas. Cooperativas producen y devuelven al hub. Marca retira de 1 solo lugar.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">📍</div>
+          <h3 class="cu-card-title">Sistema optimiza rutas por proximidad territorial</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Costos logísticos innecesarios, falta economía local
+          </div>
+          <p class="cu-card-solution">
+            Algoritmo da puntos extra a talleres cercanos geográficamente. Muestra ahorro estimado en logística y tiempos de entrega. Fortalece economía barrial. Reduce huella de carbono.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PAGAR -->
+  <section class="cu-section cu-section-alt">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">💳</div>
+        <h2 class="cu-function-title">PAGAR</h2>
+        <p class="cu-function-desc">Escrow y pagos garantizados</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">🔒</div>
+          <h3 class="cu-card-title">Escrow garantiza pago al taller por hitos</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Talleres no tienen garantía de cobrar
+          </div>
+          <p class="cu-card-solution">
+            Sistema OBLIGA a marca a depositar dinero ANTES de que taller empiece. Dinero queda en cuenta custodia. Al completar hitos, sistema libera automáticamente. Si marca no aprueba en 5 días, liberación automática.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🏦</div>
+          <h3 class="cu-card-title">Taller usa historial para crédito bancario</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Acceso limitado a financiamiento para invertir
+          </div>
+          <p class="cu-card-solution">
+            Sistema genera "Reporte Crediticio" PDF firmado digitalmente: trabajos completados, calificación, facturación, nivel oro, 0 incumplimientos. Banco valida firma digital y aprueba crédito más rápido.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">⚖️</div>
+          <h3 class="cu-card-title">Plataforma retiene pago por denuncia, árbitro decide</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Conflictos de calidad sin resolución justa
+          </div>
+          <p class="cu-card-solution">
+            Marca puede denunciar defectos con evidencia. Sistema retiene pago temporalmente. Árbitro neutral de pool revisa fotos y contrato. Decide porcentaje justo. Ejecución automática de la decisión.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. APRENDER -->
+  <section class="cu-section">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">🎓</div>
+        <h2 class="cu-function-title">APRENDER</h2>
+        <p class="cu-function-desc">Capacitación y certificación de competencias</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">📚</div>
+          <h3 class="cu-card-title">Taller accede a capacitaciones para formalizarse</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> No saben cómo formalizarse, brecha digital
+          </div>
+          <p class="cu-card-solution">
+            LMS completo con cursos multinivel según diagnóstico. Videos, ejercicios interactivos, evaluación final. Sistema emite certificado digital firmado INTI/MTEySS. Certificado se agrega automáticamente a perfil.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">📈</div>
+          <h3 class="cu-card-title">Plataforma sugiere capacitaciones según demanda</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> No saben qué capacitar, desalineación oferta-demanda
+          </div>
+          <p class="cu-card-solution">
+            Sistema analiza mensualmente brechas oferta-demanda. Detecta oportunidades (ej: "30 pedidos ropa sustentable rechazados"). Notifica talleres relevantes. Coordina con INTI para crear cursos.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🏅</div>
+          <h3 class="cu-card-title">Trabajador obtiene certificación de competencias laborales</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Trabajadores sin título formal, baja empleabilidad
+          </div>
+          <p class="cu-card-solution">
+            Test teórico online + práctica presencial INTI. Evaluador certifica nivel competente. Certificado oficial reconocido se agrega a perfil. Prioridad en bolsa de trabajo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. COMPLIANCE -->
+  <section class="cu-section cu-section-alt">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">📋</div>
+        <h2 class="cu-function-title">COMPLIANCE</h2>
+        <p class="cu-function-desc">Formalización progresiva y validaciones</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">🗺️</div>
+          <h3 class="cu-card-title">Taller informal descubre qué le falta para formalizarse</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> No saben por dónde empezar a formalizarse
+          </div>
+          <p class="cu-card-solution">
+            Sistema valida CUIT contra API AFIP. Genera diagnóstico automático: "Te faltan 3 cosas...". Muestra hoja de ruta con guías descargables, videos tutoriales, contactos asesoría gratuita MTEySS.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">⭐</div>
+          <h3 class="cu-card-title">Sistema de niveles: Taller mejora reputación completando trabajos</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Talleres formales no se diferencian de informales
+          </div>
+          <p class="cu-card-solution">
+            Sistema gamificado de puntos: +100 pedido completado, +50 bonus 5 estrellas, -200 incumplimiento. Al acumular puntos, sube de nivel (Bronce → Plata → Oro). Algoritmo prioriza niveles altos.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">👥</div>
+          <h3 class="cu-card-title">Cooperativa valida CUIT de miembros automáticamente</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Dificultad para gestionar formalidad de múltiples miembros
+          </div>
+          <p class="cu-card-solution">
+            Sistema consulta AFIP API en batch (múltiples CUIT simultáneos). Validación automática cada 3 meses. Alerta si detecta problemas: "Regularizá 2 miembros en 30 días o nivel baja".
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FISCALIZAR -->
+  <section class="cu-section">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">👁️</div>
+        <h2 class="cu-function-title">FISCALIZAR</h2>
+        <p class="cu-function-desc">Control, denuncias y sanciones</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card">
+          <div class="cu-card-icon">💰</div>
+          <h3 class="cu-card-title">Sistema detecta precio sospechosamente bajo y alerta</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Precios bajos obligan a precarizar, opacidad de precios
+          </div>
+          <p class="cu-card-solution">
+            Motor analiza precios automáticamente vs Vestir Conciencia. Si detecta precio 62% debajo referencia, solicita justificación obligatoria. NLP evalúa si justificación es débil. Mesa tripartita recibe reporte mensual.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🔍</div>
+          <h3 class="cu-card-title">Inspección laboral usa plataforma para priorizar</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Estado ausente, fiscalización ineficiente
+          </div>
+          <p class="cu-card-solution">
+            Dashboard exclusivo gobierno muestra mapa calor: talleres registrados AFIP pero NO en plataforma. Identifica zonas sin verificar. Inspector prioriza inspecciones. Datos alimentan políticas públicas.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🚨</div>
+          <h3 class="cu-card-title">Marca denuncia taller que tercerizó sin avisar</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Tercerización oculta, falta diálogo y resolución
+          </div>
+          <p class="cu-card-solution">
+            Sistema denuncias con evidencia. Taller tiene 5 días para responder. Árbitro neutral de pool revisa. Decide sanción gradual (advertencia→suspensión→expulsión). Decisión registrada en historial auditable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. GOBERNAR -->
+  <section class="cu-section cu-section-alt">
+    <div class="vg-container">
+      <div class="cu-function-header">
+        <div class="cu-function-icon">🤝</div>
+        <h2 class="cu-function-title">GOBERNAR</h2>
+        <p class="cu-function-desc">Inteligencia, mejora continua y mesa tripartita</p>
+      </div>
+
+      <div class="cu-grid">
+        <div class="cu-card cu-card-highlight">
+          <div class="cu-card-icon">⚖️</div>
+          <h3 class="cu-card-title">Mesa Tripartita detecta precios injustos y acuerda política</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Precios injustos, sesgos algorítmicos, sin mejora continua
+          </div>
+          <p class="cu-card-solution">
+            Sistema genera reporte: "60% pedidos están 30% debajo precio justo". Mesa se reúne virtualmente, revisa datos en tiempo real, debate, acuerda política. Firma digital tripartita. Acuerdo en blockchain. Equipo técnico implementa. Dashboard trackea impacto. Ciclo se repite cada 3-6 meses.
+          </p>
+          <div class="cu-card-note">
+            💡 <strong>Caso clave:</strong> Materializa el diálogo social tripartito (filosofía OIT) en código ejecutable.
+          </div>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">🔬</div>
+          <h3 class="cu-card-title">Investigador estudia cadena textil con datos anonimizados</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Falta conocimiento sobre dinámicas reales del sector
+          </div>
+          <p class="cu-card-solution">
+            Comité ética aprueba solicitud investigador. Sistema genera dataset anonimizado (k-anonymity). Investigador analiza, publica paper académico. Mesa tripartita lee resultados, decide implementar política basada en evidencia.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">📊</div>
+          <h3 class="cu-card-title">Taller ve su dashboard de performance y mejora</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Gestión limitada, sin datos para mejorar
+          </div>
+          <p class="cu-card-solution">
+            Dashboard personal con métricas clave. Benchmarking anónimo vs sector. IA genera insights: "Tu tiempo respuesta 50% más lento que promedio". Sugiere acciones concretas. Visualización evolución temporal.
+          </p>
+        </div>
+
+        <div class="cu-card">
+          <div class="cu-card-icon">📈</div>
+          <h3 class="cu-card-title">OIT genera reporte de formalización del sector</h3>
+          <div class="cu-card-problem">
+            <strong>Problema:</strong> Falta medición de impacto, rendición de cuentas
+          </div>
+          <p class="cu-card-solution">
+            Dashboard impacto con datos agregados/anonimizados. Exportación PDF/Excel. Desagregación por provincia, tamaño, tipo actor. OIT presenta a donantes con métricas verificables. Decisión de renovar financiamiento basada en datos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section class="vg-cta">
+    <div class="vg-container">
+      <h2 class="vg-cta-title">¿Querés profundizar en alguna función?</h2>
+      <p class="vg-cta-desc">Volvé a la visión general o explorá cada barrera en detalle</p>
+
+      <div class="vg-cta-actions">
+        <button class="btn btn-secondary btn-lg" onclick="window.location.href='vision-general.html'">
+          ← Visión General
+        </button>
+        <button class="btn btn-primary btn-lg" onclick="window.location.href='index.html'">
+          Ver Barreras →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botón Volver -->
+  <button class="nav-button nav-volver" onclick="window.location.href='vision-general.html'" title="Volver a Visión General">
+    ← Volver
+  </button>
+
+  <!-- Botón Feedback -->
+  <button class="feedback-button" onclick="toggleFeedback()" title="Enviar feedback">
+    💬
+  </button>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script src="feedback-v1.3.js"></script>
+
+</body>
+</html>

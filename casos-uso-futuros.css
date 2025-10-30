@@ -1,0 +1,303 @@
+/**
+ * CASOS-USO-FUTUROS.CSS
+ * Estilos para la página de casos de uso potenciales
+ * Diseño simple con cards organizadas por función
+ */
+
+/* ============================================
+   INTRODUCCIÓN
+   ============================================ */
+
+.cu-intro {
+  background: white;
+  padding: 40px 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.cu-intro-text {
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--vg-text-medium);
+  text-align: center;
+}
+
+/* ============================================
+   SECCIONES POR FUNCIÓN
+   ============================================ */
+
+.cu-section {
+  padding: 60px 20px;
+  background: white;
+}
+
+.cu-section-alt {
+  background: var(--vg-bg-light);
+}
+
+/* Header de función */
+.cu-function-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cu-function-icon {
+  font-size: 56px;
+  margin-bottom: 15px;
+}
+
+.cu-function-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--vg-text-dark);
+  margin: 0 0 10px 0;
+  letter-spacing: -0.5px;
+}
+
+.cu-function-desc {
+  font-size: 16px;
+  color: var(--vg-text-medium);
+  margin: 0;
+}
+
+/* ============================================
+   GRID DE CASOS DE USO
+   ============================================ */
+
+.cu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   CARDS DE CASOS DE USO
+   ============================================ */
+
+.cu-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 25px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.cu-section-alt .cu-card {
+  background: white;
+}
+
+.cu-card:hover {
+  border-color: var(--vg-primary);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+  transform: translateY(-4px);
+}
+
+.cu-card-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.cu-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--vg-text-dark);
+  margin: 0 0 15px 0;
+  line-height: 1.4;
+  min-height: 50px;
+}
+
+.cu-card-problem {
+  background: #fef2f2;
+  border-left: 3px solid #ef4444;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #991b1b;
+  border-radius: 6px;
+}
+
+.cu-card-problem strong {
+  font-weight: 700;
+  color: #7f1d1d;
+}
+
+.cu-card-solution {
+  font-size: 14px;
+  color: var(--vg-text-medium);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+/* Card destacada (caso más importante) */
+.cu-card-highlight {
+  border: 3px solid var(--vg-primary);
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.cu-card-highlight:hover {
+  border-color: var(--vg-primary-dark);
+}
+
+.cu-card-note {
+  margin-top: 15px;
+  padding: 12px 15px;
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid var(--vg-primary);
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--vg-primary-dark);
+}
+
+.cu-card-note strong {
+  font-weight: 700;
+}
+
+/* ============================================
+   CTA ACTIONS (Botones)
+   ============================================ */
+
+.vg-cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .cu-intro {
+    padding: 30px 20px;
+  }
+
+  .cu-intro-text {
+    font-size: 15px;
+  }
+
+  .cu-section {
+    padding: 40px 20px;
+  }
+
+  .cu-function-icon {
+    font-size: 48px;
+  }
+
+  .cu-function-title {
+    font-size: 26px;
+  }
+
+  .cu-function-desc {
+    font-size: 14px;
+  }
+
+  .cu-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .cu-card {
+    padding: 20px;
+  }
+
+  .cu-card-icon {
+    font-size: 36px;
+  }
+
+  .cu-card-title {
+    font-size: 16px;
+    min-height: auto;
+  }
+
+  .cu-card-problem {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .cu-card-solution {
+    font-size: 13px;
+  }
+
+  .vg-cta-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .vg-cta-actions .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cu-intro {
+    padding: 25px 15px;
+  }
+
+  .cu-section {
+    padding: 35px 15px;
+  }
+
+  .cu-function-header {
+    margin-bottom: 30px;
+  }
+
+  .cu-function-icon {
+    font-size: 40px;
+  }
+
+  .cu-function-title {
+    font-size: 22px;
+  }
+
+  .cu-card {
+    padding: 18px;
+  }
+
+  .cu-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .cu-card-title {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cu-card {
+  animation: fadeIn 0.6s ease;
+}
+
+/* Delay progresivo para cards */
+.cu-card:nth-child(1) { animation-delay: 0.1s; }
+.cu-card:nth-child(2) { animation-delay: 0.2s; }
+.cu-card:nth-child(3) { animation-delay: 0.3s; }
+.cu-card:nth-child(4) { animation-delay: 0.4s; }
