@@ -14,7 +14,7 @@ const TUTORIALES_BARRERAS = {
       pasos: [
         {
           id: 'paso-1-informacion-basica',
-          selector: '.col-span-8 .section-card:nth-of-type(1)',
+          selector: '.form-group',
           titulo: 'Paso 1: Información Básica del Pedido',
           descripcion: 'Define QUÉ vas a producir. Seleccioná el tipo de prenda, variante, cantidad y fecha objetivo. Esta información será la base para que el sistema haga matching con talleres que tengan capacidad y experiencia en ese producto específico.',
           posicion: 'bottom',
@@ -22,7 +22,7 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'paso-2-cadena-produccion',
-          selector: '.col-span-8 .section-card:nth-of-type(2)',
+          selector: '#listaProcesos',
           titulo: 'Paso 2: Cadena de Producción Editable',
           descripcion: 'Aquí ves los procesos sugeridos automáticamente según el tipo de prenda. La GRAN NOVEDAD es que esta cadena es EDITABLE: podés REORDENAR procesos (↑↓), AGREGAR nuevos (+), o QUITAR los que no necesites (×). Esta flexibilidad es clave para adaptarte a diferentes productos y proveedores.',
           posicion: 'bottom',
@@ -30,18 +30,10 @@ const TUTORIALES_BARRERAS = {
         },
         {
           id: 'paso-2-botones-edicion',
-          selector: '#proceso-1',
+          selector: '.proceso-item',
           titulo: 'Controles de Cada Proceso',
           descripcion: 'Cada proceso tiene controles para gestionarlo: botones de ↑↓ para cambiar el orden, × para quitarlo, y ⚙ para expandir su configuración detallada. Probá hacer click en ⚙ Config para ver las opciones avanzadas.',
           posicion: 'right',
-          destacar: true
-        },
-        {
-          id: 'paso-3-config-proceso',
-          selector: '.col-span-8 .section-card:nth-of-type(3)',
-          titulo: 'Paso 3: Configurar Procesos Individualmente',
-          descripcion: 'Al expandir la configuración de un proceso, podés: 1) Subir ARCHIVOS TÉCNICOS (moldes .dwg, fichas .pdf, fotos de referencia), 2) Definir CHECKPOINTS DE QA específicos para ese proceso, y 3) Seleccionar el PROVEEDOR que ejecutará esa etapa. Esto permite trazabilidad granular: sabés qué taller hace qué.',
-          posicion: 'top',
           destacar: true
         },
         {
@@ -61,19 +53,19 @@ const TUTORIALES_BARRERAS = {
           destacar: true
         },
         {
-          id: 'paso-4-logistica',
-          selector: '.col-span-8 .section-card:nth-of-type(4)',
-          titulo: 'Paso 4: Logística entre Procesos',
-          descripcion: 'Si diferentes procesos los hacen diferentes talleres, necesitás coordinar el traslado de productos entre ellos. Acá definís quién se hace cargo de cada traslado: el proveedor del proceso anterior (EXW), vos como marca (FCA), o contratar transporte desde la plataforma.',
-          posicion: 'top',
+          id: 'paso-4-sidebar',
+          selector: '.badge',
+          titulo: 'Sidebar con Estado del Pedido',
+          descripcion: 'El sidebar muestra el estado de cada sección: completado (✓ verde), pendiente (0/5 ámbar). Esto te guía sobre qué falta completar antes de crear el pedido.',
+          posicion: 'left',
           destacar: true
         },
         {
           id: 'paso-5-resumen',
-          selector: '.col-span-8 .section-card:nth-of-type(5)',
-          titulo: 'Paso 5: Resumen y Confirmar',
-          descripcion: 'Antes de crear el pedido, REVISÁ que toda la información esté completa. Verificá especialmente que hayas seleccionado proveedores para TODOS los procesos (o dejado que la plataforma sugiera). Una vez creado, el pedido quedará registrado con trazabilidad completa desde el momento cero.',
-          posicion: 'top',
+          selector: '.btn-primary',
+          titulo: 'Botón Crear Pedido',
+          descripcion: 'Antes de crear el pedido, REVISÁ que toda la información esté completa. Una vez creado, el pedido quedará registrado con trazabilidad completa desde el momento cero.',
+          posicion: 'bottom',
           destacar: true
         }
       ]
