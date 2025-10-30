@@ -422,6 +422,331 @@ function initCommonFeatures() {
   });
 }
 
+// ============================================
+// ONBOARDING CREAR PEDIDO
+// ============================================
+
+class CrearPedidoOnboarding {
+  constructor() {
+    this.card = document.getElementById('crearPedidoOnboarding');
+    if (!this.card) return;
+
+    this.body = document.getElementById('onboardingBody');
+    this.caption = document.getElementById('onboardingCaption');
+    this.subtitle = document.getElementById('onboardingSubtitle');
+    this.restartBtn = document.getElementById('onboardingRestart');
+    this.prevBtn = document.getElementById('onboardingPrev');
+    this.nextBtn = document.getElementById('onboardingNext');
+    this.skipBtn = document.getElementById('onboardingSkip');
+    this.progressBar = document.getElementById('onboardingProgressBar');
+    this.stepIndicator = document.getElementById('onboardingStepIndicator');
+    this.stepTitle = document.getElementById('onboardingStepTitle');
+    this.stepDescription = document.getElementById('onboardingStepDescription');
+    this.stepTips = document.getElementById('onboardingStepTips');
+
+    this.defaultSubtitle = this.subtitle ? this.subtitle.textContent : '';
+    this.disabledCaption = this.caption ? this.caption.textContent : '';
+
+    this.highlighted = null;
+    this.localStorageKey = 'crearPedidoOnboardingDismissed';
+    this.steps = this.buildSteps();
+    this.currentIndex = 0;
+    this.isActive = true;
+
+    this.attachEvents();
+
+    if (localStorage.getItem(this.localStorageKey) === 'true') {
+      this.dismiss(false, 'skip');
+    } else {
+      if (this.caption) this.caption.classList.add('hidden');
+      this.render();
+    }
+  }
+
+  buildSteps() {
+    return [
+      {
+        id: 'producto',
+        title: 'Definí el producto',
+        description: 'Seleccioná la prenda, la cantidad y la fecha objetivo para activar la búsqueda de talleres.',
+        target: '#productoSection',
+        tips: [
+          'Elegí un tipo de prenda para generar la ruta sugerida automáticamente.',
+          'Ajustá la cantidad estimada según tu orden de producción.',
+          'Definí una fecha objetivo realista para alinear la capacidad de los talleres.'
+        ],
+        validate: () => {
+          const prendaSelect = document.getElementById('tipoPrenda');
+          const cantidadInput = document.getElementById('cantidad');
+          const fechaInput = document.getElementById('fechaObjetivo');
+
+          if (!prendaSelect || !cantidadInput || !fechaInput) return true;
+
+          if (!prendaSelect.value) {
+            prendaSelect.focus();
+            return 'Elegí un tipo de prenda para continuar.';
+          }
+
+          const cantidadVal = Number(cantidadInput.value);
+          if (!cantidadInput.value || Number.isNaN(cantidadVal) || cantidadVal <= 0) {
+            cantidadInput.focus();
+            return 'Ingresá una cantidad mayor a cero.';
+          }
+
+          if (!fechaInput.value) {
+            fechaInput.focus();
+            return 'Seleccioná una fecha objetivo para continuar.';
+          }
+
+          return true;
+        }
+      },
+      {
+        id: 'ruta',
+        title: 'Revisá la ruta sugerida',
+        description: 'Chequeá que los procesos sugeridos coincidan con la manera en la que trabajás el producto.',
+        target: '#rutaSection',
+        tips: [
+          'La ruta se arma automáticamente según la prenda que definiste.',
+          'Podés ajustar procesos específicos más adelante desde el matching.',
+          'Asegurate de que no falten etapas críticas para la calidad del pedido.'
+        ],
+        validate: () => {
+          const resumenRuta = document.getElementById('resumenRuta');
+          if (resumenRuta && resumenRuta.textContent.trim() === '-') {
+            return 'Definí el producto para que generemos la ruta sugerida antes de avanzar.';
+          }
+          return true;
+        }
+      },
+      {
+        id: 'requisitos',
+        title: 'Configura requisitos y QA',
+        description: 'Detallá la evidencia que necesitás y si habrá control externo en alguna etapa.',
+        target: '#requisitosSection',
+        tips: [
+          'Las opciones marcadas definen qué necesita subir el taller en cada hito.',
+          'Podés agregar QA externo cuando se trate de procesos críticos.',
+          'Mantené al menos una evidencia activa para asegurar el seguimiento.'
+        ],
+        validate: () => {
+          const checked = document.querySelectorAll('#requisitosSection input[type="checkbox"]:checked');
+          if (!checked || checked.length === 0) {
+            return 'Seleccioná al menos una evidencia o requisito de QA.';
+          }
+          return true;
+        }
+      },
+      {
+        id: 'logistica',
+        title: 'Define logística y pagos',
+        description: 'Revisá incoterm interno y cómo se liberará el escrow en cada etapa.',
+        target: '#logisticaSection',
+        tips: [
+          'Ajustá el incoterm según quién retira y entrega la producción.',
+          'Documentá cómo se reparte el pago por hitos para evitar confusiones.',
+          'El escrow asegura los fondos: confirmá que cubra todas las etapas acordadas.'
+        ],
+        validate: () => {
+          const hitosInput = document.querySelector('#logisticaSection input.form-input');
+          if (hitosInput && !hitosInput.value.trim()) {
+            hitosInput.focus();
+            return 'Revisá y completá la distribución de hitos y porcentajes.';
+          }
+          return true;
+        }
+      },
+      {
+        id: 'resumen',
+        title: 'Validá el resumen',
+        description: 'Confirmá que toda la información del pedido esté correcta antes de crearlo.',
+        target: '#resumenCard',
+        tips: [
+          'El resumen muestra los datos que enviaremos al matching.',
+          'El botón “Crear OM” se habilita cuando el producto está completo.',
+          'Volvé a pasos anteriores con “Anterior” si querés ajustar algo.'
+        ],
+        validate: () => {
+          const createButton = document.getElementById('btnCrearPedido');
+          if (createButton && createButton.disabled) {
+            return 'Completá los datos del producto para habilitar la creación del pedido.';
+          }
+          return true;
+        }
+      }
+    ];
+  }
+
+  attachEvents() {
+    if (this.nextBtn) {
+      this.nextBtn.addEventListener('click', () => this.next());
+    }
+    if (this.prevBtn) {
+      this.prevBtn.addEventListener('click', () => this.previous());
+    }
+    if (this.skipBtn) {
+      this.skipBtn.addEventListener('click', () => this.dismiss(true, 'skip'));
+    }
+    if (this.restartBtn) {
+      this.restartBtn.addEventListener('click', () => this.restart());
+    }
+  }
+
+  render() {
+    if (!this.isActive) return;
+
+    const step = this.steps[this.currentIndex];
+    if (!step) return;
+
+    if (this.stepTitle) this.stepTitle.textContent = step.title;
+    if (this.stepDescription) this.stepDescription.textContent = step.description;
+    this.renderTips(step.tips);
+    this.updateProgress();
+
+    if (this.prevBtn) {
+      this.prevBtn.disabled = this.currentIndex === 0;
+    }
+
+    if (this.nextBtn) {
+      this.nextBtn.textContent = this.currentIndex === this.steps.length - 1 ? 'Finalizar guía' : 'Siguiente paso';
+    }
+
+    this.clearHighlight();
+    if (step.target) {
+      this.highlight(step.target);
+    }
+  }
+
+  renderTips(tips = []) {
+    if (!this.stepTips) return;
+    this.stepTips.innerHTML = '';
+    tips.forEach(tip => {
+      const li = document.createElement('li');
+      li.textContent = tip;
+      this.stepTips.appendChild(li);
+    });
+  }
+
+  updateProgress() {
+    if (!this.stepIndicator || !this.progressBar) return;
+    const total = this.steps.length;
+    const current = this.currentIndex + 1;
+    this.stepIndicator.textContent = `Paso ${current} de ${total}`;
+    const percentage = Math.max(0, Math.min(100, (current / total) * 100));
+    this.progressBar.style.width = `${percentage}%`;
+  }
+
+  highlight(selector) {
+    if (!this.isActive) return;
+    const element = document.querySelector(selector);
+    if (!element) return;
+
+    this.highlighted = element;
+    element.classList.add('onboarding-highlight');
+    if (typeof element.scrollIntoView === 'function') {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  clearHighlight() {
+    if (this.highlighted) {
+      this.highlighted.classList.remove('onboarding-highlight');
+      this.highlighted = null;
+    }
+  }
+
+  validate() {
+    const step = this.steps[this.currentIndex];
+    if (!step || typeof step.validate !== 'function') return true;
+
+    const result = step.validate();
+    if (result === true || typeof result === 'undefined') {
+      return true;
+    }
+
+    if (typeof result === 'string' && typeof showToast === 'function') {
+      showToast(result, 'warning');
+    }
+
+    return false;
+  }
+
+  next() {
+    if (!this.isActive) return;
+    if (!this.validate()) return;
+
+    if (this.currentIndex < this.steps.length - 1) {
+      this.currentIndex += 1;
+      this.render();
+    } else {
+      this.complete();
+    }
+  }
+
+  previous() {
+    if (!this.isActive) return;
+    if (this.currentIndex === 0) return;
+
+    this.currentIndex -= 1;
+    this.render();
+  }
+
+  complete() {
+    if (typeof showToast === 'function') {
+      showToast('Guía completada. Revisá el resumen antes de crear el pedido.', 'success');
+    }
+    this.dismiss(false, 'complete');
+  }
+
+  dismiss(persist = false, reason = 'skip') {
+    this.clearHighlight();
+    this.isActive = false;
+
+    if (persist) {
+      localStorage.setItem(this.localStorageKey, 'true');
+    }
+
+    if (this.body) this.body.classList.add('hidden');
+    if (this.restartBtn) this.restartBtn.classList.remove('hidden');
+    if (this.skipBtn) this.skipBtn.classList.add('hidden');
+    if (this.caption) {
+      this.caption.classList.remove('hidden');
+      if (reason === 'complete') {
+        this.caption.textContent = 'Podés reiniciar la guía si querés repasar los pasos.';
+      } else {
+        this.caption.textContent = this.disabledCaption;
+      }
+    }
+
+    if (this.card) this.card.classList.add('onboarding-muted');
+
+    if (this.subtitle) {
+      this.subtitle.textContent = reason === 'complete'
+        ? 'Guía completada. Si necesitás, podés repasar los pasos con el asistente.'
+        : 'Guía desactivada. Reiniciala cuando quieras volver a usarla.';
+    }
+  }
+
+  restart() {
+    localStorage.removeItem(this.localStorageKey);
+    this.isActive = true;
+    this.currentIndex = 0;
+
+    if (this.card) this.card.classList.remove('onboarding-muted');
+    if (this.body) this.body.classList.remove('hidden');
+    if (this.caption) this.caption.classList.add('hidden');
+    if (this.restartBtn) this.restartBtn.classList.add('hidden');
+    if (this.skipBtn) this.skipBtn.classList.remove('hidden');
+    if (this.subtitle) this.subtitle.textContent = this.defaultSubtitle;
+
+    this.render();
+
+    if (typeof showToast === 'function') {
+      showToast('Guía reiniciada.', 'success');
+    }
+  }
+}
+
 // Ejecutar en carga de página
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initCommonFeatures);

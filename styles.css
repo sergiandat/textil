@@ -493,6 +493,97 @@ body {
   color: var(--red-700);
 }
 
+.onboarding-progress {
+  height: 6px;
+  background: var(--slate-200);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.onboarding-progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(135deg, var(--sky-500) 0%, var(--sky-700) 100%);
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.onboarding-step-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--slate-800);
+}
+
+.onboarding-step-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.onboarding-step-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--slate-600);
+}
+
+.onboarding-step-list li::before {
+  content: '•';
+  color: var(--sky-600);
+  font-weight: 700;
+  margin-top: -0.15rem;
+}
+
+.onboarding-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.onboarding-actions .btn {
+  flex: 1;
+}
+
+.onboarding-link {
+  border: none;
+  background: none;
+  color: var(--sky-600);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.onboarding-link:hover {
+  color: var(--sky-700);
+  text-decoration: underline;
+}
+
+.onboarding-highlight {
+  position: relative;
+  outline: 2px solid rgba(14, 165, 233, 0.6);
+  box-shadow: 0 0 0 6px rgba(14, 165, 233, 0.15);
+  border-radius: 1rem;
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
+}
+
+#crearPedidoOnboarding.onboarding-muted {
+  border: 1px dashed var(--slate-300);
+  background: var(--slate-50);
+}
+
+.onboarding-caption {
+  font-size: 0.8rem;
+  color: var(--slate-500);
+  text-align: center;
+}
+
 /* QR placeholder */
 .qr-placeholder {
   display: grid;
