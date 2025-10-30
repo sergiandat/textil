@@ -22,13 +22,16 @@
 
       <nav class="topbar-nav">
         <button class="nav-tab active" onclick="window.location.href='dashboard.html'">Dashboard</button>
-        <button class="nav-tab" onclick="window.location.href='crear-pedido.html'">Crear Pedido</button>
+        <button class="nav-tab" onclick="mostrarModalVersionPedido()">Crear Pedido</button>
         <button class="nav-tab" onclick="alert('Mis Pedidos: Ver en Dashboard')">Mis Pedidos</button>
         <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
       </nav>
 
       <div class="flex items-center gap-3">
-        <span class="pill pill-sky">OM: OM-2025-00045</span>
+        <button class="btn btn-secondary" onclick="window.location.href='perfil-marca.html'" style="display: flex; align-items: center; gap: 0.5rem;">
+          Mi Perfil
+        </button>
+        <span class="pill pill-sky">v1.3</span>
         <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
       </div>
     </div>
@@ -75,14 +78,14 @@
     <div class="section-card mb-6">
       <h3 class="section-title mb-4">Acciones rápidas</h3>
       <div class="grid grid-cols-3 gap-3">
-        <button class="btn btn-primary btn-lg" onclick="window.location.href='crear-pedido.html'">
-          ➕ Crear nuevo pedido
+        <button class="btn btn-primary btn-lg" onclick="mostrarModalVersionPedido()">
+          Crear nuevo pedido
         </button>
         <button class="btn btn-secondary btn-lg" onclick="window.location.href='explorar-talleres.html'">
-          🔍 Explorar talleres
+          Explorar talleres
         </button>
         <button class="btn btn-secondary btn-lg" onclick="alert('Ver contratos activos')">
-          📄 Ver contratos activos
+          Ver contratos activos
         </button>
       </div>
     </div>
@@ -148,9 +151,34 @@
 
   </main>
 
+  <!-- Modal para elegir versión de Crear Pedido -->
+  <div id="modalVersionPedido" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%;">
+      <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--slate-900); margin-bottom: 1rem;">Elegir version de Crear Pedido</h3>
+      <p style="color: var(--slate-600); margin-bottom: 1.5rem; font-size: 0.875rem;">Selecciona que version del flujo de creacion de pedido queres usar:</p>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <button class="btn btn-secondary btn-lg" onclick="window.location.href='crear-pedido.html'" style="justify-content: space-between; display: flex; align-items: center;">
+          <span>Crear Pedido v1.1</span>
+          <span style="font-size: 0.75rem; opacity: 0.7;">(Version anterior)</span>
+        </button>
+
+        <button class="btn btn-primary btn-lg" onclick="window.location.href='crear-pedido-v1.3.html'" style="justify-content: space-between; display: flex; align-items: center;">
+          <span>Crear Pedido v1.3</span>
+          <span class="badge badge-emerald" style="font-size: 0.75rem;">NUEVO</span>
+        </button>
+      </div>
+
+      <button class="btn btn-secondary btn-block" onclick="cerrarModalVersionPedido()" style="margin-top: 1.5rem;">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
   <script src="data.js"></script>
   <script src="script.js"></script>
   <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
   <script>
     // Cargar usuario de sesión
     const usuario = getFromLocalStorage('usuarioActivo') || usuarioActivo;
@@ -281,6 +309,15 @@
 
     // Ejecutar al cargar
     actualizarContadorFeedback();
+
+    // Funciones para modal de versión
+    function mostrarModalVersionPedido() {
+      document.getElementById('modalVersionPedido').style.display = 'flex';
+    }
+
+    function cerrarModalVersionPedido() {
+      document.getElementById('modalVersionPedido').style.display = 'none';
+    }
   </script>
 
 </body>

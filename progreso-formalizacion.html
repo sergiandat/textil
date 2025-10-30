@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progreso de Formalización - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--slate-300);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+      padding-left: 2rem;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -2rem;
+      top: 0.25rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: bold;
+      border: 3px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .timeline-dot.completo {
+      background: var(--emerald-600);
+      color: white;
+    }
+    .timeline-dot.activo {
+      background: var(--sky-600);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+    .timeline-dot.pendiente {
+      background: var(--slate-300);
+      color: var(--slate-600);
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7); }
+      50% { box-shadow: 0 0 0 10px rgba(14, 165, 233, 0); }
+    }
+    .documento-card {
+      padding: 0.75rem;
+      border: 2px solid var(--slate-200);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .documento-card.aprobado {
+      background: var(--emerald-50);
+      border-color: var(--emerald-400);
+    }
+    .documento-card.observado {
+      background: var(--amber-50);
+      border-color: var(--amber-400);
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: progreso-formalizacion.html (Timeline de Formalización)
+    BARRERAS: B3 (Formalización compleja y costosa)
+    FUNCIONES: COMPLIANCE (progreso detallado)
+    ACTORES: Taller (principal), Trabajador, Estado (ARCA, STESS)
+    DESCRIPCIÓN: Timeline visual del proceso de formalización con documentación y soporte técnico.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Taller: Corte Sur SRL</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='validaciones.html'">Mi Formalización</button>
+        <button class="nav-tab" onclick="window.location.href='capacitaciones.html'">Capacitaciones</button>
+        <button class="nav-tab" onclick="alert('Mis Pedidos')">Mis Pedidos</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-amber">En formalización (65%)</span>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Timeline de Formalización</h1>
+        <p class="page-subtitle">Seguí paso a paso tu proceso hacia la formalización completa</p>
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='validaciones.html'">
+        ← Volver a Checklist
+      </button>
+    </div>
+
+    <!-- Alerta -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta pantalla muestra el <strong>timeline detallado</strong> del proceso de formalización. Resuelve <strong>B3</strong> haciendo transparente cada etapa, documentos necesarios y tiempos estimados.
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Timeline principal -->
+      <div class="col-span-8">
+        <div class="section-card">
+          <div class="section-header mb-6">
+            <div>
+              <h3 class="section-title">Tu Proceso de Formalización</h3>
+              <p class="section-subtitle">5 etapas principales - Estás en: Alta ARCA (en revisión)</p>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <!-- Etapa 1: Iniciado -->
+            <div class="timeline-item">
+              <div class="timeline-dot completo">✓</div>
+              <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="font-bold text-emerald-900">Etapa 1: Iniciado</div>
+                  <div class="text-sm text-emerald-700">Completado el 01/09/2025</div>
+                </div>
+                <div class="text-sm text-emerald-800 mb-3">
+                  Registro en plataforma + Validación CUIT con ARCA
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                  <div class="flex items-center gap-2">
+                    <span class="text-emerald-700">✓</span>
+                    <span>Datos básicos completados</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-emerald-700">✓</span>
+                    <span>CUIT validado: 30-12345678-9</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Etapa 2: CUIT y Habilitación -->
+            <div class="timeline-item">
+              <div class="timeline-dot completo">✓</div>
+              <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="font-bold text-emerald-900">Etapa 2: CUIT y Habilitación Municipal</div>
+                  <div class="text-sm text-emerald-700">Completado el 15/09/2025</div>
+                </div>
+                <div class="text-sm text-emerald-800 mb-3">
+                  Documentación básica municipal aprobada
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                  <div class="flex items-center gap-2">
+                    <span class="text-emerald-700">✓</span>
+                    <span>Habilitación municipal subida</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-emerald-700">✓</span>
+                    <span>Vencimiento: 15/08/2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Etapa 3: ARCA (ACTIVO) -->
+            <div class="timeline-item">
+              <div class="timeline-dot activo">3</div>
+              <div class="bg-sky-50 border-2 border-sky-600 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="font-bold text-sky-900">Etapa 3: Alta en ARCA (Registro Laboral)</div>
+                  <div class="text-sm text-sky-700">En proceso - Día 30/60</div>
+                </div>
+                <div class="text-sm text-sky-800 mb-3">
+                  Estás aquí: Documentación en revisión con 1 observación
+                </div>
+
+                <div class="mb-3">
+                  <div class="text-xs text-sky-700 mb-1">Progreso de esta etapa: 75%</div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%; background: var(--sky-600);"></div>
+                  </div>
+                </div>
+
+                <!-- Documentos de esta etapa -->
+                <div class="mt-4">
+                  <div class="font-semibold text-sm mb-2">Documentos requeridos:</div>
+
+                  <div class="documento-card aprobado">
+                    <div class="flex items-center gap-2 flex-1">
+                      <span class="text-emerald-700">✓</span>
+                      <div>
+                        <div class="font-semibold text-sm">DNI del titular</div>
+                        <div class="text-xs text-emerald-700">Aprobado - 15/09/2025</div>
+                      </div>
+                    </div>
+                    <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="verDocumento('dni')">
+                      Ver
+                    </button>
+                  </div>
+
+                  <div class="documento-card aprobado">
+                    <div class="flex items-center gap-2 flex-1">
+                      <span class="text-emerald-700">✓</span>
+                      <div>
+                        <div class="font-semibold text-sm">Constancia de domicilio</div>
+                        <div class="text-xs text-emerald-700">Aprobado - 15/09/2025</div>
+                      </div>
+                    </div>
+                    <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="verDocumento('domicilio')">
+                      Ver
+                    </button>
+                  </div>
+
+                  <div class="documento-card observado">
+                    <div class="flex items-center gap-2 flex-1">
+                      <span class="text-amber-700">⚠</span>
+                      <div>
+                        <div class="font-semibold text-sm">Plano de habilitación</div>
+                        <div class="text-xs text-amber-700">Observado - Falta firma de arquitecto</div>
+                      </div>
+                    </div>
+                    <button class="btn btn-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="resubirDocumento('plano')">
+                      Re-subir
+                    </button>
+                  </div>
+
+                  <div class="documento-card">
+                    <div class="flex items-center gap-2 flex-1">
+                      <span class="text-slate-700">○</span>
+                      <div>
+                        <div class="font-semibold text-sm">Certificado de bomberos</div>
+                        <div class="text-xs text-slate-600">Pendiente de subir</div>
+                      </div>
+                    </div>
+                    <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" onclick="subirDocumento('bomberos')">
+                      Subir
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mt-4 p-3 bg-amber-50 border border-amber-300 rounded-xl">
+                  <div class="font-semibold text-amber-900 mb-2">⚠ Acción requerida:</div>
+                  <div class="text-sm text-amber-800 mb-2">
+                    El plano de habilitación fue observado porque falta la firma del arquitecto habilitado. Necesitás corregir y re-subir.
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-primary btn-sm" onclick="resubirDocumento('plano')">
+                      📤 Re-subir plano corregido
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="alert('Tutorial: Cómo corregir el plano')">
+                      📖 Ver tutorial
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Etapa 4: Certificados (pendiente) -->
+            <div class="timeline-item">
+              <div class="timeline-dot pendiente">4</div>
+              <div class="bg-slate-50 border-2 border-slate-300 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="font-bold text-slate-900">Etapa 4: Certificados y ART</div>
+                  <div class="text-sm text-slate-600">No iniciado</div>
+                </div>
+                <div class="text-sm text-slate-700 mb-3">
+                  Certificaciones de seguridad y aseguradora de riesgos del trabajo
+                </div>
+                <div class="text-sm space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-slate-400">○</span>
+                    <span>Certificado de bomberos</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-slate-400">○</span>
+                    <span>Contrato con ART</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-slate-400">○</span>
+                    <span>Protocolo de higiene y seguridad</span>
+                  </div>
+                </div>
+                <div class="mt-3 text-xs text-slate-500">
+                  Tiempo estimado: 15-20 días desde que inicies
+                </div>
+              </div>
+            </div>
+
+            <!-- Etapa 5: Final (pendiente) -->
+            <div class="timeline-item">
+              <div class="timeline-dot pendiente">5</div>
+              <div class="bg-slate-50 border-2 border-slate-300 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="font-bold text-slate-900">Etapa 5: Formalización Completa</div>
+                  <div class="text-sm text-slate-600">No iniciado</div>
+                </div>
+                <div class="text-sm text-slate-700 mb-3">
+                  Validación final y activación completa de beneficios
+                </div>
+                <div class="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-sm">
+                  <div class="font-semibold text-emerald-900 mb-1">✓ Al completar obtendrás:</div>
+                  <ul class="text-emerald-800 space-y-1 ml-4" style="list-style: disc;">
+                    <li>100% de formalización certificada</li>
+                    <li>Acceso a pedidos premium</li>
+                    <li>Mejor posicionamiento en matching</li>
+                    <li>Elegibilidad para certificación INTI (50% desc. comisión)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+        <!-- Resumen de progreso -->
+        <div class="section-card">
+          <h3 class="section-title mb-4">Resumen de Progreso</h3>
+
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-slate-600">Progreso total:</span>
+                <span class="font-bold text-sky-700">65%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 65%; background: var(--sky-600);"></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="p-2 bg-emerald-50 rounded text-center">
+                <div class="font-bold text-emerald-700">2/5</div>
+                <div class="text-xs text-emerald-600">Etapas completas</div>
+              </div>
+              <div class="p-2 bg-sky-50 rounded text-center">
+                <div class="font-bold text-sky-700">30 días</div>
+                <div class="text-xs text-sky-600">En proceso</div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-amber-50 border border-amber-300 rounded-xl text-sm">
+              <div class="font-semibold text-amber-900 mb-1">Tiempo estimado restante:</div>
+              <div class="text-amber-800">25-30 días adicionales si completás las acciones pendientes.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asistencia técnica -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Asistencia Técnica</h3>
+
+          <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl mb-3">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="text-3xl">🏢</div>
+              <div>
+                <div class="font-semibold text-sky-900">INTI</div>
+                <div class="text-xs text-sky-700">Asesoramiento gratuito</div>
+              </div>
+            </div>
+            <div class="text-sm text-sky-800 mb-3">
+              Te ayudamos a corregir el plano y completar la documentación de ARCA.
+            </div>
+            <button class="btn btn-primary btn-block" onclick="agendarAsesoria()">
+              📞 Agendar asesoría
+            </button>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="text-3xl">💬</div>
+              <div>
+                <div class="font-semibold text-slate-900">Chat directo</div>
+                <div class="text-xs text-slate-700">ARCA / STESS</div>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-block" onclick="abrirChat()">
+              Iniciar chat
+            </button>
+          </div>
+        </div>
+
+        <!-- Tutoriales -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Tutoriales Disponibles</h3>
+
+          <div class="space-y-2">
+            <button class="w-full text-left p-3 border rounded-xl hover:bg-sky-50 hover:border-sky-400 transition-all" onclick="window.location.href='capacitaciones.html?curso=formalizacion'">
+              <div class="flex items-center gap-3">
+                <div class="text-2xl">🎓</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-sm">Primeros pasos en formalización</div>
+                  <div class="text-xs text-slate-600">4 hs • Online • Gratis</div>
+                </div>
+              </div>
+            </button>
+
+            <button class="w-full text-left p-3 border rounded-xl hover:bg-sky-50 hover:border-sky-400 transition-all" onclick="alert('Video tutorial: Documentación ARCA')">
+              <div class="flex items-center gap-3">
+                <div class="text-2xl">📹</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-sm">Cómo preparar documentación ARCA</div>
+                  <div class="text-xs text-slate-600">15 min • Video</div>
+                </div>
+              </div>
+            </button>
+
+            <button class="w-full text-left p-3 border rounded-xl hover:bg-sky-50 hover:border-sky-400 transition-all" onclick="alert('PDF descargable: Checklist ARCA')">
+              <div class="flex items-center gap-3">
+                <div class="text-2xl">📄</div>
+                <div class="flex-1">
+                  <div class="font-semibold text-sm">Checklist completo ARCA</div>
+                  <div class="text-xs text-slate-600">PDF • Descargable</div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Acciones Rápidas</h3>
+
+          <button class="btn btn-primary btn-block mb-2" onclick="subirDocumento('general')">
+            📤 Subir Documentación
+          </button>
+
+          <button class="btn btn-secondary btn-block mb-2" onclick="alert('Solicitar prórroga de plazo')">
+            ⏱ Solicitar Prórroga
+          </button>
+
+          <button class="btn btn-secondary btn-block" onclick="window.location.href='validaciones.html'">
+            ← Volver a Checklist
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    function verDocumento(tipo) {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nAbriría visor del documento: ' + tipo + '\n\nMostraría:\n- PDF o imagen del documento\n- Fecha de subida\n- Estado de aprobación\n- Observaciones si las hay');
+    }
+
+    function resubirDocumento(tipo) {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nAbriría diálogo para re-subir: ' + tipo + '\n\n- Permitiría seleccionar archivo (PDF/JPG)\n- Validaría tamaño < 5MB\n- Subiría y notificaría a ARCA para revisión');
+      showToast('✓ Archivo subido correctamente. ARCA lo revisará en 3-5 días.', 'success');
+    }
+
+    function subirDocumento(tipo) {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nAbriría diálogo de carga de archivo para: ' + tipo);
+    }
+
+    function agendarAsesoria() {
+      if (confirm('¿Agendar asesoría con INTI?\n\nDisponibilidad:\n- Mañana 10:00 hs\n- Viernes 15:00 hs\n\nDuración: 45 min\nModalidad: Videollamada')) {
+        showToast('✓ Asesoría agendada para mañana 10:00 hs. Recibirás link por email.', 'success');
+      }
+    }
+
+    function abrirChat() {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nAbriría chat en vivo con agente de ARCA/STESS\n\nHorario: Lun-Vie 9-17 hs\nTiempo de espera estimado: 2-5 minutos');
+    }
+  </script>
+
+</body>
+</html>

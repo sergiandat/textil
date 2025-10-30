@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Tripartito - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-card {
+      background: white;
+      border: 2px solid var(--slate-200);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: all 0.2s;
+    }
+    .kpi-card:hover {
+      border-color: var(--sky-400);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin: 0.5rem 0;
+    }
+    .kpi-label {
+      font-size: 0.875rem;
+      color: var(--slate-600);
+      font-weight: 500;
+    }
+    .kpi-trend {
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .kpi-trend.positive {
+      color: var(--emerald-700);
+    }
+    .kpi-trend.negative {
+      color: var(--rose-700);
+    }
+    .chart-placeholder {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
+      border: 2px dashed var(--slate-300);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate-500);
+      font-size: 0.875rem;
+    }
+    .alert-item {
+      padding: 0.75rem;
+      border-left: 4px solid var(--amber-500);
+      background: var(--amber-50);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: dashboard-tripartito.html (Dashboard Mesa Tripartita)
+    BARRERAS: B4 (Articulación), B5 (Estado Ausente), B6 (Bajas Capacidades)
+    FUNCIONES: GOBERNAR (principal)
+    ACTORES: Mesa Tripartita (Estado + Empleadores + SOIVA/Trabajadores)
+    DESCRIPCIÓN: Dashboard ejecutivo con KPIs críticos para decisiones tripartitas sobre gobernanza de la plataforma.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Mesa Tripartita: Gobernanza</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab active" onclick="window.location.href='dashboard-tripartito.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='parametrizacion-algoritmo.html'">Parametrización</button>
+        <button class="nav-tab" onclick="window.location.href='auditorias.html'">Auditorías</button>
+        <button class="nav-tab" onclick="alert('Actas Tripartitas: Historial de decisiones')">Actas</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-emerald">Tripartita</span>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard de Gobernanza Tripartita</h1>
+        <p class="page-subtitle">KPIs críticos para decisiones sobre formalización, articulación e impacto</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-primary" onclick="window.location.href='parametrizacion-algoritmo.html'">
+          ⚙ Parametrizar Algoritmo
+        </button>
+        <button class="btn btn-secondary" onclick="alert('Exportar informe mensual')">
+          📥 Exportar Informe
+        </button>
+      </div>
+    </div>
+
+    <!-- Alerta indicando que es wireframe -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Este dashboard demuestra cómo la <strong>Mesa Tripartita</strong> (Estado + Empleadores + Trabajadores) monitorea y gobierna la plataforma mediante KPIs críticos y toma decisiones sobre parametrización algorítmica.
+    </div>
+
+    <!-- Filtros globales -->
+    <div class="section-card mb-6">
+      <div class="flex items-center gap-4">
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Período</label>
+          <select class="form-select" style="width: auto;">
+            <option selected>Últimos 30 días</option>
+            <option>Últimos 90 días</option>
+            <option>Último año</option>
+            <option>Histórico completo</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Geografía</label>
+          <select class="form-select" style="width: auto;">
+            <option selected>Todas las regiones</option>
+            <option>CABA</option>
+            <option>GBA</option>
+            <option>Interior</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Función</label>
+          <select class="form-select" style="width: auto;">
+            <option selected>Todas las funciones</option>
+            <option>ENCONTRAR</option>
+            <option>ACORDAR</option>
+            <option>EJECUTAR</option>
+            <option>PAGAR</option>
+            <option>VERIFICAR</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary" style="margin-top: 1.5rem;">Aplicar filtros</button>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 1: Métricas de Formalización -->
+    <div class="section-card mb-6">
+      <div class="section-header mb-4">
+        <div>
+          <h3 class="section-title">1. Métricas de Formalización</h3>
+          <p class="section-subtitle">Barrera B3: Formalización compleja y costosa</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Talleres formalizados</div>
+          <div class="kpi-value">62.3%</div>
+          <div class="kpi-trend positive">↑ +4.8% vs mes anterior</div>
+          <div class="text-xs text-slate-500 mt-2">Objetivo: >60% ✓</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Nuevos registros ARCA</div>
+          <div class="kpi-value">23</div>
+          <div class="kpi-trend positive">↑ +9 vs mes anterior</div>
+          <div class="text-xs text-slate-500 mt-2">Últimos 30 días</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Trabajadores con contrato</div>
+          <div class="kpi-value">478</div>
+          <div class="kpi-trend positive">↑ +12.4%</div>
+          <div class="text-xs text-slate-500 mt-2">De 615 total (77.7%)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Progreso formalización</div>
+          <div class="kpi-value">54%</div>
+          <div class="kpi-trend negative">↓ -2.1%</div>
+          <div class="text-xs text-slate-500 mt-2">Promedio de talleres</div>
+        </div>
+      </div>
+
+      <div class="chart-placeholder">
+        📊 Gráfico: Evolución de formalización (últimos 12 meses) - Tendencia ascendente
+      </div>
+
+      <div class="mt-4 p-3 bg-sky-50 border border-sky-200 rounded-xl text-sm">
+        <div class="font-semibold text-sky-900 mb-2">💡 Insight para la Mesa Tripartita:</div>
+        <div class="text-sky-700">
+          El % de talleres formalizados supera el objetivo del 60%. Sin embargo, el progreso promedio (54%) indica que muchos están "estancados" a mitad de camino. <strong>Acción sugerida:</strong> Revisar trabas burocráticas en el proceso de ARCA.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: Métricas de Matching/Articulación -->
+    <div class="section-card mb-6">
+      <div class="section-header mb-4">
+        <div>
+          <h3 class="section-title">2. Métricas de Matching y Articulación</h3>
+          <p class="section-subtitle">Barrera B4: Falta de articulación en la cadena</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Tasa de matching exitoso</div>
+          <div class="kpi-value">78.5%</div>
+          <div class="kpi-trend positive">↑ +5.2%</div>
+          <div class="text-xs text-slate-500 mt-2">Pedidos → Contratos</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Tiempo a primer contrato</div>
+          <div class="kpi-value">8.3 días</div>
+          <div class="kpi-trend positive">↓ -1.7 días (mejor)</div>
+          <div class="text-xs text-slate-500 mt-2">Promedio</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Talleres sin pedidos >90d</div>
+          <div class="kpi-value" style="color: var(--amber-700);">15</div>
+          <div class="kpi-trend negative">↑ +3 talleres (alerta)</div>
+          <div class="text-xs text-slate-500 mt-2">Requiere acción</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Pedidos multi-proveedor</div>
+          <div class="kpi-value">42%</div>
+          <div class="kpi-trend positive">↑ +8.1%</div>
+          <div class="text-xs text-slate-500 mt-2">Indicador articulación</div>
+        </div>
+      </div>
+
+      <div class="chart-placeholder">
+        📊 Gráfico: Distribución geográfica de pedidos (mapa de calor AMBA) - Concentración en zona sur
+      </div>
+
+      <div class="mt-4">
+        <div class="alert-item">
+          <div class="font-semibold text-amber-900 mb-1">⚠ ALERTA: 15 talleres sin pedidos en >90 días</div>
+          <div class="text-sm text-amber-800">
+            Talleres formalizados pero sin demanda. Posible problema: algoritmo priorizando talleres con historial.
+            <strong>Acción propuesta:</strong> Ajustar parámetro "Antigüedad vs Nuevos" para dar más oportunidades a talleres recién formalizados.
+          </div>
+          <button class="btn btn-primary btn-sm mt-2" onclick="window.location.href='parametrizacion-algoritmo.html?accion=ajustar-antiguedad'">
+            → Ir a Parametrización
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: Métricas de Confianza/Conflictividad -->
+    <div class="section-card mb-6">
+      <div class="section-header mb-4">
+        <div>
+          <h3 class="section-title">3. Métricas de Confianza y Conflictividad</h3>
+          <p class="section-subtitle">Barrera B2: Desconfianza en la cadena | Barrera B5: Estado ausente</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Denuncias recibidas</div>
+          <div class="kpi-value">12</div>
+          <div class="kpi-trend negative">↑ +5 vs mes anterior</div>
+          <div class="text-xs text-slate-500 mt-2">Últimos 30 días</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Denuncias resueltas</div>
+          <div class="kpi-value">8/12</div>
+          <div class="kpi-trend">66.7% tasa resolución</div>
+          <div class="text-xs text-slate-500 mt-2">En período actual</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Tiempo denuncia → auditoría</div>
+          <div class="kpi-value" style="color: var(--emerald-700);">7 días</div>
+          <div class="kpi-trend positive">↓ -3 días (mejor)</div>
+          <div class="text-xs text-slate-500 mt-2">Objetivo: <15 días ✓</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Tasa re-contratación</div>
+          <div class="kpi-value">68.2%</div>
+          <div class="kpi-trend positive">↑ +3.4%</div>
+          <div class="text-xs text-slate-500 mt-2">Indicador de confianza</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="chart-placeholder" style="height: 200px;">
+            📊 Gráfico: Disputas de pago (AR$ 185.000 en resolución)
+          </div>
+        </div>
+        <div>
+          <div class="chart-placeholder" style="height: 200px;">
+            📊 Gráfico: Calificaciones promedio (Marca→Taller: 4.3★ | Taller→Marca: 4.1★)
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-sm">
+        <div class="font-semibold text-emerald-900 mb-2">✓ Logro destacado:</div>
+        <div class="text-emerald-700">
+          El tiempo de respuesta a denuncias (7 días) cumple el objetivo tripartito de <15 días, demostrando que el Estado está presente y proactivo. Esto resuelve directamente <strong>Barrera B5: Estado ausente/llegada tardía</strong>.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 4: Métricas de Impacto Económico -->
+    <div class="section-card mb-6">
+      <div class="section-header mb-4">
+        <div>
+          <h3 class="section-title">4. Métricas de Impacto Económico</h3>
+          <p class="section-subtitle">Barrera B6: Bajas capacidades | Barrera B7: Dumping social</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Volumen facturado</div>
+          <div class="kpi-value">AR$ 8.2M</div>
+          <div class="kpi-trend positive">↑ +18.3%</div>
+          <div class="text-xs text-slate-500 mt-2">Último mes</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Precio promedio/prenda</div>
+          <div class="kpi-value">AR$ 2.150</div>
+          <div class="kpi-trend positive">↑ +4.2%</div>
+          <div class="text-xs text-slate-500 mt-2">vs mínimo viable (AR$ 1.500)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Distribución de ingresos</div>
+          <div class="kpi-value">Gini 0.42</div>
+          <div class="kpi-trend positive">↓ -0.03 (más equitativo)</div>
+          <div class="text-xs text-slate-500 mt-2">Entre talleres</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Formal vs Informal</div>
+          <div class="kpi-value">2.4x</div>
+          <div class="kpi-trend">Precio formal/informal</div>
+          <div class="text-xs text-slate-500 mt-2">Diferencial competitivo</div>
+        </div>
+      </div>
+
+      <div class="chart-placeholder">
+        📊 Gráfico: Evolución del volumen facturado (línea ascendente consistente desde lanzamiento)
+      </div>
+
+      <div class="mt-4 grid grid-cols-2 gap-4">
+        <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-sm">
+          <div class="font-semibold text-sky-900 mb-2">📈 Impacto en formalización:</div>
+          <div class="text-sky-700">
+            El precio promedio/prenda (AR$ 2.150) supera el mínimo viable (+43%), indicando que la plataforma está promoviendo <strong>precios justos</strong> que permiten formalización sostenible.
+          </div>
+        </div>
+
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm">
+          <div class="font-semibold text-amber-900 mb-2">⚠ Punto de atención:</div>
+          <div class="text-amber-800">
+            El coeficiente Gini (0.42) está mejorando pero aún indica concentración de ingresos. <strong>Revisar:</strong> ¿El algoritmo favorece excesivamente a talleres grandes?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Actas Tripartitas -->
+    <div class="section-card mb-6">
+      <div class="section-header mb-4">
+        <div>
+          <h3 class="section-title">Últimas Decisiones de la Mesa Tripartita</h3>
+          <p class="section-subtitle">Actas registradas en blockchain</p>
+        </div>
+        <button class="btn btn-secondary" onclick="alert('Ver historial completo de actas')">
+          Ver todas
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="p-4 border-2 border-emerald-600 rounded-xl bg-emerald-50">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-semibold text-emerald-900">Acta 2025-10-15: Ajuste de reputación para incentivar formalización</div>
+            <span class="badge badge-emerald">Consenso</span>
+          </div>
+          <div class="text-sm text-emerald-800 mb-2">
+            Se aumentó el peso de "Formalización" en el cálculo de reputación de 10% a 25%, reduciendo "Cumplimiento plazos" de 40% a 35%.
+          </div>
+          <div class="text-xs text-emerald-700">
+            <strong>Votos:</strong> Estado (Sí) | Empleadores (Sí) | SOIVA (Sí) | <strong>Impacto esperado:</strong> +12% nuevos formalizados en 6 meses
+          </div>
+        </div>
+
+        <div class="p-4 border rounded-xl">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-semibold text-slate-900">Acta 2025-09-22: Reducción de comisión para cooperativas certificadas</div>
+            <span class="badge badge-sky">Aprobado</span>
+          </div>
+          <div class="text-sm text-slate-700 mb-2">
+            Exención de 50% en comisión base (de 5% a 2.5%) para cooperativas con certificación INTI vigente.
+          </div>
+          <div class="text-xs text-slate-600">
+            <strong>Votos:</strong> Estado (Sí) | Empleadores (Abstención) | SOIVA (Sí) | <strong>Vigencia:</strong> Desde 01/10/2025
+          </div>
+        </div>
+
+        <div class="p-4 border rounded-xl">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-semibold text-slate-900">Acta 2025-08-10: Protocolo de respuesta a denuncias laborales</div>
+            <span class="badge badge-sky">Aprobado</span>
+          </div>
+          <div class="text-sm text-slate-700 mb-2">
+            Se establece tiempo máximo de 15 días entre denuncia y auditoría para casos de trabajo infantil o condiciones inseguras.
+          </div>
+          <div class="text-xs text-slate-600">
+            <strong>Votos:</strong> Estado (Sí) | Empleadores (Sí) | SOIVA (Sí) | <strong>Cumplimiento:</strong> 92% (7 días promedio)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen ejecutivo -->
+    <div class="section-card">
+      <div class="section-header mb-4">
+        <div>
+          <h3 class="section-title">Resumen Ejecutivo para la Mesa Tripartita</h3>
+          <p class="section-subtitle">Síntesis de KPIs críticos y acciones propuestas</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <h4 class="font-semibold text-slate-900 mb-3">✓ Logros destacados</h4>
+          <ul class="space-y-2 text-sm">
+            <li class="flex gap-2">
+              <span class="text-emerald-700">✓</span>
+              <span>Formalización (62.3%) supera objetivo del 60%</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-700">✓</span>
+              <span>Tiempo denuncia→auditoría (7 días) cumple objetivo <15 días</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-700">✓</span>
+              <span>Precio promedio/prenda mantiene niveles que permiten formalización</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-700">✓</span>
+              <span>Tasa de re-contratación (68%) indica confianza creciente</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-900 mb-3">⚠ Puntos de atención / Acciones propuestas</h4>
+          <ul class="space-y-2 text-sm">
+            <li class="flex gap-2">
+              <span class="text-amber-700">⚠</span>
+              <span>15 talleres sin pedidos >90d: ajustar algoritmo para priorizar nuevos formalizados</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-amber-700">⚠</span>
+              <span>Progreso formalización promedio (54%) estancado: revisar trabas ARCA</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-amber-700">⚠</span>
+              <span>Gini (0.42) aún alto: evaluar si algoritmo favorece excesivamente a grandes</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-amber-700">⚠</span>
+              <span>Denuncias aumentaron (+5): monitorear tendencia y causas raíz</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-4 flex gap-3">
+        <button class="btn btn-primary" onclick="window.location.href='parametrizacion-algoritmo.html'">
+          ⚙ Parametrizar Algoritmo
+        </button>
+        <button class="btn btn-secondary" onclick="alert('Generar Acta Tripartita: proponer cambios para votación')">
+          📝 Generar Acta de Propuesta
+        </button>
+        <button class="btn btn-secondary" onclick="alert('Exportar informe completo (PDF)')">
+          📥 Exportar Informe PDF
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    // Simulación de datos dinámicos
+    console.log('Dashboard Tripartito cargado');
+    console.log('KPIs actualizados con datos simulados');
+  </script>
+
+</body>
+</html>

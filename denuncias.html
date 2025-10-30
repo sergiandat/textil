@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canal de Denuncias - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .denuncia-card {
+      padding: 1rem;
+      border: 2px solid var(--slate-200);
+      border-radius: 0.75rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s;
+    }
+    .denuncia-card:hover {
+      border-color: var(--sky-400);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .denuncia-card.abierta {
+      border-left: 4px solid var(--rose-600);
+    }
+    .denuncia-card.investigacion {
+      border-left: 4px solid var(--amber-600);
+    }
+    .denuncia-card.resuelta {
+      border-left: 4px solid var(--emerald-600);
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: denuncias.html (Canal de Denuncias)
+    BARRERAS: B2 (Desconfianza), B5 (Estado Ausente)
+    FUNCIONES: FISCALIZAR (denuncias y seguimiento)
+    ACTORES: Todos (Marca, Taller, Trabajador, SOIVA)
+    DESCRIPCIÓN: Formulario de denuncias anónimas/identificadas y seguimiento de casos reportados.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500">Canal de Denuncias</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-v1.3.html'">Dashboard</button>
+        <button class="nav-tab active" onclick="window.location.href='denuncias.html'">Denuncias</button>
+        <button class="nav-tab" onclick="window.location.href='auditorias.html'">Auditorías</button>
+        <button class="nav-tab" onclick="alert('Ayuda y Contacto')">Ayuda</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Canal de Denuncias Anónimas y Seguras</h1>
+        <p class="page-subtitle">Reportá condiciones irregulares de forma confidencial</p>
+      </div>
+    </div>
+
+    <!-- Alerta -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Este canal de denuncias resuelve <strong>B2 (Desconfianza)</strong> y <strong>B5 (Estado Ausente)</strong> permitiendo reportes anónimos que activan intervención rápida del Estado (STESS/ARCA).
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Formulario de denuncia -->
+      <div class="col-span-8 space-y-6">
+        <div class="section-card">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Nueva Denuncia</h3>
+              <p class="section-subtitle">Completá el formulario para reportar una irregularidad</p>
+            </div>
+          </div>
+
+          <form id="formDenuncia" onsubmit="enviarDenuncia(event)">
+            <!-- Tipo de denuncia -->
+            <div class="form-group">
+              <label class="form-label">Tipo de denuncia *</label>
+              <select class="form-select" id="tipoDenuncia" required>
+                <option value="">Seleccionar...</option>
+                <option value="trabajo-infantil">Trabajo infantil</option>
+                <option value="condiciones-inseguras">Condiciones inseguras (higiene, seguridad)</option>
+                <option value="incumplimiento-contrato">Incumplimiento de contrato (plazos, pago, calidad)</option>
+                <option value="discriminacion">Discriminación o acoso</option>
+                <option value="subcontratacion">Subcontratación no declarada</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <!-- Descripción detallada -->
+            <div class="form-group">
+              <label class="form-label">Descripción detallada *</label>
+              <textarea
+                class="form-input"
+                id="descripcion"
+                rows="6"
+                placeholder="Describí lo más detalladamente posible la situación que querés reportar. Incluí fechas, lugares y personas involucradas si es relevante."
+                required
+              ></textarea>
+              <div class="text-xs text-slate-500 mt-1">
+                Caracteres: <span id="charCount">0</span> / 1000 (mínimo 50)
+              </div>
+            </div>
+
+            <!-- Evidencia -->
+            <div class="form-group">
+              <label class="form-label">Evidencia (opcional)</label>
+              <div class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center">
+                <div class="text-3xl mb-2">📎</div>
+                <div class="text-sm text-slate-700 mb-2">
+                  <strong>Arrastrá archivos aquí</strong> o hacé click para seleccionar
+                </div>
+                <div class="text-xs text-slate-500">
+                  Formatos: PDF, JPG, PNG, MP4 (máx 10 MB por archivo)
+                </div>
+                <input type="file" id="evidencia" multiple accept=".pdf,.jpg,.jpeg,.png,.mp4" style="display: none;" onchange="mostrarArchivos()">
+                <button type="button" class="btn btn-secondary btn-sm mt-3" onclick="document.getElementById('evidencia').click()">
+                  Seleccionar archivos
+                </button>
+              </div>
+              <div id="archivosSeleccionados" class="mt-2"></div>
+            </div>
+
+            <!-- Ubicación (opcional) -->
+            <div class="form-group">
+              <label class="form-label">Ubicación (opcional)</label>
+              <input
+                type="text"
+                class="form-input"
+                id="ubicacion"
+                placeholder="Ej: Av. Corrientes 1234, CABA o Zona industrial La Matanza"
+              >
+              <div class="text-xs text-slate-500 mt-1">
+                Si conocés la dirección o zona donde ocurre la irregularidad, incluyela. Facilita la intervención del Estado.
+              </div>
+            </div>
+
+            <!-- Modalidad: Anónima o Identificada -->
+            <div class="form-group">
+              <label class="form-label">Modalidad *</label>
+              <div class="space-y-3">
+                <label class="flex items-start gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-sky-400 transition-all">
+                  <input type="radio" name="modalidad" value="anonima" checked onchange="toggleIdentificacion()">
+                  <div>
+                    <div class="font-semibold text-slate-900">Anónima</div>
+                    <div class="text-sm text-slate-600">
+                      Tu identidad NO será revelada. No podrás hacer seguimiento del caso.
+                    </div>
+                    <div class="text-xs text-sky-700 mt-1">
+                      ✓ Máxima confidencialidad
+                    </div>
+                  </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-sky-400 transition-all">
+                  <input type="radio" name="modalidad" value="identificada" onchange="toggleIdentificacion()">
+                  <div>
+                    <div class="font-semibold text-slate-900">Identificada</div>
+                    <div class="text-sm text-slate-600">
+                      Podrás hacer seguimiento con código único. Tu identidad está protegida por ley.
+                    </div>
+                    <div class="text-xs text-emerald-700 mt-1">
+                      ✓ Protección legal + ✓ Seguimiento del caso
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Garantías -->
+            <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl mb-4">
+              <div class="font-semibold text-emerald-900 mb-2">🔒 Garantías de Confidencialidad</div>
+              <ul class="text-sm text-emerald-800 space-y-1 ml-4" style="list-style: disc;">
+                <li>Tu identidad está protegida por la Ley de Protección al Denunciante</li>
+                <li>La denuncia se envía directamente a STESS (Secretaría de Trabajo) o ARCA</li>
+                <li>El empleador/taller NO verá tu identidad ni podrá inferirla</li>
+                <li>Recibirás un código de seguimiento (solo en modalidad identificada)</li>
+              </ul>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex gap-3">
+              <button type="submit" class="btn btn-primary btn-lg">
+                ✉ Enviar Denuncia
+              </button>
+              <button type="button" class="btn btn-secondary btn-lg" onclick="limpiarFormulario()">
+                Limpiar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Mis denuncias (solo si hay sesión identificada) -->
+        <div class="section-card" id="misDenuncias">
+          <div class="section-header mb-4">
+            <div>
+              <h3 class="section-title">Mis Denuncias</h3>
+              <p class="section-subtitle">Seguimiento de casos reportados en modalidad identificada</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Denuncia 1: En investigación -->
+            <div class="denuncia-card investigacion">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="text-2xl">🔍</div>
+                  <div>
+                    <div class="font-semibold text-slate-900">Código: #D2025-0234</div>
+                    <div class="text-sm text-slate-600">Incumplimiento de contrato</div>
+                  </div>
+                </div>
+                <span class="badge badge-amber">En investigación</span>
+              </div>
+              <div class="text-sm text-slate-700 mb-2">
+                <strong>Fecha:</strong> 15/10/2025 | <strong>Ubicación:</strong> CABA
+              </div>
+              <div class="text-sm text-amber-800">
+                <strong>Última actualización (28/10/2025):</strong> STESS programó auditoría para el 02/11/2025. Inspector asignado: #INS-045.
+              </div>
+              <button class="btn btn-secondary btn-sm mt-2" onclick="verDetalleDenuncia('D2025-0234')">
+                Ver timeline completo
+              </button>
+            </div>
+
+            <!-- Denuncia 2: Resuelta -->
+            <div class="denuncia-card resuelta">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="text-2xl">✓</div>
+                  <div>
+                    <div class="font-semibold text-slate-900">Código: #D2025-0198</div>
+                    <div class="text-sm text-slate-600">Condiciones inseguras</div>
+                  </div>
+                </div>
+                <span class="badge badge-emerald">Resuelta</span>
+              </div>
+              <div class="text-sm text-slate-700 mb-2">
+                <strong>Fecha:</strong> 01/10/2025 | <strong>Ubicación:</strong> GBA Sur
+              </div>
+              <div class="text-sm text-emerald-800">
+                <strong>Resolución (20/10/2025):</strong> Auditoría confirmó irregularidades. Taller implementó plan correctivo: matafuegos instalados, ventilación mejorada. Caso cerrado.
+              </div>
+              <button class="btn btn-secondary btn-sm mt-2" onclick="verDetalleDenuncia('D2025-0198')">
+                Ver informe final
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center">
+            <button class="btn btn-secondary" onclick="alert('Ver historial completo de denuncias')">
+              Ver todas mis denuncias
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-4 space-y-6">
+        <!-- Estadísticas públicas -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Estadísticas Públicas</h3>
+
+          <div class="text-center mb-4">
+            <div class="text-3xl font-bold text-sky-700">12</div>
+            <div class="text-sm text-slate-600">Denuncias recibidas (últimos 30 días)</div>
+          </div>
+
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-600">Resueltas:</span>
+              <span class="font-bold text-emerald-700">8 (66.7%)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">En investigación:</span>
+              <span class="font-bold text-amber-700">4 (33.3%)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Tiempo promedio resolución:</span>
+              <span class="font-bold">18 días</span>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-sky-50 rounded-xl text-sm">
+            <div class="font-semibold text-sky-900 mb-1">✓ Estado presente</div>
+            <div class="text-sky-700">
+              El tiempo de respuesta cumple el objetivo tripartito de <15 días promedio entre denuncia y auditoría.
+            </div>
+          </div>
+        </div>
+
+        <!-- Consultar estado con código -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Consultar Estado</h3>
+
+          <div class="text-sm text-slate-700 mb-3">
+            Si realizaste una denuncia identificada, ingresá tu código para ver el estado:
+          </div>
+
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Ej: D2025-0234"
+              id="codigoConsulta"
+            >
+          </div>
+
+          <button class="btn btn-primary btn-block" onclick="consultarEstado()">
+            🔍 Consultar
+          </button>
+        </div>
+
+        <!-- Contacto -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Contacto de Emergencia</h3>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-rose-50 border border-rose-300 rounded-xl">
+              <div class="font-semibold text-rose-900 mb-1">⚠ Trabajo infantil</div>
+              <div class="text-sm text-rose-800 mb-2">Si detectás trabajo infantil, llamá de inmediato:</div>
+              <div class="font-bold text-rose-900">0800-TRABAJO (0800-872-2256)</div>
+            </div>
+
+            <div class="p-3 bg-amber-50 border border-amber-300 rounded-xl">
+              <div class="font-semibold text-amber-900 mb-1">Peligro inminente</div>
+              <div class="text-sm text-amber-800 mb-2">Condiciones que ponen en riesgo vidas:</div>
+              <div class="font-bold text-amber-900">0800-666-4100 (STESS)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recursos adicionales -->
+        <div class="section-card">
+          <h3 class="section-title mb-3">Recursos Adicionales</h3>
+
+          <div class="space-y-2 text-sm">
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="alert('Guía: Qué hacer ante incumplimiento de contrato')">
+              <div class="text-sky-700">📖 Guía de tus derechos laborales</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="alert('Contactos: SOIVA, STESS, ARCA')">
+              <div class="text-sky-700">📞 Contactos útiles</div>
+            </button>
+            <button class="w-full text-left p-2 hover:bg-slate-50 rounded" onclick="alert('FAQ sobre denuncias')">
+              <div class="text-sky-700">❓ Preguntas frecuentes</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    // Contador de caracteres
+    document.getElementById('descripcion').addEventListener('input', function() {
+      const count = this.value.length;
+      document.getElementById('charCount').textContent = count;
+    });
+
+    // Mostrar archivos seleccionados
+    function mostrarArchivos() {
+      const input = document.getElementById('evidencia');
+      const container = document.getElementById('archivosSeleccionados');
+
+      if (input.files.length > 0) {
+        let html = '<div class="text-sm mt-2"><strong>Archivos seleccionados:</strong></div>';
+        for (let i = 0; i < input.files.length; i++) {
+          const size = (input.files[i].size / 1024 / 1024).toFixed(2);
+          html += `<div class="text-xs text-slate-600">• ${input.files[i].name} (${size} MB)</div>`;
+        }
+        container.innerHTML = html;
+      }
+    }
+
+    // Toggle identificación
+    function toggleIdentificacion() {
+      // Funcionalidad para mostrar/ocultar sección según modalidad
+      console.log('Modalidad cambiada');
+    }
+
+    // Enviar denuncia
+    function enviarDenuncia(event) {
+      event.preventDefault();
+
+      const tipo = document.getElementById('tipoDenuncia').value;
+      const descripcion = document.getElementById('descripcion').value;
+      const modalidad = document.querySelector('input[name="modalidad"]:checked').value;
+
+      if (descripcion.length < 50) {
+        alert('La descripción debe tener al menos 50 caracteres para que sea útil en la investigación.');
+        return;
+      }
+
+      if (confirm(`¿Confirmar envío de denuncia?\n\nTipo: ${tipo}\nModalidad: ${modalidad}\n\nLa denuncia será enviada a STESS/ARCA de forma confidencial.`)) {
+        const codigo = 'D2025-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+
+        showToast('✓ Denuncia enviada correctamente', 'success');
+
+        setTimeout(() => {
+          if (modalidad === 'identificada') {
+            alert(`Tu código de seguimiento es:\n\n${codigo}\n\nGuardalo para consultar el estado de tu denuncia.\n\nRecibirás notificaciones por email sobre avances en la investigación.`);
+          } else {
+            alert('Denuncia anónima enviada correctamente.\n\nSTESS/ARCA iniciará la investigación en las próximas 48 hs.\n\nGracias por contribuir a la formalización del sector.');
+          }
+          limpiarFormulario();
+        }, 1000);
+      }
+    }
+
+    // Limpiar formulario
+    function limpiarFormulario() {
+      document.getElementById('formDenuncia').reset();
+      document.getElementById('charCount').textContent = '0';
+      document.getElementById('archivosSeleccionados').innerHTML = '';
+    }
+
+    // Ver detalle de denuncia
+    function verDetalleDenuncia(codigo) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nAbriría modal con timeline completo de la denuncia ${codigo}:\n\n- Fecha de recepción\n- Asignación de inspector\n- Fecha de auditoría\n- Resultados de auditoría\n- Plan correctivo (si aplica)\n- Resolución final\n- Todas las actualizaciones con fechas`);
+    }
+
+    // Consultar estado con código
+    function consultarEstado() {
+      const codigo = document.getElementById('codigoConsulta').value.trim();
+
+      if (!codigo) {
+        alert('Por favor ingresá un código de denuncia');
+        return;
+      }
+
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nBuscaría estado de denuncia: ${codigo}\n\nMostraría:\n- Estado actual\n- Última actualización\n- Próximos pasos\n- Timeline completo`);
+    }
+  </script>
+
+</body>
+</html>

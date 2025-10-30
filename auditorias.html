@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditorías - Plataforma Textil OIT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+    .auditoria-card {
+      padding: 1rem;
+      border: 2px solid var(--slate-200);
+      border-radius: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .auditoria-card.programada {
+      border-left: 4px solid var(--sky-600);
+      background: var(--sky-50);
+    }
+    .auditoria-card.realizada {
+      border-left: 4px solid var(--slate-400);
+    }
+    .auditoria-card.observado {
+      border-left: 4px solid var(--amber-600);
+      background: var(--amber-50);
+    }
+    .auditoria-card.aprobado {
+      border-left: 4px solid var(--emerald-600);
+      background: var(--emerald-50);
+    }
+    .accion-correctiva {
+      padding: 0.75rem;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .accion-correctiva.completada {
+      background: var(--emerald-50);
+      border-color: var(--emerald-300);
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    PANTALLA: auditorias.html (Auditorías y Planes Correctivos)
+    BARRERAS: B5 (Estado Ausente)
+    FUNCIONES: FISCALIZAR (auditorías y seguimiento)
+    ACTORES: Estado (STESS, ARCA), Taller
+    DESCRIPCIÓN: Registro de auditorías programadas/realizadas y planes de acción correctiva.
+  -->
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-logo">
+        <div class="logo-icon">PT</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Plataforma Textil</div>
+          <div class="text-xs text-slate-500" id="topbarSubtitle">Inspector: #INS-045</div>
+        </div>
+      </div>
+
+      <nav class="topbar-nav">
+        <button class="nav-tab" onclick="window.location.href='dashboard-tripartito.html'">Dashboard</button>
+        <button class="nav-tab" onclick="window.location.href='denuncias.html'">Denuncias</button>
+        <button class="nav-tab active" onclick="window.location.href='auditorias.html'">Auditorías</button>
+        <button class="nav-tab" onclick="alert('Informes')">Informes</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button class="btn btn-secondary btn-sm" onclick="cambiarVista()">
+          Cambiar vista: <span id="vistaActual">Inspector</span>
+        </button>
+        <span class="pill pill-sky">v1.3 Barreras</span>
+        <button class="btn btn-secondary" onclick="if(confirm('¿Cerrar sesión?')) window.location.href='index.html'">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" id="pageTitle">Panel de Auditorías</h1>
+        <p class="page-subtitle">Programación, realización y seguimiento de auditorías laborales</p>
+      </div>
+      <button class="btn btn-primary" onclick="programarAuditoria()">
+        + Programar Auditoría
+      </button>
+    </div>
+
+    <!-- Alerta -->
+    <div class="alert alert-info mb-6">
+      <strong>📋 Wireframe v1.3:</strong> Esta pantalla demuestra cómo se resuelve <strong>B5 (Estado Ausente)</strong> con auditorías proactivas. Tiene 2 vistas: <strong>Inspector/Estado</strong> (programa y asigna) y <strong>Taller</strong> (ve sus auditorías y planes correctivos).
+    </div>
+
+    <!-- Vista Inspector -->
+    <div id="vistaInspector">
+      <div class="grid grid-cols-12 gap-6">
+        <!-- Columna principal -->
+        <div class="col-span-8 space-y-6">
+          <!-- Auditorías programadas -->
+          <div class="section-card">
+            <div class="section-header mb-4">
+              <div>
+                <h3 class="section-title">Auditorías Programadas</h3>
+                <p class="section-subtitle">Próximas inspecciones asignadas</p>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <!-- Auditoría 1: Próxima -->
+              <div class="auditoria-card programada">
+                <div class="flex items-center justify-between mb-2">
+                  <div>
+                    <div class="font-bold text-sky-900">Taller: Textil Roca SRL</div>
+                    <div class="text-sm text-sky-700">CUIT: 30-11223344-5 | Morón, BA</div>
+                  </div>
+                  <span class="badge badge-sky">Programada</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-sm mt-3">
+                  <div>
+                    <div class="text-slate-600">Fecha:</div>
+                    <div class="font-semibold">05/11/2025 - 10:00 hs</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Tipo:</div>
+                    <div class="font-semibold">Seguridad e Higiene</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Origen:</div>
+                    <div class="font-semibold">Certificación INTI</div>
+                  </div>
+                </div>
+                <div class="mt-3 p-2 bg-white rounded border border-sky-300 text-sm">
+                  <strong>Documentación requerida:</strong> Habilitación municipal, protocolo COVID, registro de capacitaciones SST
+                </div>
+                <div class="flex gap-2 mt-3">
+                  <button class="btn btn-primary btn-sm" onclick="realizarAuditoria('textil-roca')">
+                    ✓ Realizar Auditoría
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="alert('Descargar checklist de seguridad e higiene (PDF)')">
+                    📥 Checklist
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="reprogramarAuditoria('textil-roca')">
+                    📅 Reprogramar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Auditoría 2: Denuncia -->
+              <div class="auditoria-card programada">
+                <div class="flex items-center justify-between mb-2">
+                  <div>
+                    <div class="font-bold text-sky-900">Taller: Confecciones del Sur</div>
+                    <div class="text-sm text-sky-700">CUIT: 30-55667788-9 | Avellaneda, BA</div>
+                  </div>
+                  <span class="badge badge-rose">Urgente - Denuncia</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-sm mt-3">
+                  <div>
+                    <div class="text-slate-600">Fecha:</div>
+                    <div class="font-semibold">02/11/2025 - 14:00 hs</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Tipo:</div>
+                    <div class="font-semibold">Investigación denuncia</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Código denuncia:</div>
+                    <div class="font-semibold">#D2025-0234</div>
+                  </div>
+                </div>
+                <div class="mt-3 p-2 bg-rose-50 rounded border border-rose-300 text-sm">
+                  <strong>Motivo:</strong> Denuncia por incumplimiento de contrato (plazos y calidad). Verificar condiciones laborales y cumplimiento normativo.
+                </div>
+                <div class="flex gap-2 mt-3">
+                  <button class="btn btn-primary btn-sm" onclick="realizarAuditoria('confecciones-sur')">
+                    ✓ Realizar Auditoría
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="verDenuncia('D2025-0234')">
+                    👁 Ver Denuncia
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auditorías realizadas -->
+          <div class="section-card">
+            <div class="section-header mb-4">
+              <div>
+                <h3 class="section-title">Auditorías Realizadas Recientemente</h3>
+                <p class="section-subtitle">Últimas inspecciones completadas</p>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <!-- Auditoría realizada 1: Observado -->
+              <div class="auditoria-card observado">
+                <div class="flex items-center justify-between mb-2">
+                  <div>
+                    <div class="font-bold text-amber-900">Taller: Corte y Confección SA</div>
+                    <div class="text-sm text-amber-700">CUIT: 30-99887766-3 | La Matanza, BA</div>
+                  </div>
+                  <span class="badge badge-amber">Observado</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-sm mt-3">
+                  <div>
+                    <div class="text-slate-600">Fecha realización:</div>
+                    <div class="font-semibold">15/09/2025</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Tipo:</div>
+                    <div class="font-semibold">Seguridad e Higiene</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Inspector:</div>
+                    <div class="font-semibold">#INS-045</div>
+                  </div>
+                </div>
+                <div class="mt-3 p-2 bg-white rounded border border-amber-400 text-sm">
+                  <strong>Observaciones:</strong> Falta matafuegos (2 unidades), salida de emergencia sin señalizar, ventilación insuficiente
+                </div>
+                <div class="mt-2 p-2 bg-amber-100 rounded text-sm">
+                  <strong>Plan correctivo:</strong> En progreso (60%) - Plazo: 15/11/2025 - <button class="text-sky-700 underline" onclick="verPlanCorrectivo('corte-confeccion')">Ver detalle →</button>
+                </div>
+              </div>
+
+              <!-- Auditoría realizada 2: Aprobado -->
+              <div class="auditoria-card aprobado">
+                <div class="flex items-center justify-between mb-2">
+                  <div>
+                    <div class="font-bold text-emerald-900">Taller: Cooperativa El Telar</div>
+                    <div class="text-sm text-emerald-700">CUIT: 30-12312312-4 | Flores, CABA</div>
+                  </div>
+                  <span class="badge badge-emerald">Aprobado</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-sm mt-3">
+                  <div>
+                    <div class="text-slate-600">Fecha realización:</div>
+                    <div class="font-semibold">10/09/2025</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Tipo:</div>
+                    <div class="font-semibold">Laboral general</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-600">Inspector:</div>
+                    <div class="font-semibold">#INS-022</div>
+                  </div>
+                </div>
+                <div class="mt-3 p-2 bg-white rounded border border-emerald-400 text-sm">
+                  <strong>Resultado:</strong> Cumple con todas las normativas laborales, de seguridad e higiene. Instalaciones en condiciones óptimas.
+                </div>
+                <button class="btn btn-secondary btn-sm mt-2" onclick="verInformeFinal('el-telar')">
+                  📄 Ver informe completo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Inspector -->
+        <div class="col-span-4 space-y-6">
+          <!-- Métricas -->
+          <div class="section-card">
+            <h3 class="section-title mb-4">Mis Métricas</h3>
+
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="p-3 bg-sky-50 rounded text-center">
+                <div class="text-2xl font-bold text-sky-700">5</div>
+                <div class="text-xs text-sky-600">Programadas</div>
+              </div>
+              <div class="p-3 bg-emerald-50 rounded text-center">
+                <div class="text-2xl font-bold text-emerald-700">12</div>
+                <div class="text-xs text-emerald-600">Realizadas (mes)</div>
+              </div>
+            </div>
+
+            <div class="mt-4 space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-slate-600">Tasa aprobación:</span>
+                <span class="font-bold text-emerald-700">58%</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600">Con observaciones:</span>
+                <span class="font-bold text-amber-700">33%</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-600">Clausuras:</span>
+                <span class="font-bold text-rose-700">1 (8%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones rápidas -->
+          <div class="section-card">
+            <h3 class="section-title mb-3">Acciones Rápidas</h3>
+
+            <button class="btn btn-primary btn-block mb-2" onclick="programarAuditoria()">
+              + Programar Auditoría
+            </button>
+
+            <button class="btn btn-secondary btn-block mb-2" onclick="alert('Ver talleres prioritarios para auditar')">
+              🎯 Talleres Prioritarios
+            </button>
+
+            <button class="btn btn-secondary btn-block" onclick="window.location.href='denuncias.html'">
+              📋 Ver Denuncias Pendientes
+            </button>
+          </div>
+
+          <!-- Priorización -->
+          <div class="section-card">
+            <h3 class="section-title mb-3">Talleres Priorizados</h3>
+
+            <div class="text-sm space-y-2">
+              <div class="p-2 border-l-4 border-rose-600 bg-rose-50 rounded">
+                <div class="font-semibold">3 talleres</div>
+                <div class="text-xs">Con denuncias activas</div>
+              </div>
+              <div class="p-2 border-l-4 border-amber-600 bg-amber-50 rounded">
+                <div class="font-semibold">7 talleres</div>
+                <div class="text-xs">Sin auditar >12 meses</div>
+              </div>
+              <div class="p-2 border-l-4 border-sky-600 bg-sky-50 rounded">
+                <div class="font-semibold">5 talleres</div>
+                <div class="text-xs">Plan correctivo en curso</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista Taller (oculta por defecto) -->
+    <div id="vistaTaller" style="display: none;">
+      <div class="grid grid-cols-12 gap-6">
+        <div class="col-span-8 space-y-6">
+          <!-- Próxima auditoría -->
+          <div class="section-card">
+            <div class="section-header mb-4">
+              <div>
+                <h3 class="section-title">Mi Próxima Auditoría</h3>
+                <p class="section-subtitle">Preparate para la inspección</p>
+              </div>
+            </div>
+
+            <div class="auditoria-card programada">
+              <div class="font-bold text-sky-900 mb-2">Auditoría de Seguridad e Higiene</div>
+              <div class="grid grid-cols-2 gap-4 mb-3">
+                <div>
+                  <div class="text-sm text-slate-600">Fecha programada:</div>
+                  <div class="text-lg font-bold text-sky-700">05/11/2025 - 10:00 hs</div>
+                </div>
+                <div>
+                  <div class="text-sm text-slate-600">Inspector asignado:</div>
+                  <div class="font-semibold">#INS-045</div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-white rounded border border-sky-300 mb-3">
+                <div class="font-semibold mb-2">Documentación que deberás presentar:</div>
+                <ul class="text-sm space-y-1 ml-4" style="list-style: disc;">
+                  <li>Habilitación municipal vigente</li>
+                  <li>Protocolo COVID actualizado</li>
+                  <li>Registro de capacitaciones en SST</li>
+                  <li>Certificados de matafuegos</li>
+                  <li>Constancia de ART</li>
+                </ul>
+              </div>
+
+              <div class="flex gap-2">
+                <button class="btn btn-secondary btn-sm" onclick="alert('Descargar checklist de preparación (PDF)')">
+                  📥 Descargar Checklist
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="solicitarReprogramacion()">
+                  📅 Solicitar Reprogramación
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plan correctivo activo -->
+          <div class="section-card">
+            <div class="section-header mb-4">
+              <div>
+                <h3 class="section-title">Plan de Acción Correctiva</h3>
+                <p class="section-subtitle">Resultado de auditoría del 15/09/2025</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>Progreso:</span>
+                <span class="font-bold text-amber-700">1/3 completadas (60%)</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%; background: var(--amber-600);"></div>
+              </div>
+              <div class="text-sm text-amber-700 mt-1">
+                <strong>Plazo límite:</strong> 15/11/2025 (15 días restantes)
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <div class="accion-correctiva">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-slate-400">○</span>
+                  <div class="flex-1 font-semibold text-slate-900">Instalar 2 matafuegos ABC</div>
+                  <span class="text-xs text-slate-600">Plazo: 30 días</span>
+                </div>
+                <div class="text-sm text-slate-700">Ubicación: Entrada principal + Sector de máquinas</div>
+                <button class="btn btn-primary btn-sm mt-2" onclick="subirEvidencia('matafuegos')">
+                  📤 Subir evidencia de corrección
+                </button>
+              </div>
+
+              <div class="accion-correctiva">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-slate-400">○</span>
+                  <div class="flex-1 font-semibold text-slate-900">Señalizar salida de emergencia</div>
+                  <span class="text-xs text-slate-600">Plazo: 15 días</span>
+                </div>
+                <div class="text-sm text-slate-700">Cartel luminoso según normativa vigente</div>
+                <button class="btn btn-primary btn-sm mt-2" onclick="subirEvidencia('senalizacion')">
+                  📤 Subir evidencia de corrección
+                </button>
+              </div>
+
+              <div class="accion-correctiva completada">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-emerald-700">✓</span>
+                  <div class="flex-1 font-semibold text-emerald-900">Actualizar botiquín</div>
+                  <span class="badge badge-emerald">Completado</span>
+                </div>
+                <div class="text-sm text-emerald-700">Verificado el 20/10/2025 - Evidencia aprobada</div>
+              </div>
+            </div>
+
+            <div class="mt-4 p-3 bg-amber-50 border border-amber-300 rounded-xl text-sm">
+              <strong>⚠ Importante:</strong> Si no completás el plan antes del 15/11/2025, habrá suspensión temporal de actividad hasta regularización.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Taller -->
+        <div class="col-span-4 space-y-6">
+          <!-- Historial -->
+          <div class="section-card">
+            <h3 class="section-title mb-3">Mi Historial</h3>
+
+            <div class="space-y-3 text-sm">
+              <div class="p-3 bg-emerald-50 rounded">
+                <div class="font-semibold text-emerald-900">Última auditoría aprobada</div>
+                <div class="text-emerald-700">15/08/2024 - Laboral general</div>
+              </div>
+
+              <div class="p-3 bg-amber-50 rounded">
+                <div class="font-semibold text-amber-900">Auditorías con observaciones</div>
+                <div class="text-amber-700">1 de 3 (33.3%)</div>
+              </div>
+
+              <div class="p-3 bg-sky-50 rounded">
+                <div class="font-semibold text-sky-900">Planes correctivos</div>
+                <div class="text-sky-700">1 activo, 0 vencidos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ayuda -->
+          <div class="section-card">
+            <h3 class="section-title mb-3">Ayuda y Soporte</h3>
+
+            <button class="btn btn-secondary btn-block mb-2" onclick="alert('Solicitar extensión de plazo para plan correctivo')">
+              ⏱ Solicitar Extensión
+            </button>
+
+            <button class="btn btn-secondary btn-block mb-2" onclick="alert('Contacto con INTI para asesoramiento')">
+              🏢 Asesoramiento INTI
+            </button>
+
+            <button class="btn btn-secondary btn-block" onclick="window.location.href='capacitaciones.html?tema=seguridad'">
+              🎓 Capacitaciones SST
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
+  <script>
+    let vistaActual = 'inspector'; // o 'taller'
+
+    function cambiarVista() {
+      vistaActual = vistaActual === 'inspector' ? 'taller' : 'inspector';
+
+      if (vistaActual === 'inspector') {
+        document.getElementById('vistaInspector').style.display = 'block';
+        document.getElementById('vistaTaller').style.display = 'none';
+        document.getElementById('vistaActual').textContent = 'Inspector';
+        document.getElementById('topbarSubtitle').textContent = 'Inspector: #INS-045';
+        document.getElementById('pageTitle').textContent = 'Panel de Auditorías';
+      } else {
+        document.getElementById('vistaInspector').style.display = 'none';
+        document.getElementById('vistaTaller').style.display = 'block';
+        document.getElementById('vistaActual').textContent = 'Taller';
+        document.getElementById('topbarSubtitle').textContent = 'Taller: Corte Sur SRL';
+        document.getElementById('pageTitle').textContent = 'Mis Auditorías';
+      }
+    }
+
+    function programarAuditoria() {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nAbriría formulario para programar auditoría:\n\n- Seleccionar taller (búsqueda por CUIT/nombre)\n- Tipo de auditoría (Laboral, Seguridad, Higiene, etc.)\n- Fecha y hora\n- Asignar inspector\n- Motivo (rutina, denuncia, seguimiento)\n- Documentación requerida');
+    }
+
+    function realizarAuditoria(taller) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nAbriría interfaz de realización de auditoría para: ${taller}\n\nIncluye:\n- Checklist digital de verificación\n- Carga de observaciones\n- Captura de fotos/evidencia\n- Calificación (Aprobado/Observado/Clausurado)\n- Generación automática de acta\n- Si observado: carga de plan correctivo`);
+    }
+
+    function reprogramarAuditoria(taller) {
+      if (confirm(`¿Reprogramar auditoría de ${taller}?\n\nMotivos válidos:\n- Caso fortuito\n- Solicitud justificada del taller\n- Reasignación de inspector`)) {
+        showToast('Auditoría reprogramada para 10/11/2025', 'success');
+      }
+    }
+
+    function verPlanCorrectivo(taller) {
+      alert('FUNCIONALIDAD WIREFRAME:\n\nMostraría plan correctivo completo con:\n- Lista de acciones requeridas\n- Plazos por acción\n- Evidencia subida por el taller\n- Estado de aprobación de cada ítem\n- Opciones para aprobar/rechazar correcciones');
+    }
+
+    function verInformeFinal(taller) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nGeneraría PDF con informe completo de auditoría de ${taller}:\n\n- Fecha y hora\n- Inspector\n- Checklist completo\n- Observaciones\n- Fotos/evidencia\n- Resultado final\n- Firma digital inspector`);
+    }
+
+    function verDenuncia(codigo) {
+      window.location.href = `denuncias.html?codigo=${codigo}`;
+    }
+
+    function solicitarReprogramacion() {
+      if (confirm('¿Solicitar reprogramación de auditoría?\n\nDeberás justificar el motivo. La solicitud será evaluada por STESS.')) {
+        showToast('Solicitud enviada. Recibirás respuesta en 48-72 hs.', 'success');
+      }
+    }
+
+    function subirEvidencia(tipo) {
+      alert(`FUNCIONALIDAD WIREFRAME:\n\nAbriría diálogo para subir evidencia de corrección: ${tipo}\n\n- Permitir seleccionar fotos/PDF\n- Agregar comentarios\n- Enviar a inspector para validación\n- El inspector tiene 3-5 días para revisar`);
+      showToast('Evidencia subida. El inspector la revisará en 3-5 días.', 'success');
+    }
+  </script>
+
+</body>
+</html>

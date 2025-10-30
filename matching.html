@@ -26,6 +26,10 @@
         <button class="nav-tab active">Matching</button>
         <button class="nav-tab" onclick="window.location.href='explorar-talleres.html'">Explorar Talleres</button>
       </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="pill pill-sky">v1.3</span>
+      </div>
     </div>
   </header>
 
@@ -146,50 +150,24 @@
   <script src="data.js"></script>
   <script src="script.js"></script>
   <script src="feedback.js"></script>
+  <script src="navigation-controller.js"></script>
   <script>
-    // ✅ ARREGLO #1: Obtener pedido de URL con fallback a localStorage
+    // Obtener pedido de URL
     const omId = getUrlParam('om');
     let pedido = getFromLocalStorage('pedidoEnCreacion');
 
-    // ✅ ARREGLO #2: Si no hay pedido guardado, crear uno por defecto
-    if (!pedido) {
-      pedido = {
-        om_id: omId || 'OM-2025-00001',
-        tipo_prenda: 'Jean',
-        cantidad: 500,
-        prenda_id: 'jean_basic',
-        procesos: ['Corte', 'Confección', 'Lavado', 'Acabado']
-      };
-      console.log('⚠️ Usando pedido por defecto:', pedido);
-    }
-
-    // Mostrar información del pedido
     if (pedido) {
       document.getElementById('pedidoInfo').textContent =
         `${pedido.om_id} | ${pedido.tipo_prenda} ${pedido.cantidad}u | ${pedido.procesos.length} procesos`;
     }
 
-    // ✅ ARREGLO #3: Filtrar talleres con mejor lógica
+    // Filtrar talleres según la prenda
     let talleresFiltrados = talleres.filter(t => {
-      // Verificar si es Jean de múltiples formas
-      const esPrendaJean = pedido && (
-        pedido.tipo_prenda === 'Jean' || 
-        pedido.tipo_prenda.includes('Jean') ||
-        pedido.tipo_prenda.toLowerCase().includes('jean')
-      );
-
-      // Si es Jean, filtrar por especialización
-      if (esPrendaJean) {
-        const tieneCapacidad = t.especializacion.includes('Jean') || 
-                              t.especializacion.includes('Pantalón');
-        return tieneCapacidad;
+      if (pedido && pedido.tipo_prenda.includes('Jean')) {
+        return t.especializacion.includes('Jean') || t.especializacion.includes('Pantalón');
       }
-      
-      // Si no, mostrar todos los talleres
       return true;
     });
-
-    console.log('📊 Talleres disponibles:', talleresFiltrados.length);
 
     // Renderizar tabla
     function renderTalleres(talleresToRender) {
@@ -197,12 +175,6 @@
       tbody.innerHTML = '';
 
       document.getElementById('statTalleresSugeridos').textContent = talleresToRender.length;
-
-      // ✅ ARREGLO #4: Verificar si hay talleres antes de renderizar
-      if (talleresToRender.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">No se encontraron talleres disponibles</td></tr>';
-        return;
-      }
 
       talleresToRender.forEach((taller, index) => {
         const tr = document.createElement('tr');
@@ -263,12 +235,7 @@
         if (t.rating < ratingMin) return false;
 
         // Filtro por prenda
-        const esPrendaJean = pedido && (
-          pedido.tipo_prenda === 'Jean' || 
-          pedido.tipo_prenda.includes('Jean')
-        );
-
-        if (esPrendaJean) {
+        if (pedido && pedido.tipo_prenda.includes('Jean')) {
           return t.especializacion.includes('Jean') || t.especializacion.includes('Pantalón');
         }
         return true;
