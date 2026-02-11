@@ -1,15 +1,28 @@
 import Link from 'next/link'
-import { LayoutDashboard, BookOpen, Users, Building2, ShoppingCart, ClipboardCheck, Settings, Shield, Database } from 'lucide-react'
+import {
+  LayoutDashboard, BookOpen, Users, Building2, ShoppingCart, ClipboardCheck,
+  Settings, Shield, Database, BarChart3, FileText, Bell, Award, HelpCircle,
+  Plug, UserCheck, Briefcase
+} from 'lucide-react'
 
 const sidebarItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Colecciones', href: '/admin/colecciones', icon: BookOpen },
   { label: 'Usuarios', href: '/admin/usuarios', icon: Users },
   { label: 'Talleres', href: '/admin/talleres', icon: Building2 },
-  { label: 'Marcas', href: '/admin/marcas', icon: Building2 },
+  { label: 'Marcas', href: '/admin/marcas', icon: Briefcase },
   { label: 'Pedidos', href: '/admin/pedidos', icon: ShoppingCart },
+  { label: 'Colecciones', href: '/admin/colecciones', icon: BookOpen },
+  { label: 'Evaluaciones', href: '/admin/evaluaciones', icon: ClipboardCheck },
+  { label: 'Certificados', href: '/admin/certificados', icon: Award },
+  { label: 'Procesos', href: '/admin/procesos', icon: UserCheck },
   { label: 'Auditorías', href: '/admin/auditorias', icon: ClipboardCheck },
+  { label: 'Documentos', href: '/admin/documentos', icon: FileText },
+  { label: 'Reportes', href: '/admin/reportes', icon: BarChart3 },
+  { label: 'Notificaciones', href: '/admin/notificaciones', icon: Bell },
+  { label: 'FAQ', href: '/admin/faq', icon: HelpCircle },
+  { label: 'Integraciones', href: '/admin/integraciones', icon: Plug },
   { label: 'Configuración', href: '/admin/configuracion', icon: Settings },
+  { label: 'Roles', href: '/admin/roles', icon: Shield },
   { label: 'Seguridad', href: '/admin/logs', icon: Shield },
   { label: 'Base de datos', href: '/admin/database', icon: Database },
 ]
