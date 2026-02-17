@@ -16,10 +16,9 @@ interface Usuario {
   name: string | null
   email: string
   role: string
-  activo: boolean
+  active: boolean
   createdAt: string
-  taller?: { nombre: string; nivel: string } | null
-  marca?: { razonSocial: string } | null
+  phone: string | null
 }
 
 export default function AdminUsuariosPage() {
@@ -45,18 +44,15 @@ export default function AdminUsuariosPage() {
   const columns = [
     { header: 'Usuario', accessor: (row: Usuario) => (
       <div>
-        <p className="font-semibold">{row.name || row.taller?.nombre || row.marca?.razonSocial || 'Sin nombre'}</p>
+        <p className="font-semibold">{row.name || 'Sin nombre'}</p>
         <p className="text-xs text-gray-400">{row.email}</p>
       </div>
     )},
     { header: 'Rol', accessor: (row: Usuario) => (
       <Badge variant={row.role === 'ADMIN' ? 'success' : 'default'}>{row.role}</Badge>
     )},
-    { header: 'Nivel', accessor: (row: Usuario) => (
-      row.taller ? <Badge variant={row.taller.nivel === 'ORO' ? 'success' : row.taller.nivel === 'PLATA' ? 'default' : 'warning'}>{row.taller.nivel}</Badge> : '-'
-    )},
     { header: 'Estado', accessor: (row: Usuario) => (
-      <Badge variant={row.activo ? 'success' : 'warning'}>{row.activo ? 'Activo' : 'Inactivo'}</Badge>
+      <Badge variant={row.active ? 'success' : 'warning'}>{row.active ? 'Activo' : 'Inactivo'}</Badge>
     )},
     { header: 'Registro', accessor: (row: Usuario) => new Date(row.createdAt).toLocaleDateString('es-AR'), sortable: true },
     { header: 'Acciones', accessor: (row: Usuario) => (
@@ -102,14 +98,14 @@ export default function AdminUsuariosPage() {
         {detalleModal && (
           <div className="space-y-4">
             <div>
-              <p className="font-overpass font-bold text-lg">{detalleModal.name || detalleModal.taller?.nombre || detalleModal.marca?.razonSocial}</p>
+              <p className="font-overpass font-bold text-lg">{detalleModal.name || 'Sin nombre'}</p>
               <p className="text-sm text-gray-500">{detalleModal.email}</p>
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div><span className="text-gray-500">Rol:</span> {detalleModal.role}</div>
-              <div><span className="text-gray-500">Estado:</span> {detalleModal.activo ? 'Activo' : 'Inactivo'}</div>
+              <div><span className="text-gray-500">Estado:</span> {detalleModal.active ? 'Activo' : 'Inactivo'}</div>
               <div><span className="text-gray-500">Registrado:</span> {new Date(detalleModal.createdAt).toLocaleDateString('es-AR')}</div>
-              {detalleModal.taller && <div><span className="text-gray-500">Nivel:</span> {detalleModal.taller.nivel}</div>}
+              <div><span className="text-gray-500">Teléfono:</span> {detalleModal.phone || '-'}</div>
             </div>
             <div className="flex gap-2 pt-4 border-t">
               <Button size="sm" variant="secondary">Cambiar rol</Button>

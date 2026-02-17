@@ -19,8 +19,6 @@ export default auth((req) => {
     '/verificar',
     '/directorio',
     '/perfil/',  // Perfil público /perfil/[id]
-    '/taller/', // Perfil público de taller
-    '/marca/', // Perfil público de marca
   ]
 
   // Verificar si es ruta pública (incluyendo rutas dinámicas)
@@ -57,7 +55,7 @@ export default auth((req) => {
   }
 
   // Rutas de TALLER - solo para rol TALLER
-  if (pathname.startsWith('/taller') && !pathname.match(/^\/taller\/[^/]+$/)) {
+  if (pathname.startsWith('/taller')) {
     if (userRole !== 'TALLER') {
       return NextResponse.redirect(new URL('/unauthorized', nextUrl))
     }
@@ -65,7 +63,7 @@ export default auth((req) => {
   }
 
   // Rutas de MARCA - solo para rol MARCA
-  if (pathname.startsWith('/marca') && !pathname.match(/^\/marca\/[^/]+$/)) {
+  if (pathname.startsWith('/marca')) {
     if (userRole !== 'MARCA') {
       return NextResponse.redirect(new URL('/unauthorized', nextUrl))
     }
@@ -117,3 +115,4 @@ export const config = {
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
+

@@ -12,18 +12,20 @@ import { Eye } from 'lucide-react'
 
 interface Pedido {
   id: string
-  marca: { razonSocial: string }
-  taller: { nombre: string }
+  omId: string
+  marca: { nombre: string }
   estado: string
-  cantidadTotal: number
-  descripcion: string
+  tipoPrenda: string
+  cantidad: number
   createdAt: string
+  _count: { ordenes: number }
 }
 
 const estadoVariant: Record<string, 'success' | 'warning' | 'default'> = {
   COMPLETADO: 'success',
-  EN_PROCESO: 'warning',
-  PENDIENTE: 'default',
+  EN_EJECUCION: 'warning',
+  BORRADOR: 'default',
+  ESPERANDO_ENTREGA: 'warning',
   CANCELADO: 'warning',
 }
 
@@ -33,12 +35,12 @@ export default function AdminPedidosPage() {
   const [filtroEstado, setFiltroEstado] = useState('')
 
   useEffect(() => {
-    fetch('/api/pedidos').then(r => r.json()).then(setPedidos).catch(() => {})
+    fetch('/api/pedidos?limit=100').then(r => r.json()).then((d: { pedidos?: Pedido[] }) => setPedidos(d.pedidos || [])).catch(() => {})
   }, [])
 
   const filtered = pedidos.filter(p => {
-    const matchSearch = p.marca.razonSocial.toLowerCase().includes(search.toLowerCase()) ||
-      p.taller.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    const matchSearch = p.marca.nombre.toLowerCase().includes(search.toLowerCase()) ||
+      p.omId.toLowerCase().includes(search.toLowerCase()) ||
       p.id.includes(search)
     const matchEstado = !filtroEstado || p.estado === filtroEstado
     return matchSearch && matchEstado
@@ -47,15 +49,16 @@ export default function AdminPedidosPage() {
   const byEstado = (e: string) => pedidos.filter(p => p.estado === e).length
 
   const columns = [
-    { header: 'ID', accessor: (row: Pedido) => `#${row.id.slice(0, 8)}` },
-    { header: 'Marca', accessor: (row: Pedido) => row.marca.razonSocial },
-    { header: 'Taller', accessor: (row: Pedido) => row.taller.nombre },
+    { header: 'OM', accessor: (row: Pedido) => row.omId },
+    { header: 'Marca', accessor: (row: Pedido) => row.marca.nombre },
+    { header: 'Prenda', accessor: (row: Pedido) => row.tipoPrenda },
     { header: 'Estado', accessor: (row: Pedido) => (
       <Badge variant={estadoVariant[row.estado] || 'default'}>{row.estado.replace('_', ' ')}</Badge>
     )},
-    { header: 'Cantidad', accessor: (row: Pedido) => row.cantidadTotal.toLocaleString() },
+    { header: 'Cantidad', accessor: (row: Pedido) => row.cantidad.toLocaleString() },
+    { header: 'Órdenes', accessor: (row: Pedido) => String(row._count.ordenes) },
     { header: 'Fecha', accessor: (row: Pedido) => new Date(row.createdAt).toLocaleDateString('es-AR'), sortable: true },
-    { header: 'Acciones', accessor: (row: Pedido) => (
+    { header: 'Acciones', accessor: () => (
       <button className="p-1 hover:bg-gray-100 rounded"><Eye className="w-4 h-4 text-gray-500" /></button>
     )},
   ]
@@ -68,19 +71,20 @@ export default function AdminPedidosPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard value={String(pedidos.length)} label="Total" variant="success" />
         <StatCard value={String(byEstado('COMPLETADO'))} label="Completados" variant="success" />
-        <StatCard value={String(byEstado('EN_PROCESO'))} label="En proceso" variant="warning" />
-        <StatCard value={String(byEstado('PENDIENTE'))} label="Pendientes" variant="muted" />
+        <StatCard value={String(byEstado('EN_EJECUCION'))} label="En ejecución" variant="warning" />
+        <StatCard value={String(byEstado('BORRADOR'))} label="Borradores" variant="muted" />
       </div>
 
       <div className="flex gap-3 mb-4">
-        <SearchInput onChange={setSearch} placeholder="Buscar por marca, taller o ID..." className="flex-1" />
+        <SearchInput onChange={setSearch} placeholder="Buscar por marca, OM ID..." className="flex-1" />
         <Select
           value={filtroEstado}
           onChange={e => setFiltroEstado(e.target.value)}
           options={[
             { value: '', label: 'Todos los estados' },
-            { value: 'PENDIENTE', label: 'Pendiente' },
-            { value: 'EN_PROCESO', label: 'En proceso' },
+            { value: 'BORRADOR', label: 'Borrador' },
+            { value: 'EN_EJECUCION', label: 'En ejecución' },
+            { value: 'ESPERANDO_ENTREGA', label: 'Esperando entrega' },
             { value: 'COMPLETADO', label: 'Completado' },
             { value: 'CANCELADO', label: 'Cancelado' },
           ]}

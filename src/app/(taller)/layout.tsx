@@ -10,6 +10,9 @@ export default async function TallerLayout({ children }: { children: React.React
   if (!session?.user) {
     redirect('/login')
   }
+  if (session.user.role !== 'TALLER') {
+    redirect('/unauthorized')
+  }
 
   // Obtener datos del taller desde la base de datos
   const taller = await prisma.taller.findFirst({

@@ -1,48 +1,99 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { z } from 'zod'
+
+const registerSchema = z.object({
+  email: z.string().email('Email invalido'),
+  password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres'),
+  role: z.enum(['TALLER', 'MARCA']),
+  name: z.string().trim().min(1).optional(),
+  nombre: z.string().trim().min(1).optional(),
+  phone: z.string().trim().optional(),
+  tallerData: z.object({
+    nombre: z.string().trim().min(1, 'Nombre de taller requerido'),
+    cuit: z.string().trim().min(1, 'CUIT requerido'),
+    ubicacion: z.string().trim().min(1, 'Ubicacion requerida').optional().nullable(),
+    capacidadMensual: z.number().int().min(0).optional(),
+  }).optional(),
+  marcaData: z.object({
+    nombre: z.string().trim().min(1, 'Nombre de marca requerido'),
+    cuit: z.string().trim().min(1, 'CUIT requerido'),
+    ubicacion: z.string().trim().min(1, 'Ubicacion requerida').optional().nullable(),
+    tipo: z.string().trim().min(1, 'Tipo requerido').optional().nullable(),
+  }).optional(),
+}).superRefine((data, ctx) => {
+  if (data.role === 'TALLER' && !data.tallerData) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['tallerData'], message: 'Datos de taller requeridos' })
+  }
+  if (data.role === 'MARCA' && !data.marcaData) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['marcaData'], message: 'Datos de marca requeridos' })
+  }
+})
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const { email, password, name, nombre, phone, role } = body
-    const taller = body.taller || body.tallerData
-    const marca = body.marca || body.marcaData
-
-    if (!email || !password || !role) {
-      return NextResponse.json({ error: 'Email, contraseña y rol son requeridos' }, { status: 400 })
-    }
-    if (password.length < 6) {
-      return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres' }, { status: 400 })
-    }
-    if (!['TALLER', 'MARCA'].includes(role)) {
-      return NextResponse.json({ error: 'Rol inválido' }, { status: 400 })
+    const raw = await req.json()
+    const normalized = {
+      ...raw,
+      tallerData: raw.tallerData ?? raw.taller,
+      marcaData: raw.marcaData ?? raw.marca,
+      email: typeof raw.email === 'string' ? raw.email.trim().toLowerCase() : raw.email,
+      phone: typeof raw.phone === 'string' ? raw.phone.trim() : raw.phone,
     }
 
-    const exists = await prisma.user.findUnique({ where: { email } })
-    if (exists) return NextResponse.json({ error: 'El email ya está registrado' }, { status: 409 })
+    const parsed = registerSchema.safeParse(normalized)
+    if (!parsed.success) {
+      const message = parsed.error.issues[0]?.message || 'Datos invalidos'
+      return NextResponse.json({ error: message }, { status: 400 })
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const data = parsed.data
+
+    const exists = await prisma.user.findUnique({ where: { email: data.email } })
+    if (exists) {
+      return NextResponse.json({ error: 'El email ya esta registrado' }, { status: 409 })
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10)
 
     const user = await prisma.user.create({
       data: {
-        email,
+        email: data.email,
         password: hashedPassword,
-        name: name || nombre,
-        phone,
-        role,
-        ...(role === 'TALLER' && taller
-          ? { taller: { create: { nombre: taller.nombre, cuit: taller.cuit, ubicacion: taller.ubicacion, capacidadMensual: taller.capacidadMensual || 0 } } }
+        name: data.name || data.nombre || null,
+        phone: data.phone || null,
+        role: data.role,
+        ...(data.role === 'TALLER' && data.tallerData
+          ? {
+              taller: {
+                create: {
+                  nombre: data.tallerData.nombre,
+                  cuit: data.tallerData.cuit,
+                  ubicacion: data.tallerData.ubicacion || null,
+                  capacidadMensual: data.tallerData.capacidadMensual || 0,
+                },
+              },
+            }
           : {}),
-        ...(role === 'MARCA' && marca
-          ? { marca: { create: { nombre: marca.nombre, cuit: marca.cuit, ubicacion: marca.ubicacion, tipo: marca.tipo } } }
+        ...(data.role === 'MARCA' && data.marcaData
+          ? {
+              marca: {
+                create: {
+                  nombre: data.marcaData.nombre,
+                  cuit: data.marcaData.cuit,
+                  ubicacion: data.marcaData.ubicacion || null,
+                  tipo: data.marcaData.tipo || null,
+                },
+              },
+            }
           : {}),
       },
       select: { id: true, email: true, name: true, role: true },
     })
 
     return NextResponse.json(user, { status: 201 })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Error al registrar usuario' }, { status: 500 })
   }
 }

@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { auth } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 import {
   LayoutDashboard, BookOpen, Users, Building2, ShoppingCart, ClipboardCheck,
   Settings, Shield, Database, BarChart3, FileText, Bell, Award, HelpCircle,
@@ -27,7 +29,15 @@ const sidebarItems = [
   { label: 'Base de datos', href: '/admin/database', icon: Database },
 ]
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth()
+  if (!session?.user) {
+    redirect('/login')
+  }
+  if (session.user.role !== 'ADMIN') {
+    redirect('/unauthorized')
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-brand-blue text-white sticky top-0 z-50">

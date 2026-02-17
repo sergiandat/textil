@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ProgressRing } from '@/components/ui/progress-ring'
-import { Star, MapPin, Users, TrendingUp, Clock, Award, Edit, Wrench } from 'lucide-react'
+import { Star, MapPin, Users, TrendingUp, Clock, Award, Edit } from 'lucide-react'
 
 const nivelColor: Record<string, 'warning' | 'default' | 'success'> = { BRONCE: 'warning', PLATA: 'default', ORO: 'success' }
 
@@ -40,7 +40,7 @@ export default async function TallerPerfilPage() {
   }
 
   const checks = ['nombre', 'cuit', 'ubicacion', 'descripcion', 'zona', 'fundado'] as const
-  let campos = checks.length + 4
+  const campos = checks.length + 4
   let completos = checks.filter(c => (taller as Record<string, unknown>)[c]).length
   if (taller.capacidadMensual > 0) completos++
   if (taller.trabajadoresRegistrados > 0) completos++
@@ -71,7 +71,7 @@ export default async function TallerPerfilPage() {
 
       <Card>
         <div className="flex items-center gap-6">
-          <ProgressRing value={completitud} size={80} />
+          <ProgressRing percentage={completitud} size={80} />
           <div>
             <p className="font-overpass font-bold text-brand-blue text-lg">Perfil {completitud}% completo</p>
             <p className="text-sm text-gray-500">
@@ -136,7 +136,7 @@ export default async function TallerPerfilPage() {
       </Card>
 
       {taller.procesos.length > 0 && (
-        <Card title="Procesos Productivos" icon={<Wrench className="w-5 h-5" />}>
+        <Card title="Procesos Productivos">
           <div className="flex flex-wrap gap-2">
             {taller.procesos.map((tp) => (
               <Badge key={tp.id} variant="outline">{tp.proceso.nombre}</Badge>

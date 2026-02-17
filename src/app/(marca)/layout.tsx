@@ -10,6 +10,9 @@ export default async function MarcaLayout({ children }: { children: React.ReactN
   if (!session?.user) {
     redirect('/login')
   }
+  if (session.user.role !== 'MARCA') {
+    redirect('/unauthorized')
+  }
 
   // Obtener datos de la marca desde la base de datos
   const marca = await prisma.marca.findFirst({

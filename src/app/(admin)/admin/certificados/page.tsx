@@ -14,10 +14,10 @@ interface Cert {
   id: string
   codigo: string
   taller: { nombre: string }
-  coleccion: { nombre: string }
-  estado: string
-  fechaEmision: string
-  puntaje: number
+  coleccion: { titulo: string }
+  revocado: boolean
+  fecha: string
+  calificacion: number
 }
 
 const motivosRevocacion = ['Datos falsos', 'Solicitud del taller', 'Error administrativo', 'Otro']
@@ -30,7 +30,7 @@ export default function AdminCertificadosPage() {
   const [motivo, setMotivo] = useState('')
 
   useEffect(() => {
-    fetch('/api/certificados').then(r => r.json()).then(setCerts).catch(() => {})
+    fetch('/api/certificados?limit=100').then(r => r.json()).then((d: { certificados?: Cert[] }) => setCerts(d.certificados || [])).catch(() => {})
   }, [])
 
   const filtered = certs.filter(c =>
@@ -41,17 +41,17 @@ export default function AdminCertificadosPage() {
   const columns = [
     { header: 'Código', accessor: 'codigo' as const, sortable: true },
     { header: 'Taller', accessor: (row: Cert) => row.taller.nombre },
-    { header: 'Colección', accessor: (row: Cert) => row.coleccion.nombre },
-    { header: 'Fecha', accessor: (row: Cert) => new Date(row.fechaEmision).toLocaleDateString('es-AR') },
+    { header: 'Colección', accessor: (row: Cert) => row.coleccion.titulo },
+    { header: 'Fecha', accessor: (row: Cert) => new Date(row.fecha).toLocaleDateString('es-AR') },
     { header: 'Estado', accessor: (row: Cert) => (
-      <Badge variant={row.estado === 'VALIDO' ? 'success' : 'warning'}>
-        {row.estado === 'VALIDO' ? 'Válido' : 'Revocado'}
+      <Badge variant={!row.revocado ? 'success' : 'warning'}>
+        {!row.revocado ? 'Válido' : 'Revocado'}
       </Badge>
     )},
     { header: 'Acciones', accessor: (row: Cert) => (
       <div className="flex gap-1">
         <button onClick={() => setVerModal(row)} className="p-1 hover:bg-gray-100 rounded"><Eye className="w-4 h-4 text-gray-500" /></button>
-        {row.estado === 'VALIDO' && (
+        {!row.revocado && (
           <button onClick={() => setRevocarModal(row)} className="p-1 hover:bg-gray-100 rounded"><Trash2 className="w-4 h-4 text-gray-400" /></button>
         )}
       </div>
@@ -65,7 +65,7 @@ export default function AdminCertificadosPage() {
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <Card className="text-center"><p className="font-overpass font-bold text-2xl text-brand-blue">{certs.length}</p><p className="text-xs text-gray-500">Total</p></Card>
-        <Card className="text-center"><p className="font-overpass font-bold text-2xl text-brand-blue">{certs.filter(c => { const d = new Date(c.fechaEmision); const now = new Date(); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() }).length}</p><p className="text-xs text-gray-500">Este mes</p></Card>
+        <Card className="text-center"><p className="font-overpass font-bold text-2xl text-brand-blue">{certs.filter(c => { const d = new Date(c.fecha); const now = new Date(); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() }).length}</p><p className="text-xs text-gray-500">Este mes</p></Card>
       </div>
 
       <SearchInput onChange={setSearch} placeholder="Buscar por taller o código..." className="mb-4" />
@@ -102,8 +102,8 @@ export default function AdminCertificadosPage() {
             <p className="text-sm text-gray-600 mb-1">Se certifica que</p>
             <p className="font-overpass font-bold text-lg">{verModal.taller.nombre}</p>
             <p className="text-sm text-gray-500 mb-4">ha completado satisfactoriamente el curso</p>
-            <p className="font-overpass font-bold text-brand-blue mb-2">&ldquo;{verModal.coleccion.nombre}&rdquo;</p>
-            <p className="text-sm text-gray-500 mb-4">con una calificación de {verModal.puntaje}%</p>
+            <p className="font-overpass font-bold text-brand-blue mb-2">&ldquo;{verModal.coleccion.titulo}&rdquo;</p>
+            <p className="text-sm text-gray-500 mb-4">con una calificación de {verModal.calificacion}%</p>
             <p className="text-xs text-gray-400">Código: {verModal.codigo}</p>
             <div className="flex justify-center gap-2 mt-6">
               <Button size="sm" variant="secondary">Descargar PDF</Button>

@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         include: {
           procesos: { include: { proceso: true } },
           prendas: { include: { prenda: true } },
-          user: { select: { email: true, phone: true } },
+          user: { select: { email: true, phone: true, active: true } },
         },
         skip: (page - 1) * limit,
         take: limit,

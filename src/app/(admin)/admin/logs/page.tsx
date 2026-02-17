@@ -10,9 +10,9 @@ import { Badge } from '@/components/ui/badge'
 interface LogEntry {
   id: string
   accion: string
-  detalle: string | null
+  detalles: Record<string, unknown> | null
   ip: string | null
-  createdAt: string
+  timestamp: string
   user: { name: string | null; email: string } | null
 }
 
@@ -84,14 +84,14 @@ export default function AdminLogsPage() {
                 return (
                   <tr key={log.id} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">
-                      {new Date(log.createdAt).toLocaleString('es-AR')}
+                      {new Date(log.timestamp).toLocaleString('es-AR')}
                       {log.ip && <div className="text-gray-400">IP: {log.ip}</div>}
                     </td>
                     <td className="px-4 py-3"><Badge variant={tipoColors[tipo] || 'default'}>{tipo}</Badge></td>
                     <td className="px-4 py-3 text-sm">{log.user?.name || log.user?.email || 'Sistema'}</td>
                     <td className="px-4 py-3 text-sm">
                       {log.accion}
-                      {log.detalle && <div className="text-xs text-gray-400">{log.detalle}</div>}
+                      {log.detalles && <div className="text-xs text-gray-400">{JSON.stringify(log.detalles)}</div>}
                     </td>
                   </tr>
                 )

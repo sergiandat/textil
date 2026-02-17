@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 
 interface CardProps {
   children: React.ReactNode
-  title?: string
+  title?: React.ReactNode
   description?: string
   footer?: React.ReactNode
   className?: string

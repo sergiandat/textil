@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -17,7 +17,8 @@ import {
   Search,
   FileText,
   Building2,
-  BarChart3
+  BarChart3,
+  ClipboardList
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -49,6 +50,7 @@ const menuItemsByRole: Record<string, MenuItem[]> = {
   ],
   MARCA: [
     { id: 'directorio', label: 'Directorio Talleres', href: '/marca/directorio', icon: Search },
+    { id: 'pedidos', label: 'Mis Pedidos', href: '/marca/pedidos', icon: ClipboardList },
     { id: 'perfil', label: 'Mi Perfil', href: '/marca/perfil', icon: Building2 },
     { id: 'notificaciones', label: 'Notificaciones', href: '/cuenta/notificaciones', icon: Bell, badge: 0 },
     { id: 'cuenta', label: 'Mi Cuenta', href: '/cuenta', icon: Settings },

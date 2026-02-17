@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import { DataTable } from '@/components/ui/data-table'
 import { StatCard } from '@/components/ui/stat-card'
@@ -12,11 +11,10 @@ import { Eye, Edit } from 'lucide-react'
 
 interface MarcaRow {
   id: string
-  razonSocial: string
+  nombre: string
   cuit: string
-  cuitVerificado: boolean
   createdAt: string
-  user: { activo: boolean; email: string }
+  user: { active: boolean; email: string; phone: string | null }
 }
 
 export default function AdminMarcasPage() {
@@ -24,31 +22,27 @@ export default function AdminMarcasPage() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    fetch('/api/marcas').then(r => r.json()).then(setMarcas).catch(() => {})
+    fetch('/api/marcas?limit=100').then(r => r.json()).then((d: { marcas?: MarcaRow[] }) => setMarcas(d.marcas || [])).catch(() => {})
   }, [])
 
   const filtered = marcas.filter(m =>
-    m.razonSocial.toLowerCase().includes(search.toLowerCase()) ||
+    m.nombre.toLowerCase().includes(search.toLowerCase()) ||
     m.cuit.includes(search) ||
     m.user.email.toLowerCase().includes(search.toLowerCase())
   )
 
-  const activas = marcas.filter(m => m.user.activo).length
-  const pendientes = marcas.filter(m => !m.cuitVerificado).length
+  const activas = marcas.filter(m => m.user.active).length
 
   const columns = [
     { header: 'Empresa', accessor: (row: MarcaRow) => (
       <div>
-        <p className="font-semibold">{row.razonSocial}</p>
+        <p className="font-semibold">{row.nombre}</p>
         <p className="text-xs text-gray-400">{row.user.email}</p>
       </div>
     )},
     { header: 'CUIT', accessor: 'cuit' as const, sortable: true },
-    { header: 'Verificada', accessor: (row: MarcaRow) => (
-      <Badge variant={row.cuitVerificado ? 'success' : 'warning'}>{row.cuitVerificado ? 'Sí' : 'Pendiente'}</Badge>
-    )},
     { header: 'Estado', accessor: (row: MarcaRow) => (
-      <Badge variant={row.user.activo ? 'success' : 'warning'}>{row.user.activo ? 'Activa' : 'Inactiva'}</Badge>
+      <Badge variant={row.user.active ? 'success' : 'warning'}>{row.user.active ? 'Activa' : 'Inactiva'}</Badge>
     )},
     { header: 'Registro', accessor: (row: MarcaRow) => new Date(row.createdAt).toLocaleDateString('es-AR'), sortable: true },
     { header: 'Acciones', accessor: (row: MarcaRow) => (
@@ -64,10 +58,9 @@ export default function AdminMarcasPage() {
       <h1 className="font-overpass font-bold text-2xl text-brand-blue mb-1">Gestión de Marcas</h1>
       <p className="text-gray-500 text-sm mb-6">Todas las marcas/empresas registradas</p>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         <StatCard value={String(marcas.length)} label="Total" variant="success" />
         <StatCard value={String(activas)} label="Activas" variant="success" />
-        <StatCard value={String(pendientes)} label="Pendientes" variant="warning" />
       </div>
 
       <SearchInput onChange={setSearch} placeholder="Buscar por nombre, CUIT o email..." className="mb-4" />

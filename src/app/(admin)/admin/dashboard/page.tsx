@@ -16,7 +16,7 @@ interface Stats {
 interface LogEntry {
   id: string
   accion: string
-  createdAt: string
+  timestamp: string
   user?: { name: string | null } | null
 }
 
@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
             <ul className="space-y-2">
               {logs.map(log => (
                 <li key={log.id} className="text-sm flex items-start gap-2">
-                  <span className="text-gray-400 shrink-0">{new Date(log.createdAt).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
+                  <span className="text-gray-400 shrink-0">{new Date(log.timestamp).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
                   <span>{log.user?.name || 'Sistema'}: {log.accion}</span>
                 </li>
               ))}

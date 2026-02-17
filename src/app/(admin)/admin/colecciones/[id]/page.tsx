@@ -17,11 +17,11 @@ export default function AdminEditarColeccionPage() {
   const router = useRouter()
   const isNew = params.id === 'nueva'
 
-  const [nombre, setNombre] = useState('')
+  const [titulo, setTitulo] = useState('')
   const [descripcion, setDescripcion] = useState('')
   const [institucion, setInstitucion] = useState('')
   const [categoria, setCategoria] = useState('')
-  const [publicada, setPublicada] = useState(false)
+  const [activa, setActiva] = useState(false)
   const [saving, setSaving] = useState(false)
 
   async function handleSave() {
@@ -32,7 +32,7 @@ export default function AdminEditarColeccionPage() {
       await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, descripcion, institucion, categoria, publicada }),
+        body: JSON.stringify({ titulo, descripcion, institucion, categoria, activa }),
       })
       router.push('/admin/colecciones')
     } finally {
@@ -53,7 +53,7 @@ export default function AdminEditarColeccionPage() {
       <Card className="mb-6">
         <h2 className="font-overpass font-bold text-brand-blue mb-4">Información Básica</h2>
         <div className="space-y-4">
-          <Input label="Nombre de la colección *" value={nombre} onChange={e => setNombre(e.target.value)} />
+          <Input label="Título de la colección *" value={titulo} onChange={e => setTitulo(e.target.value)} />
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Descripción *</label>
             <textarea
@@ -99,11 +99,11 @@ export default function AdminEditarColeccionPage() {
         <h2 className="font-overpass font-bold text-brand-blue mb-3">Estado</h2>
         <div className="flex gap-4">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="radio" checked={!publicada} onChange={() => setPublicada(false)} className="text-brand-blue" />
+            <input type="radio" checked={!activa} onChange={() => setActiva(false)} className="text-brand-blue" />
             <span className="text-sm">Borrador</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="radio" checked={publicada} onChange={() => setPublicada(true)} className="text-brand-blue" />
+            <input type="radio" checked={activa} onChange={() => setActiva(true)} className="text-brand-blue" />
             <span className="text-sm">Publicada</span>
           </label>
         </div>

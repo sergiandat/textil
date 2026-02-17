@@ -10,10 +10,10 @@ import { Plus } from 'lucide-react'
 
 interface Coleccion {
   id: string
-  nombre: string
+  titulo: string
   descripcion: string
   institucion: string
-  publicada: boolean
+  activa: boolean
   _count: { videos: number }
 }
 
@@ -22,11 +22,11 @@ export default function AdminColeccionesPage() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    fetch('/api/colecciones').then(r => r.json()).then(setColecciones).catch(() => {})
+    fetch('/api/colecciones?limit=100').then(r => r.json()).then((d: { colecciones?: Coleccion[] }) => setColecciones(d.colecciones || [])).catch(() => {})
   }, [])
 
   const filtered = colecciones.filter(c =>
-    c.nombre.toLowerCase().includes(search.toLowerCase())
+    c.titulo.toLowerCase().includes(search.toLowerCase())
   )
 
   return (
@@ -52,11 +52,11 @@ export default function AdminColeccionesPage() {
           <Card key={col.id}>
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="font-overpass font-bold text-brand-blue">{col.nombre}</h2>
+                <h2 className="font-overpass font-bold text-brand-blue">{col.titulo}</h2>
                 <p className="text-sm text-gray-500 mt-1">{col.institucion} | {col._count.videos} videos</p>
                 <div className="mt-2">
-                  <Badge variant={col.publicada ? 'success' : 'warning'}>
-                    {col.publicada ? 'Publicada' : 'Borrador'}
+                  <Badge variant={col.activa ? 'success' : 'warning'}>
+                    {col.activa ? 'Publicada' : 'Borrador'}
                   </Badge>
                 </div>
               </div>

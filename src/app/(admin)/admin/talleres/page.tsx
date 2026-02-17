@@ -18,7 +18,7 @@ interface TallerRow {
   nivel: string
   zona: string | null
   createdAt: string
-  user: { activo: boolean; email: string }
+  user: { active: boolean; email: string; phone: string | null }
 }
 
 export default function AdminTalleresPage() {
@@ -27,7 +27,7 @@ export default function AdminTalleresPage() {
   const [filtroNivel, setFiltroNivel] = useState('')
 
   useEffect(() => {
-    fetch('/api/talleres').then(r => r.json()).then(setTalleres).catch(() => {})
+    fetch('/api/talleres?limit=100').then(r => r.json()).then((d: { talleres?: TallerRow[] }) => setTalleres(d.talleres || [])).catch(() => {})
   }, [])
 
   const filtered = talleres.filter(t => {
@@ -52,7 +52,7 @@ export default function AdminTalleresPage() {
       <Badge variant={row.nivel === 'ORO' ? 'success' : row.nivel === 'PLATA' ? 'default' : 'warning'}>{row.nivel}</Badge>
     )},
     { header: 'Estado', accessor: (row: TallerRow) => (
-      <Badge variant={row.user.activo ? 'success' : 'warning'}>{row.user.activo ? 'Activo' : 'Inactivo'}</Badge>
+      <Badge variant={row.user.active ? 'success' : 'warning'}>{row.user.active ? 'Activo' : 'Inactivo'}</Badge>
     )},
     { header: 'Registro', accessor: (row: TallerRow) => new Date(row.createdAt).toLocaleDateString('es-AR'), sortable: true },
     { header: 'Acciones', accessor: (row: TallerRow) => (

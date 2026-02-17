@@ -6,7 +6,9 @@ import bcrypt from 'bcryptjs'
 export async function PUT(req: NextRequest) {
   try {
     const session = await auth()
-    if (!session?.user?.id) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+    }
 
     const body = await req.json()
     const updateData: Record<string, unknown> = {}
@@ -15,16 +17,29 @@ export async function PUT(req: NextRequest) {
     if (body.phone) updateData.phone = body.phone
 
     if (body.newPassword) {
-      if (!body.currentPassword) {
-        return NextResponse.json({ error: 'Contraseña actual requerida' }, { status: 400 })
+      if (typeof body.newPassword !== 'string' || body.newPassword.length < 8) {
+        return NextResponse.json({ error: 'La nueva contrasena debe tener al menos 8 caracteres' }, { status: 400 })
       }
+
+      if (!body.currentPassword || typeof body.currentPassword !== 'string') {
+        return NextResponse.json({ error: 'Contrasena actual requerida' }, { status: 400 })
+      }
+
       const user = await prisma.user.findUnique({ where: { id: session.user.id } })
-      if (!user?.password) return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 })
+      if (!user?.password) {
+        return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 })
+      }
 
       const valid = await bcrypt.compare(body.currentPassword, user.password)
-      if (!valid) return NextResponse.json({ error: 'Contraseña actual incorrecta' }, { status: 400 })
+      if (!valid) {
+        return NextResponse.json({ error: 'Contrasena actual incorrecta' }, { status: 400 })
+      }
 
       updateData.password = await bcrypt.hash(body.newPassword, 10)
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json({ error: 'No hay datos para actualizar' }, { status: 400 })
     }
 
     const updated = await prisma.user.update({
@@ -34,7 +49,7 @@ export async function PUT(req: NextRequest) {
     })
 
     return NextResponse.json(updated)
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Error al actualizar cuenta' }, { status: 500 })
   }
 }

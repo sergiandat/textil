@@ -68,7 +68,7 @@ export default async function TallerFormalizacionPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="md:col-span-2">
           <div className="flex items-center gap-6">
-            <ProgressRing value={progreso} size={100} />
+            <ProgressRing percentage={progreso} size={100} />
             <div>
               <p className="font-overpass font-bold text-2xl text-brand-blue">{completadas}/{total} completadas</p>
               <p className="text-sm text-gray-500 mt-1">
@@ -99,7 +99,7 @@ export default async function TallerFormalizacionPage() {
       </div>
 
       {/* Checklist */}
-      <Card title="Checklist de Formalización" icon={<FileText className="w-5 h-5" />}>
+      <Card title={<span className="inline-flex items-center gap-2"><FileText className="w-5 h-5" />Checklist de Formalización</span>}>
         <div className="divide-y divide-gray-100">
           {tiposValidacion.map((tipo) => {
             const validacion = validacionMap.get(tipo.tipo)
@@ -109,7 +109,7 @@ export default async function TallerFormalizacionPage() {
             return (
               <div key={tipo.tipo} className="py-3 first:pt-0 last:pb-0">
                 <ChecklistItem
-                  label={tipo.label}
+                  title={tipo.label}
                   status={status}
                   description={
                     estado === 'COMPLETADO'
@@ -160,3 +160,5 @@ export default async function TallerFormalizacionPage() {
     </div>
   )
 }
+
+
