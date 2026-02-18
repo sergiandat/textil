@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
+import { aplicarNivel } from '@/lib/nivel'
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,8 +35,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const session = await auth()
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    const role = (session.user as { role?: string }).role
+    if (role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Solo ADMIN puede emitir certificados' }, { status: 403 })
+    }
 
+    const body = await req.json()
     const certificado = await prisma.certificado.create({
       data: {
         tallerId: body.tallerId,
@@ -43,6 +51,9 @@ export async function POST(req: NextRequest) {
         calificacion: body.calificacion,
       },
     })
+
+    // Recalculate taller level after new certificate
+    await aplicarNivel(body.tallerId)
 
     return NextResponse.json(certificado, { status: 201 })
   } catch (error) {

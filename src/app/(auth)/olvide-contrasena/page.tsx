@@ -18,13 +18,25 @@ type FormData = z.infer<typeof schema>
 
 export default function OlvideContrasenaPage() {
   const [enviado, setEnviado] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
-  function onSubmit(_data: FormData) {
+  async function onSubmit(data: FormData) {
+    setLoading(true)
+    try {
+      await fetch('/api/auth/password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email }),
+      })
+    } catch {
+      // Silently handle - don't reveal if email exists
+    }
     setEnviado(true)
+    setLoading(false)
   }
 
   if (enviado) {
@@ -65,8 +77,8 @@ export default function OlvideContrasenaPage() {
           <Mail className="absolute right-3 top-[38px] w-4 h-4 text-gray-400 pointer-events-none" />
         </div>
 
-        <Button type="submit" className="w-full" size="lg">
-          Enviar instrucciones
+        <Button type="submit" className="w-full" size="lg" disabled={loading}>
+          {loading ? 'Enviando...' : 'Enviar instrucciones'}
         </Button>
       </form>
 

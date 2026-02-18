@@ -33,6 +33,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const { id } = await params
+    const role = (session.user as { role?: string }).role
+
+    // Ownership check: solo el dueño o ADMIN
+    const existing = await prisma.marca.findUnique({ where: { id }, select: { userId: true } })
+    if (!existing) return NextResponse.json({ error: 'Marca no encontrada' }, { status: 404 })
+    if (existing.userId !== session.user.id && role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Sin acceso a esta marca' }, { status: 403 })
+    }
+
     const body = await req.json()
 
     const marca = await prisma.marca.update({

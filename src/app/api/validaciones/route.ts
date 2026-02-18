@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await auth()
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    const role = (session.user as { role?: string }).role
+    if (role !== 'ADMIN' && role !== 'ESTADO') {
+      return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
+    }
+
     const { searchParams } = req.nextUrl
     const tallerId = searchParams.get('tallerId')
     const page = parseInt(searchParams.get('page') || '1')
@@ -14,9 +22,7 @@ export async function GET(req: NextRequest) {
     const [validaciones, total] = await Promise.all([
       prisma.validacion.findMany({
         where,
-        include: {
-          taller: { select: { id: true, nombre: true } },
-        },
+        include: { taller: { select: { id: true, nombre: true } } },
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
@@ -32,8 +38,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const session = await auth()
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    const role = (session.user as { role?: string }).role
+    if (role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Solo ADMIN puede crear validaciones' }, { status: 403 })
+    }
 
+    const body = await req.json()
     const validacion = await prisma.validacion.create({
       data: {
         tallerId: body.tallerId,

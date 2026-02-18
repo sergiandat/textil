@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await auth()
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    const role = (session.user as { role?: string }).role
+    if (role !== 'ADMIN' && role !== 'ESTADO') {
+      return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
+    }
+
     const { searchParams } = req.nextUrl
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
@@ -28,6 +36,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// POST queda publico para denuncias anonimas
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()

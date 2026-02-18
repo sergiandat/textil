@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ArrowRight, Check, Factory, Users, LayoutGrid, Ruler, Clock, TrendingUp, Settings, Trophy } from 'lucide-react'
 import { Card } from '@/components/ui/card'
@@ -38,6 +38,8 @@ const AREAS = ['Área de corte', 'Área de confección', 'Área de terminación/
 export default function WizardPage() {
   const router = useRouter()
   const [step, setStep] = useState(0)
+  const [tallerId, setTallerId] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
 
   // State for all wizard data
   const [maquinaria, setMaquinaria] = useState<Record<string, number>>({})
@@ -61,6 +63,78 @@ export default function WizardPage() {
   const [registro, setRegistro] = useState('excel')
   const [escalabilidad, setEscalabilidad] = useState('contratar')
 
+  // Pre-populate from existing data
+  useEffect(() => {
+    fetch('/api/talleres/me')
+      .then(r => r.ok ? r.json() : null)
+      .then(t => {
+        if (!t) return
+        setTallerId(t.id)
+        if (t.prendaPrincipal) setPrendaPrincipal(t.prendaPrincipal)
+        if (t.organizacion) setOrganizacion(t.organizacion)
+        if (t.metrosCuadrados) setMetrosCuadrados(String(t.metrosCuadrados))
+        if (t.areas?.length) setAreas(t.areas)
+        if (t.sam) setSam(String(t.sam))
+        if (t.experienciaPromedio) setExperiencia(t.experienciaPromedio)
+        if (t.polivalencia) setPolivalencia(t.polivalencia)
+        if (t.horario) setHorario(t.horario)
+        if (t.registroProduccion) setRegistro(t.registroProduccion)
+        if (t.escalabilidad) setEscalabilidad(t.escalabilidad)
+        if (t.paradasFrecuencia) setParadas(t.paradasFrecuencia)
+        if (t.trabajadoresRegistrados) setTamanoEquipo(
+          t.trabajadoresRegistrados <= 2 ? '1-2' : t.trabajadoresRegistrados <= 5 ? '3-5' : t.trabajadoresRegistrados <= 10 ? '6-10' : t.trabajadoresRegistrados <= 20 ? '11-20' : '+20'
+        )
+        if (t.maquinaria?.length) {
+          const maq: Record<string, number> = {}
+          for (const m of t.maquinaria) maq[m.nombre] = m.cantidad
+          setMaquinaria(maq)
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  const buildPayload = useCallback(() => {
+    const numMaq = Object.values(maquinaria).reduce((a, b) => a + b, 0)
+    const totalRoles = Object.values(roles).reduce((a, b) => a + b, 0)
+    const samVal = parseInt(sam) || 28
+    const efic = paradas === 'nunca' ? 0.6 : paradas === 'a-veces' ? 0.52 : 0.4
+    const capMensual = Math.round(((8 * 60) / samVal) * efic * (numMaq || 6)) * 22
+    return {
+      sam: parseInt(sam) || undefined,
+      prendaPrincipal: prendaPrincipal || undefined,
+      organizacion: organizacion || undefined,
+      metrosCuadrados: parseInt(metrosCuadrados) || undefined,
+      areas,
+      experienciaPromedio: experiencia || undefined,
+      polivalencia: polivalencia || undefined,
+      horario: horario || undefined,
+      registroProduccion: registro || undefined,
+      escalabilidad: escalabilidad || undefined,
+      paradasFrecuencia: paradas || undefined,
+      capacidadMensual: capMensual || undefined,
+      trabajadoresRegistrados: totalRoles || (tamanoEquipo === '1-2' ? 2 : tamanoEquipo === '3-5' ? 4 : tamanoEquipo === '6-10' ? 8 : tamanoEquipo === '11-20' ? 15 : 25),
+      maquinaria: Object.entries(maquinaria)
+        .filter(([, c]) => c > 0)
+        .map(([nombre, cantidad]) => ({ nombre, cantidad, tipo: numMaq > 0 ? 'confeccion' : undefined })),
+    }
+  }, [maquinaria, sam, prendaPrincipal, organizacion, metrosCuadrados, areas, experiencia, polivalencia, horario, registro, escalabilidad, paradas, roles, tamanoEquipo])
+
+  async function handleSave(redirectTo: string) {
+    if (!tallerId) return
+    setSaving(true)
+    try {
+      await fetch(`/api/talleres/${tallerId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildPayload()),
+      })
+      router.push(redirectTo)
+    } catch {
+      alert('Error al guardar. Intentá de nuevo.')
+    }
+    setSaving(false)
+  }
+
   const progreso = Math.round((step / (STEPS.length - 1)) * 100)
 
   // Calculate capacity
@@ -70,6 +144,14 @@ export default function WizardPage() {
   const horasNum = parseInt(horasDia) || 8
   const capacidadDiaria = Math.round(((horasNum * 60) / samNum) * eficiencia * numMaquinas)
   const capacidadMensual = capacidadDiaria * 22
+
+  // Calculate score from actual answers
+  const scoreEquipo = experiencia === '5+' ? 90 : experiencia === '3-5' ? 75 : experiencia === '1-3' ? 50 : 30
+  const scoreOrg = organizacion === 'linea' ? 80 : organizacion === 'modular' ? 70 : 55
+  const scoreMaq = Math.min(Object.values(maquinaria).reduce((a, b) => a + b, 0) * 12, 100)
+  const scoreGestion = registro === 'software' ? 90 : registro === 'excel' ? 65 : registro === 'papel' ? 40 : 20
+  const scoreEscalabilidad = escalabilidad === 'turno' || escalabilidad === 'tercerizar' ? 85 : escalabilidad === 'contratar' ? 75 : escalabilidad === 'horas-extra' ? 55 : 30
+  const scoreGeneral = Math.round((scoreEquipo + scoreOrg + scoreMaq + scoreGestion + scoreEscalabilidad) / 5)
 
   function next() { if (step < STEPS.length - 1) setStep(step + 1) }
   function prev() { if (step > 0) setStep(step - 1) }
@@ -140,8 +222,8 @@ export default function WizardPage() {
             Podés pausar en cualquier momento y retomar después. Tu progreso se guarda automáticamente.
           </Card>
           <Button onClick={next} size="lg">Empezar</Button>
-          <button type="button" onClick={() => router.push('/taller/dashboard')} className="block mx-auto mt-3 text-sm text-gray-500 hover:underline">
-            Completar más tarde
+          <button type="button" onClick={() => handleSave('/taller')} disabled={saving} className="block mx-auto mt-3 text-sm text-gray-500 hover:underline">
+            {saving ? 'Guardando...' : 'Completar más tarde'}
           </button>
         </div>
       )}
@@ -395,9 +477,9 @@ export default function WizardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <Card>
               <div className="text-center">
-                <p className="font-overpass font-bold text-5xl text-brand-blue">78%</p>
+                <p className="font-overpass font-bold text-5xl text-brand-blue">{scoreGeneral}%</p>
                 <p className="text-sm text-gray-500 mt-1">Score General</p>
-                <p className="text-xs text-gray-400">Top 22% de talleres</p>
+                <p className="text-xs text-gray-400">Top {100 - scoreGeneral}% de talleres</p>
               </div>
             </Card>
             <Card>
@@ -410,7 +492,7 @@ export default function WizardPage() {
           </div>
 
           <Card title="Indicadores de Madurez" className="mb-6 text-left">
-            {[{ label: 'Equipo', pct: 80 }, { label: 'Organización', pct: 70 }, { label: 'Maquinaria', pct: 75 }, { label: 'Gestión', pct: 50 }, { label: 'Escalabilidad', pct: 80 }].map(i => (
+            {[{ label: 'Equipo', pct: scoreEquipo }, { label: 'Organización', pct: scoreOrg }, { label: 'Maquinaria', pct: scoreMaq }, { label: 'Gestión', pct: scoreGestion }, { label: 'Escalabilidad', pct: scoreEscalabilidad }].map(i => (
               <div key={i.label} className="flex items-center gap-3 mb-2">
                 <span className="w-24 text-xs font-semibold">{i.label}</span>
                 <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-brand-blue rounded-full" style={{ width: `${i.pct}%` }} /></div>
@@ -428,8 +510,12 @@ export default function WizardPage() {
           </Card>
 
           <div className="flex gap-3 justify-center">
-            <Button onClick={() => router.push('/taller/perfil')} variant="secondary">Editar perfil</Button>
-            <Button onClick={() => router.push('/taller/aprender')}>Ir a Academia</Button>
+            <Button onClick={() => handleSave('/taller/perfil')} variant="secondary" disabled={saving}>
+              {saving ? 'Guardando...' : 'Editar perfil'}
+            </Button>
+            <Button onClick={() => handleSave('/taller/aprender')} disabled={saving}>
+              {saving ? 'Guardando...' : 'Guardar e ir a Academia'}
+            </Button>
           </div>
         </div>
       )}

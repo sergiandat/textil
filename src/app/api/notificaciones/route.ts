@@ -5,14 +5,10 @@ import { auth } from '@/lib/auth'
 export async function GET(req: NextRequest) {
   try {
     const session = await auth()
-    if (!session?.user) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-    }
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
+    const userId = session.user.id!
     const { searchParams } = req.nextUrl
-    const userId = searchParams.get('userId')
-    if (!userId) return NextResponse.json({ error: 'userId requerido' }, { status: 400 })
-
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
 
@@ -36,21 +32,26 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const session = await auth()
-    if (!session?.user) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-    }
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
+    const userId = session.user.id!
     const body = await req.json()
-    if (body.marcarTodas && body.userId) {
-      await prisma.notificacion.updateMany({ where: { userId: body.userId, leida: false }, data: { leida: true } })
+
+    if (body.marcarTodas) {
+      await prisma.notificacion.updateMany({ where: { userId, leida: false }, data: { leida: true } })
       return NextResponse.json({ ok: true })
     }
     if (body.id) {
-      const notif = await prisma.notificacion.update({ where: { id: body.id }, data: { leida: true } })
-      return NextResponse.json(notif)
+      // Verificar que la notificacion pertenece al usuario
+      const notif = await prisma.notificacion.findUnique({ where: { id: body.id }, select: { userId: true } })
+      if (!notif || notif.userId !== userId) {
+        return NextResponse.json({ error: 'Sin acceso' }, { status: 403 })
+      }
+      const updated = await prisma.notificacion.update({ where: { id: body.id }, data: { leida: true } })
+      return NextResponse.json(updated)
     }
-    return NextResponse.json({ error: 'id o marcarTodas+userId requerido' }, { status: 400 })
+    return NextResponse.json({ error: 'id o marcarTodas requerido' }, { status: 400 })
   } catch (error) {
-    return NextResponse.json({ error: 'Error al actualizar notificación' }, { status: 500 })
+    return NextResponse.json({ error: 'Error al actualizar notificacion' }, { status: 500 })
   }
 }

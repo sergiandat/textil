@@ -39,6 +39,18 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const { id } = await params
+    const role = (session.user as { role?: string }).role
+
+    // Ownership check: solo la marca dueña o ADMIN
+    const existing = await prisma.pedido.findUnique({
+      where: { id },
+      select: { marca: { select: { userId: true } } },
+    })
+    if (!existing) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
+    if (existing.marca.userId !== session.user.id && role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Sin acceso a este pedido' }, { status: 403 })
+    }
+
     const body = await req.json()
 
     const pedido = await prisma.pedido.update({

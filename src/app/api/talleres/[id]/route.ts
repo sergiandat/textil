@@ -37,19 +37,50 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const { id } = await params
+    const role = (session.user as { role?: string }).role
+
+    // Ownership check: solo el dueño o ADMIN
+    const existing = await prisma.taller.findUnique({ where: { id }, select: { userId: true } })
+    if (!existing) return NextResponse.json({ error: 'Taller no encontrado' }, { status: 404 })
+    if (existing.userId !== session.user.id && role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Sin acceso a este taller' }, { status: 403 })
+    }
+
     const body = await req.json()
+
+    // Build update data with only provided fields
+    const data: Record<string, unknown> = {}
+    const fields = [
+      'nombre', 'ubicacion', 'zona', 'descripcion',
+      'capacidadMensual', 'trabajadoresRegistrados', 'fundado',
+      // Wizard fields
+      'sam', 'prendaPrincipal', 'organizacion', 'metrosCuadrados',
+      'areas', 'experienciaPromedio', 'polivalencia', 'horario',
+      'registroProduccion', 'escalabilidad', 'paradasFrecuencia',
+    ]
+    for (const f of fields) {
+      if (body[f] !== undefined) data[f] = body[f]
+    }
+
+    // Maquinaria: replace all if provided
+    if (Array.isArray(body.maquinaria)) {
+      await prisma.maquinaria.deleteMany({ where: { tallerId: id } })
+      if (body.maquinaria.length > 0) {
+        await prisma.maquinaria.createMany({
+          data: body.maquinaria.map((m: { nombre: string; cantidad?: number; tipo?: string }) => ({
+            tallerId: id,
+            nombre: m.nombre,
+            cantidad: m.cantidad ?? 1,
+            tipo: m.tipo,
+          })),
+        })
+      }
+    }
 
     const taller = await prisma.taller.update({
       where: { id },
-      data: {
-        nombre: body.nombre,
-        ubicacion: body.ubicacion,
-        zona: body.zona,
-        descripcion: body.descripcion,
-        capacidadMensual: body.capacidadMensual,
-        trabajadoresRegistrados: body.trabajadoresRegistrados,
-        fundado: body.fundado,
-      },
+      data,
+      include: { maquinaria: true },
     })
 
     return NextResponse.json(taller)

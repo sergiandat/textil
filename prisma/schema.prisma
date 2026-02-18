@@ -180,6 +180,20 @@ model Taller {
   ontimeRate            Float       @default(0)
   retrabajoRate         Float       @default(0)
   portfolioFotos        String[]
+
+  // Wizard perfil (pasos 1-11)
+  sam                   Int?
+  prendaPrincipal       String?
+  organizacion          String?
+  metrosCuadrados       Int?
+  areas                 String[]
+  experienciaPromedio   String?
+  polivalencia          String?
+  horario               String?
+  registroProduccion    String?
+  escalabilidad         String?
+  paradasFrecuencia     String?
+
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 

@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { ChecklistItem } from '@/components/ui/checklist-item'
 import { ProgressRing } from '@/components/ui/progress-ring'
 import { Button } from '@/components/ui/button'
-import { FileText, Upload, ExternalLink } from 'lucide-react'
+import { FileText, ExternalLink } from 'lucide-react'
+import { UploadButton } from './upload-button'
 
 const tiposValidacion = [
   { tipo: 'CUIT_MONOTRIBUTO', label: 'CUIT / Monotributo', descripcion: 'Inscripción en ARCA (ex-AFIP)', enlace: 'https://www.afip.gob.ar' },
@@ -47,6 +48,15 @@ export default async function TallerFormalizacionPage() {
         </Card>
       </div>
     )
+  }
+
+  // Ensure a validacion record exists for each type
+  for (const tv of tiposValidacion) {
+    await prisma.validacion.upsert({
+      where: { tallerId_tipo: { tallerId: taller.id, tipo: tv.tipo } },
+      create: { tallerId: taller.id, tipo: tv.tipo, estado: 'NO_INICIADO' },
+      update: {},
+    })
   }
 
   const validaciones = await prisma.validacion.findMany({
@@ -125,10 +135,8 @@ export default async function TallerFormalizacionPage() {
                 />
                 {estado !== 'COMPLETADO' && (
                   <div className="flex gap-2 mt-2 ml-8">
-                    {estado === 'NO_INICIADO' && (
-                      <Button size="sm" variant="secondary" icon={<Upload className="w-3 h-3" />}>
-                        Subir documento
-                      </Button>
+                    {(estado === 'NO_INICIADO' || estado === 'RECHAZADO') && validacion && (
+                      <UploadButton validacionId={validacion.id} />
                     )}
                     {tipo.enlace && (
                       <a href={tipo.enlace} target="_blank" rel="noopener noreferrer">
