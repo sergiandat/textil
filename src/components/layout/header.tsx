@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Globe, Search, Menu, X, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { UserSidebar } from './user-sidebar'
@@ -15,7 +16,8 @@ interface Tab {
 const tabsByRole: Record<string, Tab[]> = {
   TALLER: [
     { id: 'tablero', label: 'Tablero', href: '/taller' },
-    { id: 'formalizacion', label: 'Mi Formalización', href: '/taller/formalizacion' },
+    { id: 'pedidos', label: 'Pedidos', href: '/taller/pedidos' },
+    { id: 'formalizacion', label: 'Formalización', href: '/taller/formalizacion' },
     { id: 'perfil', label: 'Mi Perfil', href: '/taller/perfil' },
     { id: 'aprender', label: 'Academia', href: '/taller/aprender' },
   ],
@@ -44,7 +46,6 @@ interface HeaderProps {
 }
 
 export function Header({
-  activeTab = 'tablero',
   userName = 'Usuario',
   userRole = 'TALLER',
   userProgress = 40,
@@ -52,7 +53,16 @@ export function Header({
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const pathname = usePathname()
   const tabs = tabsByRole[userRole] || tabsByRole.TALLER
+
+  // Detectar tab activo por la ruta actual
+  const activeTab = (() => {
+    // Buscar match mas especifico primero (ordenar por longitud de href desc)
+    const sorted = [...tabs].sort((a, b) => b.href.length - a.href.length)
+    const match = sorted.find(tab => pathname.startsWith(tab.href))
+    return match?.id || tabs[0]?.id || ''
+  })()
 
   return (
     <>

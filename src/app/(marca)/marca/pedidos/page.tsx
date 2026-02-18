@@ -176,9 +176,10 @@ export default async function MarcaPedidosPage({
         ) : (
           <div className="space-y-3">
             {pedidos.map((pedido) => (
-              <div
+              <Link
                 key={pedido.id}
-                className="border border-gray-100 rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+                href={`/marca/pedidos/${pedido.id}`}
+                className="block border border-gray-100 rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 hover:border-brand-blue/30 hover:shadow-sm transition-all"
               >
                 <div className="space-y-1">
                   <p className="font-overpass font-semibold text-brand-blue">{pedido.omId}</p>
@@ -195,7 +196,7 @@ export default async function MarcaPedidosPage({
                     {statusLabel[pedido.estado] || pedido.estado}
                   </Badge>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
