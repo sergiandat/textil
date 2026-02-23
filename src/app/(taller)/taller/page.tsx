@@ -13,7 +13,7 @@ export default async function TallerDashboardPage() {
     where: { userId: session.user.id },
     include: {
       validaciones: true,
-      progreso: {
+      progresoCapacitacion: {
         include: { coleccion: { select: { titulo: true } } },
       },
       certificados: true,
@@ -236,7 +236,7 @@ export default async function TallerDashboardPage() {
           </div>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
             {coleccionesRecomendadas.map((col) => {
-              const progreso = taller?.progreso.find((p) => p.coleccionId === col.id)
+              const progreso = taller?.progresoCapacitacion.find((p) => p.coleccionId === col.id)
               return (
                 <Link
                   key={col.id}
