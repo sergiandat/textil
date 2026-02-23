@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
 
 const statusLabel: Record<string, string> = {
   PENDIENTE: 'Pendiente',
@@ -83,12 +84,20 @@ export default async function TallerPedidosPage() {
         ) : (
           <div className="space-y-3">
             {ordenes.map((orden) => (
-              <div
+              <Link
                 key={orden.id}
-                className="border border-gray-100 rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+                href={`/taller/pedidos/${orden.id}`}
+                className="block border border-gray-100 rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 hover:border-brand-blue hover:bg-blue-50/30 transition-colors"
               >
                 <div className="space-y-1">
-                  <p className="font-overpass font-semibold text-brand-blue">{orden.moId}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-overpass font-semibold text-brand-blue">{orden.moId}</p>
+                    {orden.estado === 'PENDIENTE' && (
+                      <span className="text-xs bg-yellow-100 text-yellow-700 font-semibold px-2 py-0.5 rounded-full">
+                        ¡Requiere respuesta!
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-gray-600">
                     Pedido: {orden.pedido.omId} - {orden.pedido.tipoPrenda}
                   </p>
@@ -113,7 +122,7 @@ export default async function TallerPedidosPage() {
                     {statusLabel[orden.estado] || orden.estado}
                   </Badge>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

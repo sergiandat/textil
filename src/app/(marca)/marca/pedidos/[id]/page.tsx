@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, Package, Clock, DollarSign, TrendingUp } from 'lucide-react'
+import { AsignarTaller } from './asignar-taller'
 
 const statusVariant: Record<string, 'default' | 'success' | 'warning'> = {
   BORRADOR: 'default',
@@ -69,14 +70,19 @@ export default async function MarcaPedidoDetallePage({ params }: { params: Promi
         <ArrowLeft className="w-4 h-4" /> Volver a pedidos
       </Link>
 
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="font-overpass font-bold text-3xl text-brand-blue">{pedido.omId}</h1>
           <p className="text-gray-600 mt-1">{pedido.tipoPrenda} - {pedido.cantidad.toLocaleString()} unidades</p>
         </div>
-        <Badge variant={statusVariant[pedido.estado] || 'default'}>
-          {statusLabel[pedido.estado] || pedido.estado}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge variant={statusVariant[pedido.estado] || 'default'}>
+            {statusLabel[pedido.estado] || pedido.estado}
+          </Badge>
+          {(pedido.estado === 'BORRADOR' || pedido.estado === 'EN_EJECUCION') && (
+            <AsignarTaller pedidoId={pedido.id} />
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -146,6 +152,9 @@ export default async function MarcaPedidoDetallePage({ params }: { params: Promi
                   <Badge variant={ordenStatusVariant[orden.estado] || 'default'}>
                     {ordenStatusLabel[orden.estado] || orden.estado}
                   </Badge>
+                  {orden.estado === 'PENDIENTE' && (
+                    <span className="text-xs text-yellow-600 font-medium">⏳ Esperando al taller</span>
+                  )}
                 </div>
               </div>
             ))}
