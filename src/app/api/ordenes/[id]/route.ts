@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
+import { EstadoPedido } from '@prisma/client'
 
 const TRANSICIONES_VALIDAS: Record<string, string[]> = {
   PENDIENTE: ['EN_EJECUCION', 'CANCELADO'],
@@ -71,9 +72,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         ? Math.round(activas.reduce((sum, o) => sum + o.progreso, 0) / activas.length)
         : 0
 
-    let estadoPedido: string | undefined
-    if (todasCompletadas) estadoPedido = 'COMPLETADO'
-    else if (hayEjecucion) estadoPedido = 'EN_EJECUCION'
+    let estadoPedido: EstadoPedido | undefined
+    if (todasCompletadas) estadoPedido = EstadoPedido.COMPLETADO
+    else if (hayEjecucion) estadoPedido = EstadoPedido.EN_EJECUCION
 
     await prisma.pedido.update({
       where: { id: orden.pedidoId },
