@@ -55,10 +55,9 @@ Client component que IGNORA completamente el parametro [id]. Muestra siempre el 
 **Pedidos recibidos** `/taller/pedidos` — **OK**
 Lista real de OrdenManufactura asignadas al taller desde Prisma. 4 stat cards (total, pendientes, en ejecucion, completadas) calculadas de datos reales. Cada orden muestra moId, pedido, marca, proceso, precio, barra de progreso y badge de estado. Solo lectura — no hay detalle clickeable ni forma de actualizar progreso/estado. Falta acentos en "En ejecucion".
 
-**Completar perfil wizard** `/taller/perfil/completar` — **STUB** — P1
-Wizard de 12 pasos implementado como client component con estado local. Los pasos son: Bienvenida, Maquinaria (6 tipos con cantidades), Equipo (tamano + roles), Experiencia (anos + polivalencia), Organizacion (linea/modular/completa), Espacio (m2 + areas), SAM (prenda + minutos), SAM Quiz (3 opciones con feedback), Eficiencia (horas/dia + cambios + paradas), Resultado (capacidad calculada), Gestion (horario + registro + escalabilidad), Resumen.
-La formula de capacidad funciona: ((horas*60)/SAM)*eficiencia*maquinas*22.
-CRITICO: El paso Resumen muestra "Score 78%" y "Top 22%" HARDCODEADO. Los indicadores de madurez (80%, 70%, 75%, etc.) son constantes estaticas. Los 6 badges siempre aparecen. Y lo mas grave: NO HAY SUBMIT — al terminar hace router.push('/taller/perfil') sin guardar nada en BD. 12 pasos de data se pierden. El boton "Completar mas tarde" navega a /taller/dashboard (ruta incorrecta, es /taller). No pre-carga datos existentes.
+**Completar perfil wizard** `/taller/perfil/completar` — **OK** — P1
+Wizard de 14 pasos (indices 0-13): bienvenida, maquinaria, equipo, experiencia, organizacion, espacio, sam, sam-quiz, eficiencia, resultado, gestion, procesos, prendas, resumen.
+Formula de capacidad: ((horas*60)/SAM)*eficiencia*maquinas*22. Score calculado desde respuestas reales (5 dimensiones). Pre-carga datos existentes desde /api/talleres/me. Guarda via PUT /api/talleres/[id] incluyendo maquinaria, procesosIds, prendasIds, puntaje. Botones en resumen: "Ver mi perfil" y "Guardar e ir a Academia". "Completar mas tarde" en bienvenida guarda y redirige a /taller. Pendiente: no hay auto-save entre pasos intermedios.
 
 ---
 
@@ -498,7 +497,7 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 1. Corregir auth en APIs expuestas (auditorias, validaciones, denuncias, certificados POST, ordenes)
 2. Agregar ownership checks en PUT (talleres, marcas, pedidos)
 3. Password reset completo (API + SendGrid + pagina /restablecer)
-4. Wizard perfil taller: conectar submit a API (guardar en BD)
+4. ~~Wizard perfil taller: conectar submit a API~~ — RESUELTO (guarda via PUT /api/talleres/[id])
 5. Formalizacion: integrar file-upload component + storage
 6. Admin detalle taller: cargar datos reales + aprobar/rechazar documentos
 7. Motor calculo nivel BRONCE/PLATA/ORO

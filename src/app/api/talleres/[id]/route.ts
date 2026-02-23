@@ -56,7 +56,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       // Wizard fields
       'sam', 'prendaPrincipal', 'organizacion', 'metrosCuadrados',
       'areas', 'experienciaPromedio', 'polivalencia', 'horario',
-      'registroProduccion', 'escalabilidad', 'paradasFrecuencia',
+      'registroProduccion', 'escalabilidad', 'paradasFrecuencia', 'puntaje',
     ]
     for (const f of fields) {
       if (body[f] !== undefined) data[f] = body[f]

@@ -126,6 +126,21 @@ export default function WizardPage() {
       .catch(() => {})
   }, [])
 
+  // Calculate capacity and scores (used in handleSave and render)
+  const numMaquinas = Object.values(maquinaria).reduce((a, b) => a + b, 0) || 6
+  const eficiencia = paradas === 'nunca' ? 0.6 : paradas === 'a-veces' ? 0.52 : 0.4
+  const samNum = parseInt(sam) || 28
+  const horasNum = parseInt(horasDia) || 8
+  const capacidadDiaria = Math.round(((horasNum * 60) / samNum) * eficiencia * numMaquinas)
+  const capacidadMensual = capacidadDiaria * 22
+
+  const scoreEquipo = experiencia === '5+' ? 90 : experiencia === '3-5' ? 75 : experiencia === '1-3' ? 50 : 30
+  const scoreOrg = organizacion === 'linea' ? 80 : organizacion === 'modular' ? 70 : 55
+  const scoreMaq = Math.min(Object.values(maquinaria).reduce((a, b) => a + b, 0) * 12, 100)
+  const scoreGestion = registro === 'software' ? 90 : registro === 'excel' ? 65 : registro === 'papel' ? 40 : 20
+  const scoreEscalabilidad = escalabilidad === 'turno' || escalabilidad === 'tercerizar' ? 85 : escalabilidad === 'contratar' ? 75 : escalabilidad === 'horas-extra' ? 55 : 30
+  const scoreGeneral = Math.round((scoreEquipo + scoreOrg + scoreMaq + scoreGestion + scoreEscalabilidad) / 5)
+
   const buildPayload = useCallback(() => {
     const numMaq = Object.values(maquinaria).reduce((a, b) => a + b, 0)
     const totalRoles = Object.values(roles).reduce((a, b) => a + b, 0)
@@ -155,38 +170,26 @@ export default function WizardPage() {
   }, [maquinaria, sam, prendaPrincipal, organizacion, metrosCuadrados, areas, experiencia, polivalencia, horario, registro, escalabilidad, paradas, roles, tamanoEquipo, procesosSeleccionados, prendasSeleccionadas])
 
   async function handleSave(redirectTo: string) {
-    if (!tallerId) return
+    if (!tallerId) {
+      router.push(redirectTo)
+      return
+    }
     setSaving(true)
     try {
-      await fetch(`/api/talleres/${tallerId}`, {
+      const res = await fetch(`/api/talleres/${tallerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(buildPayload()),
+        body: JSON.stringify({ ...buildPayload(), puntaje: scoreGeneral }),
       })
+      if (!res.ok) throw new Error('Error del servidor')
       router.push(redirectTo)
     } catch {
       alert('Error al guardar. Intentá de nuevo.')
+      setSaving(false)
     }
-    setSaving(false)
   }
 
   const progreso = Math.round((step / (STEPS.length - 1)) * 100)
-
-  // Calculate capacity
-  const numMaquinas = Object.values(maquinaria).reduce((a, b) => a + b, 0) || 6
-  const eficiencia = paradas === 'nunca' ? 0.6 : paradas === 'a-veces' ? 0.52 : 0.4
-  const samNum = parseInt(sam) || 28
-  const horasNum = parseInt(horasDia) || 8
-  const capacidadDiaria = Math.round(((horasNum * 60) / samNum) * eficiencia * numMaquinas)
-  const capacidadMensual = capacidadDiaria * 22
-
-  // Calculate score from actual answers
-  const scoreEquipo = experiencia === '5+' ? 90 : experiencia === '3-5' ? 75 : experiencia === '1-3' ? 50 : 30
-  const scoreOrg = organizacion === 'linea' ? 80 : organizacion === 'modular' ? 70 : 55
-  const scoreMaq = Math.min(Object.values(maquinaria).reduce((a, b) => a + b, 0) * 12, 100)
-  const scoreGestion = registro === 'software' ? 90 : registro === 'excel' ? 65 : registro === 'papel' ? 40 : 20
-  const scoreEscalabilidad = escalabilidad === 'turno' || escalabilidad === 'tercerizar' ? 85 : escalabilidad === 'contratar' ? 75 : escalabilidad === 'horas-extra' ? 55 : 30
-  const scoreGeneral = Math.round((scoreEquipo + scoreOrg + scoreMaq + scoreGestion + scoreEscalabilidad) / 5)
 
   function next() { if (step < STEPS.length - 1) setStep(step + 1) }
   function prev() { if (step > 0) setStep(step - 1) }
@@ -256,7 +259,7 @@ export default function WizardPage() {
             </ul>
           </Card>
           <Card className="bg-blue-50/50 text-sm text-gray-600 mb-6">
-            Podés pausar en cualquier momento y retomar después. Tu progreso se guarda automáticamente.
+            Podés pausar y retomar después. Al terminar el wizard, tu perfil se guarda en la plataforma.
           </Card>
           <Button onClick={next} size="lg">Empezar</Button>
           <button type="button" onClick={() => handleSave('/taller')} disabled={saving} className="block mx-auto mt-3 text-sm text-gray-500 hover:underline">
