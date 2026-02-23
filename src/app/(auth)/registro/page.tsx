@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -427,9 +427,19 @@ function StepMarcaInfo({
 
 export default function RegistroPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const [step, setStep] = useState(1)
   const [role, setRole] = useState<Role | null>(null)
+
+  // Pre-seleccionar rol si viene de la landing (?rol=TALLER o ?rol=MARCA)
+  useEffect(() => {
+    const rolParam = searchParams.get('rol')
+    if (rolParam === 'TALLER' || rolParam === 'MARCA') {
+      setRole(rolParam)
+      setStep(2)
+    }
+  }, [searchParams])
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoData | null>(null)
   const [tallerInfo, setTallerInfo] = useState<TallerInfoData | null>(null)
   const [marcaInfo, setMarcaInfo] = useState<MarcaInfoData | null>(null)

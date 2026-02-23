@@ -6,34 +6,47 @@ import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react'
+
+function getYoutubeId(url: string) {
+  const match = url.match(/(?:v=|youtu\.be\/)([^&\s]+)/)
+  return match ? match[1] : null
+}
 
 export default function AdminAgregarVideoPage() {
   const params = useParams()
   const router = useRouter()
+  const coleccionId = params.id as string
+
   const [url, setUrl] = useState('')
-  const [loaded, setLoaded] = useState(false)
   const [titulo, setTitulo] = useState('')
-  const [descripcion, setDescripcion] = useState('')
-  const [posicion, setPosicion] = useState('1')
+  const [duracion, setDuracion] = useState('')
   const [checks, setChecks] = useState({ preciso: false, audio: false, noPublicidad: false })
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
 
-  function handleLoad() {
-    // Mock: extract video info from URL
-    setTitulo('Cómo inscribirte en monotributo')
-    setLoaded(true)
-  }
+  const videoId = getYoutubeId(url)
+  const urlValida = !!videoId
 
   async function handleSubmit() {
+    if (!titulo.trim()) { setError('El título es obligatorio'); return }
+    if (!urlValida) { setError('URL de YouTube inválida'); return }
     setSaving(true)
+    setError('')
     try {
-      await fetch(`/api/colecciones/${params.id}`, {
-        method: 'PUT',
+      const res = await fetch(`/api/colecciones/${coleccionId}/videos`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ addVideo: { url, titulo, descripcion, posicion: Number(posicion) } }),
+        body: JSON.stringify({ titulo, youtubeUrl: url, duracion: duracion || null }),
       })
-      router.push(`/admin/colecciones/${params.id}`)
+      if (res.ok) {
+        router.push(`/admin/colecciones/${coleccionId}`)
+      } else {
+        const body = await res.json()
+        setError(body.error || 'Error al guardar video')
+      }
+    } catch {
+      setError('Error de conexión')
     } finally {
       setSaving(false)
     }
@@ -41,83 +54,101 @@ export default function AdminAgregarVideoPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-6 px-4">
-      <Link href={`/admin/colecciones/${params.id}`} className="inline-flex items-center gap-1 text-sm text-brand-blue hover:underline mb-4">
+      <Link href={`/admin/colecciones/${coleccionId}`} className="inline-flex items-center gap-1 text-sm text-brand-blue hover:underline mb-4">
         <ArrowLeft className="w-4 h-4" /> Volver a colección
       </Link>
 
       <h1 className="font-overpass font-bold text-2xl text-brand-blue mb-6">Agregar Video</h1>
 
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          {error}
+        </div>
+      )}
+
       <Card className="mb-6">
-        <h2 className="font-overpass font-bold text-brand-blue mb-3">Paso 1: Pegar URL de YouTube</h2>
-        <div className="flex gap-2">
-          <Input placeholder="https://www.youtube.com/watch?v=..." value={url} onChange={e => setUrl(e.target.value)} className="flex-1" />
-          <Button onClick={handleLoad} variant="secondary">Cargar</Button>
+        <h2 className="font-overpass font-bold text-brand-blue mb-3">Paso 1: URL de YouTube</h2>
+        <Input
+          placeholder="https://www.youtube.com/watch?v=..."
+          value={url}
+          onChange={e => { setUrl(e.target.value); setError('') }}
+        />
+        {url && !urlValida && (
+          <p className="mt-1.5 text-xs text-red-500">URL de YouTube inválida</p>
+        )}
+        {urlValida && (
+          <p className="mt-1.5 text-xs text-green-600 flex items-center gap-1">
+            <CheckCircle className="w-3.5 h-3.5" /> URL válida
+          </p>
+        )}
+      </Card>
+
+      {urlValida && videoId && (
+        <Card className="mb-6">
+          <h2 className="font-overpass font-bold text-brand-blue mb-3">Vista previa</h2>
+          <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}`}
+              title="Vista previa"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+        </Card>
+      )}
+
+      <Card className="mb-6">
+        <h2 className="font-overpass font-bold text-brand-blue mb-3">Paso 2: Información del video</h2>
+        <div className="space-y-4">
+          <Input
+            label="Título en la plataforma *"
+            value={titulo}
+            onChange={e => setTitulo(e.target.value)}
+          />
+          <Input
+            label="Duración estimada"
+            placeholder="Ej: 12:35"
+            value={duracion}
+            onChange={e => setDuracion(e.target.value)}
+          />
         </div>
       </Card>
 
-      {loaded && (
-        <>
-          <Card className="mb-6">
-            <h2 className="font-overpass font-bold text-brand-blue mb-3">Paso 2: Verificar Información</h2>
-            <div className="flex gap-4">
-              <div className="w-40 h-24 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 shrink-0">
-                <ExternalLink className="w-6 h-6" />
-              </div>
-              <div className="text-sm space-y-1">
-                <p className="font-semibold">{titulo}</p>
-                <p className="text-gray-500">Canal: ContadorOnline</p>
-                <p className="text-gray-500">Duración: 12:15 | Vistas: 125,432</p>
-              </div>
-            </div>
-          </Card>
+      <Card className="mb-6">
+        <h2 className="font-overpass font-bold text-brand-blue mb-3">Verificación de contenido</h2>
+        <div className="space-y-2">
+          {[
+            { key: 'preciso' as const, label: 'Verifiqué que el contenido es preciso y actualizado' },
+            { key: 'audio' as const, label: 'El audio es claro y comprensible' },
+            { key: 'noPublicidad' as const, label: 'No contiene publicidad invasiva' },
+          ].map(item => (
+            <label key={item.key} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={checks[item.key]}
+                onChange={e => setChecks({ ...checks, [item.key]: e.target.checked })}
+                className="rounded"
+              />
+              <span className="text-sm">{item.label}</span>
+            </label>
+          ))}
+        </div>
+      </Card>
 
-          <Card className="mb-6">
-            <h2 className="font-overpass font-bold text-brand-blue mb-3">Paso 3: Personalizar</h2>
-            <div className="space-y-4">
-              <Input label="Título en la plataforma *" value={titulo} onChange={e => setTitulo(e.target.value)} />
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Descripción corta *</label>
-                <textarea
-                  value={descripcion}
-                  onChange={e => setDescripcion(e.target.value)}
-                  rows={2}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
-                />
-              </div>
-              <Input label="Posición en la colección" type="number" value={posicion} onChange={e => setPosicion(e.target.value)} />
-            </div>
-          </Card>
-
-          <Card className="mb-6">
-            <h2 className="font-overpass font-bold text-brand-blue mb-3">Verificación de Contenido</h2>
-            <div className="space-y-2">
-              {[
-                { key: 'preciso' as const, label: 'Verifiqué que el contenido es preciso y actualizado' },
-                { key: 'audio' as const, label: 'El audio es claro y comprensible' },
-                { key: 'noPublicidad' as const, label: 'No contiene publicidad invasiva' },
-              ].map(item => (
-                <label key={item.key} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={checks[item.key]}
-                    onChange={e => setChecks({ ...checks, [item.key]: e.target.checked })}
-                    className="rounded"
-                  />
-                  <span className="text-sm">{item.label}</span>
-                </label>
-              ))}
-            </div>
-          </Card>
-
-          <Button
-            onClick={handleSubmit}
-            disabled={saving || !checks.preciso || !checks.audio || !checks.noPublicidad}
-            className="w-full"
-          >
-            {saving ? 'Agregando...' : 'Agregar a la Colección'}
-          </Button>
-        </>
-      )}
+      <div className="flex gap-3">
+        <Button
+          onClick={handleSubmit}
+          disabled={saving || !urlValida || !titulo.trim() || !checks.preciso || !checks.audio || !checks.noPublicidad}
+          className="flex-1"
+        >
+          {saving ? 'Agregando...' : 'Agregar a la colección'}
+        </Button>
+        <Button variant="secondary" onClick={() => router.push(`/admin/colecciones/${coleccionId}`)}>
+          Cancelar
+        </Button>
+      </div>
     </div>
   )
 }
