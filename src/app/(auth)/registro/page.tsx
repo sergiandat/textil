@@ -27,20 +27,22 @@ import { Select } from '@/components/ui/select'
 
 type Role = 'TALLER' | 'MARCA'
 
+// Valida CUIT argentino: XX-XXXXXXXX-X o XXXXXXXXXXX (sin guiones)
+function validarCuit(val: string) {
+  const limpio = val.replace(/-/g, '')
+  return /^\d{11}$/.test(limpio)
+}
+
 // --- Zod schemas ---
 
 const personalInfoSchema = z
   .object({
     nombre: z.string().min(1, 'El nombre es obligatorio'),
-    email: z
-      .string()
-      .min(1, 'El email es obligatorio')
-      .email('Ingresá un email válido'),
-    password: z
-      .string()
-      .min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    email: z.string().min(1, 'El email es obligatorio').email('Ingresá un email válido'),
+    password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
     confirmPassword: z.string().min(1, 'Confirmá tu contraseña'),
     phone: z.string().optional(),
+    terminos: z.boolean().refine(v => v === true, 'Debés aceptar los términos y condiciones'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Las contraseñas no coinciden',
@@ -49,7 +51,7 @@ const personalInfoSchema = z
 
 const tallerInfoSchema = z.object({
   nombreTaller: z.string().min(1, 'El nombre del taller es obligatorio'),
-  cuit: z.string().min(1, 'El CUIT es obligatorio'),
+  cuit: z.string().refine(validarCuit, 'El CUIT debe tener 11 dígitos (ej: 20-12345678-9)'),
   ubicacion: z.string().min(1, 'La ubicación es obligatoria'),
   capacidadMensual: z
     .string()
@@ -61,7 +63,7 @@ const tallerInfoSchema = z.object({
 
 const marcaInfoSchema = z.object({
   nombreMarca: z.string().min(1, 'El nombre de la marca es obligatorio'),
-  cuit: z.string().min(1, 'El CUIT es obligatorio'),
+  cuit: z.string().refine(validarCuit, 'El CUIT debe tener 11 dígitos (ej: 20-12345678-9)'),
   ubicacion: z.string().min(1, 'La ubicación es obligatoria'),
   tipo: z.string().min(1, 'Seleccioná el tipo de empresa'),
 })
@@ -87,18 +89,10 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
                   : 'bg-gray-200 text-gray-500'
             }`}
           >
-            {step < currentStep ? (
-              <Check className="w-4 h-4" />
-            ) : (
-              step
-            )}
+            {step < currentStep ? <Check className="w-4 h-4" /> : step}
           </div>
           {index < steps.length - 1 && (
-            <div
-              className={`w-12 h-0.5 ${
-                step < currentStep ? 'bg-brand-blue' : 'bg-gray-200'
-              }`}
-            />
+            <div className={`w-12 h-0.5 ${step < currentStep ? 'bg-brand-blue' : 'bg-gray-200'}`} />
           )}
         </div>
       ))}
@@ -108,11 +102,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
 
 // --- Step 1: Role selection ---
 
-function StepRole({
-  onSelect,
-}: {
-  onSelect: (role: Role) => void
-}) {
+function StepRole({ onSelect }: { onSelect: (role: Role) => void }) {
   return (
     <div>
       <h2 className="font-overpass font-bold text-xl text-brand-blue text-center mb-2">
@@ -121,7 +111,6 @@ function StepRole({
       <p className="text-sm text-gray-500 text-center mb-6">
         Seleccioná tu rol en la plataforma
       </p>
-
       <div className="grid grid-cols-1 gap-4">
         <button
           type="button"
@@ -132,12 +121,8 @@ function StepRole({
             <Factory className="w-6 h-6" />
           </div>
           <div>
-            <p className="font-overpass font-bold text-brand-blue text-lg">
-              Taller
-            </p>
-            <p className="text-sm text-gray-500">
-              Soy un taller textil y quiero ofrecer mis servicios
-            </p>
+            <p className="font-overpass font-bold text-brand-blue text-lg">Taller</p>
+            <p className="text-sm text-gray-500">Soy un taller textil y quiero ofrecer mis servicios</p>
           </div>
         </button>
 
@@ -150,12 +135,8 @@ function StepRole({
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
-            <p className="font-overpass font-bold text-brand-blue text-lg">
-              Marca
-            </p>
-            <p className="text-sm text-gray-500">
-              Soy una marca y busco talleres para producir
-            </p>
+            <p className="font-overpass font-bold text-brand-blue text-lg">Marca</p>
+            <p className="text-sm text-gray-500">Soy una marca y busco talleres para producir</p>
           </div>
         </button>
       </div>
@@ -174,14 +155,12 @@ function StepPersonalInfo({
   onBack: () => void
   defaultValues?: Partial<PersonalInfoData>
 }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PersonalInfoData>({
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<PersonalInfoData>({
     resolver: zodResolver(personalInfoSchema),
-    defaultValues,
+    defaultValues: { terminos: false, ...defaultValues },
   })
+
+  const terminosValue = watch('terminos')
 
   return (
     <div>
@@ -216,7 +195,7 @@ function StepPersonalInfo({
 
         <div className="relative">
           <Input
-            label="Contraseña"
+            label="Contraseña (mínimo 8 caracteres)"
             type="password"
             placeholder="••••••••"
             error={errors.password?.message}
@@ -247,21 +226,29 @@ function StepPersonalInfo({
           <Phone className="absolute right-3 top-[38px] w-4 h-4 text-gray-400 pointer-events-none" />
         </div>
 
+        <label className={`flex items-start gap-3 cursor-pointer rounded-lg border p-3 transition-colors ${terminosValue ? 'border-brand-blue bg-blue-50/40' : 'border-gray-200'}`}>
+          <input
+            type="checkbox"
+            className="mt-0.5 accent-[var(--color-brand-blue)]"
+            {...register('terminos')}
+          />
+          <span className="text-sm text-gray-600">
+            Acepto los{' '}
+            <a href="/terminos" target="_blank" className="text-brand-blue font-semibold hover:underline">
+              términos y condiciones
+            </a>{' '}
+            de la Plataforma Digital Textil
+          </span>
+        </label>
+        {errors.terminos && (
+          <p className="text-xs text-red-500 -mt-2">{errors.terminos.message}</p>
+        )}
+
         <div className="flex gap-3 pt-2">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onBack}
-            icon={<ArrowLeft className="w-4 h-4" />}
-            className="flex-1"
-          >
+          <Button type="button" variant="secondary" onClick={onBack} icon={<ArrowLeft className="w-4 h-4" />} className="flex-1">
             Atrás
           </Button>
-          <Button
-            type="submit"
-            icon={<ArrowRight className="w-4 h-4" />}
-            className="flex-1"
-          >
+          <Button type="submit" icon={<ArrowRight className="w-4 h-4" />} className="flex-1">
             Siguiente
           </Button>
         </div>
@@ -283,11 +270,7 @@ function StepTallerInfo({
   loading: boolean
   defaultValues?: Partial<TallerInfoData>
 }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TallerInfoData>({
+  const { register, handleSubmit, formState: { errors } } = useForm<TallerInfoData>({
     resolver: zodResolver(tallerInfoSchema),
     defaultValues,
   })
@@ -344,21 +327,10 @@ function StepTallerInfo({
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onBack}
-            icon={<ArrowLeft className="w-4 h-4" />}
-            className="flex-1"
-          >
+          <Button type="button" variant="secondary" onClick={onBack} icon={<ArrowLeft className="w-4 h-4" />} className="flex-1">
             Atrás
           </Button>
-          <Button
-            type="submit"
-            loading={loading}
-            icon={<Check className="w-4 h-4" />}
-            className="flex-1"
-          >
+          <Button type="submit" loading={loading} icon={<Check className="w-4 h-4" />} className="flex-1">
             Crear cuenta
           </Button>
         </div>
@@ -380,11 +352,7 @@ function StepMarcaInfo({
   loading: boolean
   defaultValues?: Partial<MarcaInfoData>
 }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<MarcaInfoData>({
+  const { register, handleSubmit, formState: { errors } } = useForm<MarcaInfoData>({
     resolver: zodResolver(marcaInfoSchema),
     defaultValues,
   })
@@ -443,21 +411,10 @@ function StepMarcaInfo({
         />
 
         <div className="flex gap-3 pt-2">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onBack}
-            icon={<ArrowLeft className="w-4 h-4" />}
-            className="flex-1"
-          >
+          <Button type="button" variant="secondary" onClick={onBack} icon={<ArrowLeft className="w-4 h-4" />} className="flex-1">
             Atrás
           </Button>
-          <Button
-            type="submit"
-            loading={loading}
-            icon={<Check className="w-4 h-4" />}
-            className="flex-1"
-          >
+          <Button type="submit" loading={loading} icon={<Check className="w-4 h-4" />} className="flex-1">
             Crear cuenta
           </Button>
         </div>
@@ -474,6 +431,8 @@ export default function RegistroPage() {
   const [step, setStep] = useState(1)
   const [role, setRole] = useState<Role | null>(null)
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoData | null>(null)
+  const [tallerInfo, setTallerInfo] = useState<TallerInfoData | null>(null)
+  const [marcaInfo, setMarcaInfo] = useState<MarcaInfoData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -489,6 +448,7 @@ export default function RegistroPage() {
 
   async function handleTallerSubmit(data: TallerInfoData) {
     if (!personalInfo || !role) return
+    setTallerInfo(data)
     setError(null)
     setLoading(true)
 
@@ -512,13 +472,11 @@ export default function RegistroPage() {
       })
 
       const body = await res.json()
-
       if (!res.ok) {
         setError(body.error || 'Error al crear la cuenta')
         setLoading(false)
         return
       }
-
       router.push('/login?registered=true')
     } catch {
       setError('Ocurrió un error inesperado. Intentá de nuevo.')
@@ -528,6 +486,7 @@ export default function RegistroPage() {
 
   async function handleMarcaSubmit(data: MarcaInfoData) {
     if (!personalInfo || !role) return
+    setMarcaInfo(data)
     setError(null)
     setLoading(true)
 
@@ -551,13 +510,11 @@ export default function RegistroPage() {
       })
 
       const body = await res.json()
-
       if (!res.ok) {
         setError(body.error || 'Error al crear la cuenta')
         setLoading(false)
         return
       }
-
       router.push('/login?registered=true')
     } catch {
       setError('Ocurrió un error inesperado. Intentá de nuevo.')
@@ -590,6 +547,7 @@ export default function RegistroPage() {
           onSubmit={handleTallerSubmit}
           onBack={() => setStep(2)}
           loading={loading}
+          defaultValues={tallerInfo ?? undefined}
         />
       )}
 
@@ -598,15 +556,13 @@ export default function RegistroPage() {
           onSubmit={handleMarcaSubmit}
           onBack={() => setStep(2)}
           loading={loading}
+          defaultValues={marcaInfo ?? undefined}
         />
       )}
 
       <p className="mt-6 text-center text-sm text-gray-600">
         ¿Ya tenés cuenta?{' '}
-        <Link
-          href="/login"
-          className="font-semibold text-brand-blue hover:underline"
-        >
+        <Link href="/login" className="font-semibold text-brand-blue hover:underline">
           Iniciar sesión
         </Link>
       </p>
