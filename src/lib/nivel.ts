@@ -8,12 +8,13 @@ interface ResultadoNivel {
 }
 
 // Validaciones requeridas para cada nivel
-const VALIDACIONES_PLATA = ['CUIT', 'HABILITACION_MUNICIPAL', 'ART']
+// Deben coincidir con tiposValidacion en /taller/formalizacion/page.tsx
+const VALIDACIONES_PLATA = ['CUIT_MONOTRIBUTO', 'HABILITACION_MUNICIPAL', 'ART']
 const VALIDACIONES_ORO = [
   ...VALIDACIONES_PLATA,
-  'EMPLEADOS_REGISTRADOS',
-  'SEGURO_INCENDIO',
-  'CONDICIONES_HIGIENE',
+  'INSCRIPCION_EMPLEADOR',
+  'HABILITACION_BOMBEROS',
+  'SEGURIDAD_HIGIENE',
   'LIBRO_SUELDOS',
 ]
 
