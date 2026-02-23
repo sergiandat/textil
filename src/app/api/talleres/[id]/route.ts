@@ -77,10 +77,36 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       }
     }
 
+    // Procesos: replace all if provided (array of procesoId strings)
+    if (Array.isArray(body.procesosIds)) {
+      await prisma.tallerProceso.deleteMany({ where: { tallerId: id } })
+      if (body.procesosIds.length > 0) {
+        await prisma.tallerProceso.createMany({
+          data: body.procesosIds.map((procesoId: string) => ({ tallerId: id, procesoId })),
+          skipDuplicates: true,
+        })
+      }
+    }
+
+    // Prendas: replace all if provided (array of prendaId strings)
+    if (Array.isArray(body.prendasIds)) {
+      await prisma.tallerPrenda.deleteMany({ where: { tallerId: id } })
+      if (body.prendasIds.length > 0) {
+        await prisma.tallerPrenda.createMany({
+          data: body.prendasIds.map((prendaId: string) => ({ tallerId: id, prendaId })),
+          skipDuplicates: true,
+        })
+      }
+    }
+
     const taller = await prisma.taller.update({
       where: { id },
       data,
-      include: { maquinaria: true },
+      include: {
+        maquinaria: true,
+        procesos: { include: { proceso: true } },
+        prendas: { include: { prenda: true } },
+      },
     })
 
     return NextResponse.json(taller)

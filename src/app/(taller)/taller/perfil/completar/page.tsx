@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Check, Factory, Users, LayoutGrid, Ruler, Clock, TrendingUp, Settings, Trophy } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Factory, Users, LayoutGrid, Ruler, Clock, TrendingUp, Settings, Trophy, Shirt } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,6 +20,8 @@ const STEPS = [
   { key: 'eficiencia', label: 'Efic.', icon: TrendingUp },
   { key: 'resultado', label: 'Result.', icon: Trophy },
   { key: 'gestion', label: 'Gestión', icon: Settings },
+  { key: 'procesos', label: 'Procesos', icon: Settings },
+  { key: 'prendas', label: 'Prendas', icon: Shirt },
   { key: 'resumen', label: 'Resumen', icon: Trophy },
 ]
 
@@ -35,11 +37,26 @@ const MAQUINAS = [
 const ROLES_EQUIPO = ['Cortador/a', 'Costurero/a', 'Terminación/Planchado', 'Control calidad', 'Encargado/a', 'Logística']
 const AREAS = ['Área de corte', 'Área de confección', 'Área de terminación/planchado', 'Almacén de insumos', 'Área de control de calidad']
 
+interface ProcesoProductivo {
+  id: string
+  nombre: string
+  descripcion: string | null
+}
+
+interface TipoPrenda {
+  id: string
+  nombre: string
+}
+
 export default function WizardPage() {
   const router = useRouter()
   const [step, setStep] = useState(0)
   const [tallerId, setTallerId] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+
+  // Catálogos
+  const [catalogoProcesos, setCatalogoProcesos] = useState<ProcesoProductivo[]>([])
+  const [catalogoPrendas, setCatalogoPrendas] = useState<TipoPrenda[]>([])
 
   // State for all wizard data
   const [maquinaria, setMaquinaria] = useState<Record<string, number>>({})
@@ -62,9 +79,19 @@ export default function WizardPage() {
   const [horasExtra, setHorasExtra] = useState('a-veces')
   const [registro, setRegistro] = useState('excel')
   const [escalabilidad, setEscalabilidad] = useState('contratar')
+  const [procesosSeleccionados, setProcesosSeleccionados] = useState<string[]>([])
+  const [prendasSeleccionadas, setPrendasSeleccionadas] = useState<string[]>([])
 
-  // Pre-populate from existing data
+  // Load catálogos y datos existentes
   useEffect(() => {
+    fetch('/api/catalogos')
+      .then(r => r.ok ? r.json() : { procesos: [], prendas: [] })
+      .then(data => {
+        setCatalogoProcesos(data.procesos ?? [])
+        setCatalogoPrendas(data.prendas ?? [])
+      })
+      .catch(() => {})
+
     fetch('/api/talleres/me')
       .then(r => r.ok ? r.json() : null)
       .then(t => {
@@ -88,6 +115,12 @@ export default function WizardPage() {
           const maq: Record<string, number> = {}
           for (const m of t.maquinaria) maq[m.nombre] = m.cantidad
           setMaquinaria(maq)
+        }
+        if (t.procesos?.length) {
+          setProcesosSeleccionados(t.procesos.map((tp: { procesoId: string }) => tp.procesoId))
+        }
+        if (t.prendas?.length) {
+          setPrendasSeleccionadas(t.prendas.map((tp: { prendaId: string }) => tp.prendaId))
         }
       })
       .catch(() => {})
@@ -116,8 +149,10 @@ export default function WizardPage() {
       maquinaria: Object.entries(maquinaria)
         .filter(([, c]) => c > 0)
         .map(([nombre, cantidad]) => ({ nombre, cantidad, tipo: numMaq > 0 ? 'confeccion' : undefined })),
+      procesosIds: procesosSeleccionados,
+      prendasIds: prendasSeleccionadas,
     }
-  }, [maquinaria, sam, prendaPrincipal, organizacion, metrosCuadrados, areas, experiencia, polivalencia, horario, registro, escalabilidad, paradas, roles, tamanoEquipo])
+  }, [maquinaria, sam, prendaPrincipal, organizacion, metrosCuadrados, areas, experiencia, polivalencia, horario, registro, escalabilidad, paradas, roles, tamanoEquipo, procesosSeleccionados, prendasSeleccionadas])
 
   async function handleSave(redirectTo: string) {
     if (!tallerId) return
@@ -156,6 +191,8 @@ export default function WizardPage() {
   function next() { if (step < STEPS.length - 1) setStep(step + 1) }
   function prev() { if (step > 0) setStep(step - 1) }
   function toggleArea(a: string) { setAreas(areas.includes(a) ? areas.filter(x => x !== a) : [...areas, a]) }
+  function toggleProceso(id: string) { setProcesosSeleccionados(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]) }
+  function togglePrenda(id: string) { setPrendasSeleccionadas(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]) }
 
   function RadioOption({ value, current, onChange, label, desc }: { value: string; current: string; onChange: (v: string) => void; label: string; desc?: string }) {
     return (
@@ -469,8 +506,74 @@ export default function WizardPage() {
         </div>
       )}
 
-      {/* STEP 11: Resumen */}
+      {/* STEP 11: Procesos productivos */}
       {step === 11 && (
+        <div>
+          <h2 className="font-overpass font-bold text-xl text-brand-blue mb-2">¿Qué procesos realizás?</h2>
+          <p className="text-sm text-gray-500 mb-4">Seleccioná todos los procesos que tu taller puede ofrecer a las marcas.</p>
+          {catalogoProcesos.length === 0 ? (
+            <Card className="text-center py-8 text-gray-500 text-sm">Cargando procesos...</Card>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {catalogoProcesos.map(p => {
+                const seleccionado = procesosSeleccionados.includes(p.id)
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => toggleProceso(p.id)}
+                    className={`p-4 rounded-xl border text-left transition-all ${seleccionado ? 'border-brand-blue bg-blue-50/60 ring-1 ring-brand-blue' : 'border-gray-200 hover:border-gray-300'}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-semibold text-sm">{p.nombre}</p>
+                      {seleccionado && <Check className="w-4 h-4 text-brand-blue shrink-0 mt-0.5" />}
+                    </div>
+                    {p.descripcion && <p className="text-xs text-gray-500 mt-1">{p.descripcion}</p>}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+          {procesosSeleccionados.length > 0 && (
+            <p className="text-xs text-brand-blue font-semibold mt-3">{procesosSeleccionados.length} proceso{procesosSeleccionados.length !== 1 ? 's' : ''} seleccionado{procesosSeleccionados.length !== 1 ? 's' : ''}</p>
+          )}
+        </div>
+      )}
+
+      {/* STEP 12: Tipos de prenda */}
+      {step === 12 && (
+        <div>
+          <h2 className="font-overpass font-bold text-xl text-brand-blue mb-2">¿Qué prendas fabricás?</h2>
+          <p className="text-sm text-gray-500 mb-4">Seleccioná los tipos de prenda en los que tu taller está especializado.</p>
+          {catalogoPrendas.length === 0 ? (
+            <Card className="text-center py-8 text-gray-500 text-sm">Cargando prendas...</Card>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {catalogoPrendas.map(pr => {
+                const seleccionada = prendasSeleccionadas.includes(pr.id)
+                return (
+                  <button
+                    key={pr.id}
+                    type="button"
+                    onClick={() => togglePrenda(pr.id)}
+                    className={`p-4 rounded-xl border text-center transition-all ${seleccionada ? 'border-brand-blue bg-blue-50/60 ring-1 ring-brand-blue' : 'border-gray-200 hover:border-gray-300'}`}
+                  >
+                    <Shirt className={`w-6 h-6 mx-auto mb-1 ${seleccionada ? 'text-brand-blue' : 'text-gray-400'}`} />
+                    <p className="font-semibold text-sm">{pr.nombre}</p>
+                    {seleccionada && <Check className="w-3.5 h-3.5 text-brand-blue mx-auto mt-1" />}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+          {prendasSeleccionadas.length > 0 && (
+            <p className="text-xs text-brand-blue font-semibold mt-3">{prendasSeleccionadas.length} prenda{prendasSeleccionadas.length !== 1 ? 's' : ''} seleccionada{prendasSeleccionadas.length !== 1 ? 's' : ''}</p>
+          )}
+        </div>
+      )}
+
+      {/* STEP 13: Resumen */}
+      {step === 13 && (
         <div className="text-center">
           <h2 className="font-overpass font-bold text-2xl text-brand-blue mb-4">¡Perfil Completado!</h2>
 
@@ -490,6 +593,26 @@ export default function WizardPage() {
               <p className="text-sm">{prendaPrincipal} — Confección {organizacion}</p>
             </Card>
           </div>
+
+          {procesosSeleccionados.length > 0 && (
+            <Card title="Procesos seleccionados" className="mb-4 text-left">
+              <div className="flex flex-wrap gap-2">
+                {catalogoProcesos.filter(p => procesosSeleccionados.includes(p.id)).map(p => (
+                  <Badge key={p.id} variant="outline">{p.nombre}</Badge>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {prendasSeleccionadas.length > 0 && (
+            <Card title="Prendas seleccionadas" className="mb-4 text-left">
+              <div className="flex flex-wrap gap-2">
+                {catalogoPrendas.filter(pr => prendasSeleccionadas.includes(pr.id)).map(pr => (
+                  <Badge key={pr.id} variant="default">{pr.nombre}</Badge>
+                ))}
+              </div>
+            </Card>
+          )}
 
           <Card title="Indicadores de Madurez" className="mb-6 text-left">
             {[{ label: 'Equipo', pct: scoreEquipo }, { label: 'Organización', pct: scoreOrg }, { label: 'Maquinaria', pct: scoreMaq }, { label: 'Gestión', pct: scoreGestion }, { label: 'Escalabilidad', pct: scoreEscalabilidad }].map(i => (
@@ -511,7 +634,7 @@ export default function WizardPage() {
 
           <div className="flex gap-3 justify-center">
             <Button onClick={() => handleSave('/taller/perfil')} variant="secondary" disabled={saving}>
-              {saving ? 'Guardando...' : 'Editar perfil'}
+              {saving ? 'Guardando...' : 'Ver mi perfil'}
             </Button>
             <Button onClick={() => handleSave('/taller/aprender')} disabled={saving}>
               {saving ? 'Guardando...' : 'Guardar e ir a Academia'}
@@ -521,7 +644,7 @@ export default function WizardPage() {
       )}
 
       {/* Navigation */}
-      {step > 0 && step < 11 && (
+      {step > 0 && step < 13 && (
         <div className="flex justify-between mt-6">
           <Button variant="secondary" onClick={prev} icon={<ArrowLeft className="w-4 h-4" />}>Atrás</Button>
           <Button onClick={next} icon={<ArrowRight className="w-4 h-4" />}>Siguiente</Button>
