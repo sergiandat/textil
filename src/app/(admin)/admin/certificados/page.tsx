@@ -28,6 +28,26 @@ export default function AdminCertificadosPage() {
   const [revocarModal, setRevocarModal] = useState<Cert | null>(null)
   const [verModal, setVerModal] = useState<Cert | null>(null)
   const [motivo, setMotivo] = useState('')
+  const [revoking, setRevoking] = useState(false)
+
+  async function handleRevocar() {
+    if (!revocarModal || !motivo) return
+    setRevoking(true)
+    try {
+      const res = await fetch('/api/certificados', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: revocarModal.id, motivo }),
+      })
+      if (res.ok) {
+        setCerts(prev => prev.map(c => c.id === revocarModal.id ? { ...c, revocado: true } : c))
+        setRevocarModal(null)
+        setMotivo('')
+      }
+    } finally {
+      setRevoking(false)
+    }
+  }
 
   useEffect(() => {
     fetch('/api/certificados?limit=100').then(r => r.json()).then((d: { certificados?: Cert[] }) => setCerts(d.certificados || [])).catch(() => {})
@@ -87,7 +107,9 @@ export default function AdminCertificadosPage() {
             />
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setRevocarModal(null)}>Cancelar</Button>
-              <Button onClick={() => { setRevocarModal(null); setMotivo('') }}>Revocar</Button>
+              <Button onClick={handleRevocar} disabled={!motivo || revoking}>
+                {revoking ? 'Revocando...' : 'Revocar'}
+              </Button>
             </div>
           </div>
         )}

@@ -33,6 +33,40 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// PATCH /api/certificados — revocar certificado por id (admin)
+export async function PATCH(req: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    const role = (session.user as { role?: string }).role
+    if (role !== 'ADMIN') return NextResponse.json({ error: 'Solo ADMIN' }, { status: 403 })
+
+    const { id, motivo } = await req.json()
+    if (!id) return NextResponse.json({ error: 'Falta id' }, { status: 400 })
+
+    const cert = await prisma.certificado.update({
+      where: { id },
+      data: { revocado: true },
+      include: { taller: { select: { id: true } } },
+    })
+
+    await aplicarNivel(cert.taller.id)
+
+    await prisma.logActividad.create({
+      data: {
+        userId: session.user.id,
+        accion: 'CERTIFICADO_REVOCADO',
+        detalles: { certificadoId: id, motivo: motivo || 'Sin motivo' },
+      },
+    })
+
+    return NextResponse.json(cert)
+  } catch (error) {
+    console.error('Error en PATCH /api/certificados:', error)
+    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await auth()
