@@ -49,8 +49,8 @@ Carga validaciones reales desde Prisma y las mapea contra 8 tipos hardcodeados. 
 **Academia colecciones** `/taller/aprender` — **OK**
 Lista real de colecciones desde Prisma (donde activa=true). Muestra conteo de videos, progreso real (ProgresoCapacitacion), certificados obtenidos. Botones "Empezar"/"Continuar"/"Revisar" dinamicos segun estado. Stats cards (cursos, videos, certificados) desde datos reales.
 
-**Academia detalle** `/taller/aprender/[id]` — **STUB** — P1
-Client component que IGNORA completamente el parametro [id]. Muestra siempre el mismo curso hardcodeado "Formalizacion basica" con 5 videos estaticos, preguntas frecuentes estaticas, y un player fake (rectangulo gris con icono Play). Los videos no se pueden marcar como vistos (el estado visto es hardcodeado). El boton "Rendir Evaluacion" no hace nada. El input del asistente IA no hace nada. Cero Prisma, cero API calls. Necesita reescritura completa para cargar datos reales.
+**Academia detalle** `/taller/aprender/[id]` — **OK**
+Server component carga coleccion real con videos ordenados y evaluacion. AcademiaCliente (client): iframe YouTube embed real, lista de videos clickeable, marcar visto via POST /api/colecciones/[id]/progreso (upsert en BD), quiz/evaluacion via POST /api/colecciones/[id]/evaluacion (corrige respuestas, genera certificado si aprueba con codigo unico). Muestra estado certificado si ya existe. Progreso pre-cargado desde BD.
 
 **Pedidos recibidos** `/taller/pedidos` — **OK**
 Lista real de OrdenManufactura asignadas al taller desde Prisma. 4 stat cards (total, pendientes, en ejecucion, completadas) calculadas de datos reales. Cada orden muestra moId, pedido, marca, proceso, precio, barra de progreso y badge de estado. Solo lectura — no hay detalle clickeable ni forma de actualizar progreso/estado. Falta acentos en "En ejecucion".
@@ -98,8 +98,8 @@ Client component con UI completa: 4 tipos de reporte (radio), formato (PDF/Excel
 
 ### 1.5 Publicas
 
-**Verificar certificado** `/verificar` — **PARCIAL** — P1
-Client component: input para codigo, boton "Verificar" llama GET /api/certificados/[codigo] (API real). 3 estados: valido (verde, muestra datos), revocado (rojo), no encontrado (rojo). Funciona con datos reales. PERO: el parametro URL ?code= NO se lee (los links "Verificar QR" desde perfil taller no pre-llenan el input). Falta generacion de QR real.
+**Verificar certificado** `/verificar` — **OK**
+Client component con Suspense. Lee ?code= de URL (pre-llena input y busca automaticamente). 3 estados: valido (verde, datos completos), revocado (rojo), no encontrado (rojo). Llama GET /api/certificados/[codigo] real. Funciona desde links QR de perfiles. Falta generacion de QR real (imagen).
 
 **Config notificaciones** `/cuenta/notificaciones` — **STUB** — P3
 Existe el directorio y page pero no fue analizado en detalle.
@@ -132,11 +132,11 @@ Fetch GET /api/colecciones real. Busqueda client-side por titulo. Muestra titulo
 **Crear coleccion** `/admin/colecciones/nueva` — **OK**
 Form controlado con titulo, descripcion, categoria, institucion, duracion. POST /api/colecciones funcional. Redirect a editar on success.
 
-**Editar coleccion** `/admin/colecciones/[id]` — **STUB** — P2
-Form existe pero NUNCA carga datos existentes — no hace GET /api/colecciones/[id]. Siempre abre vacio. El PUT funciona si se llena manualmente. La seccion "Videos de la Coleccion" muestra 3 videos hardcodeados mock. Drag-and-drop renderizado pero no conectado. Toggle publicada/borrador arranca en false ignorando estado real.
+**Editar coleccion** `/admin/colecciones/[id]` — **OK**
+useEffect carga datos desde GET /api/colecciones/[id] al montar (titulo, descripcion, institucion, categoria, duracion, activa, videos). Lista de videos reales con delete via DELETE /api/colecciones/[id]/videos?videoId=. Guarda via PUT. Toggle publicada/borrador funcional. Link a /videos para agregar.
 
-**Agregar video** `/admin/colecciones/[id]/videos` — **STUB** — P2
-Input de URL + boton "Cargar". La extraccion de metadata es mock: siempre retorna titulo "Como inscribirte en monotributo" y canal fake. No hay llamada a YouTube API. Thumbnail es rectangulo gris. Los checkboxes de verificacion de contenido funcionan (bloquean submit hasta marcar los 3). PUT /api/colecciones/[id] con addVideo funciona.
+**Agregar video** `/admin/colecciones/[id]/videos` — **OK**
+Input URL YouTube con validacion regex, preview iframe en vivo, campo titulo manual. Checkboxes verificacion de contenido (bloquean submit hasta marcar los 3). Guarda via POST /api/colecciones/[id]/videos (calcula orden automatico). No extrae metadata de YouTube API — titulo se ingresa manualmente.
 
 **Evaluaciones** `/admin/evaluaciones` — **STUB** — P2
 100% client-side mock. Select de coleccion con 3 opciones hardcodeadas (no fetch). 2 preguntas mock en useState. CRUD completo in-memory (agregar/editar/borrar preguntas, editar opciones, marcar correcta, agregar explicacion). Boton "Guardar Evaluacion" no hace nada. Cero persistencia.
@@ -156,8 +156,8 @@ Fetch GET /api/talleres real. Filtros por nombre/CUIT/email y nivel. 4 stats (to
 **Marcas lista** `/admin/marcas` — **OK**
 Fetch GET /api/marcas real. Busqueda. 2 stats (total, activas). Link a detalle. Boton editar sin handler.
 
-**Detalle taller** `/admin/talleres/[id]` — **STUB** — P1
-USA PARAMS.ID PERO MUESTRA DATOS HARDCODEADOS. Siempre muestra "Corte Sur SRL" con CUIT "30-12345678-9" independientemente del ID en la URL. 3 tabs (Formalizacion, Documentos, Actividad) con datos mock. 5 validaciones mock en checklist. "Sin documentos por revisar" y "Sin actividad reciente" estaticos. 2 notas internas hardcodeadas. Input de nota que se limpia al "Agregar" pero no guarda. Botones "Editar datos", "Suspender", "Eliminar" sin handlers. Necesita reescritura completa con datos Prisma reales.
+**Detalle taller** `/admin/talleres/[id]` — **OK**
+Carga taller real con user, validaciones, maquinaria, certificados. Header: nombre, CUIT, zona, email, phone, nivel badge, puntaje, activo/inactivo. Stats: SAM, capacidad, organizacion, trabajadores (condicional). 3 tabs via searchParams: Formalizacion (checklist validaciones reales con aprobar/rechazar via Server Actions), Documentos (pendientes con URL), Actividad (logs reales). Notas internas via Server Action. Aprobar/rechazar recalcula nivel con aplicarNivel().
 
 **Detalle marca** `/admin/marcas/[id]` — **STUB** — P2
 Mismo patron: ignora params.id, muestra mockMarca "Comercial Textil SRL" siempre. Stats (pedidos:5, favoritos:3, contactos:12) hardcodeados. 4 actividades mock. "Sin notas" estatico. Botones sin handlers.

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Search, CheckCircle, XCircle, Award } from 'lucide-react'
 import { Button, Input, Card } from '@/components/ui'
 
@@ -13,35 +14,40 @@ interface CertificadoResult {
   revocado: boolean
 }
 
-export default function VerificarPage() {
-  const [codigo, setCodigo] = useState('')
+function VerificarContent() {
+  const searchParams = useSearchParams()
+  const [codigo, setCodigo] = useState(searchParams.get('code') ?? '')
   const [loading, setLoading] = useState(false)
   const [resultado, setResultado] = useState<CertificadoResult | null>(null)
   const [noEncontrado, setNoEncontrado] = useState(false)
   const [buscado, setBuscado] = useState(false)
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!codigo.trim()) return
+  useEffect(() => {
+    const code = searchParams.get('code')
+    if (code) buscar(code)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  async function buscar(valor: string) {
+    if (!valor.trim()) return
     setLoading(true)
     setResultado(null)
     setNoEncontrado(false)
-
     try {
-      const res = await fetch(`/api/certificados/${encodeURIComponent(codigo.trim())}`)
-      if (res.ok) {
-        const data = await res.json()
-        setResultado(data)
-      } else {
-        setNoEncontrado(true)
-      }
+      const res = await fetch(`/api/certificados/${encodeURIComponent(valor.trim())}`)
+      if (res.ok) setResultado(await res.json())
+      else setNoEncontrado(true)
     } catch {
       setNoEncontrado(true)
     } finally {
       setLoading(false)
       setBuscado(true)
     }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    await buscar(codigo)
   }
 
   return (
@@ -172,5 +178,13 @@ export default function VerificarPage() {
         </Card>
       )}
     </div>
+  )
+}
+
+export default function VerificarPage() {
+  return (
+    <Suspense>
+      <VerificarContent />
+    </Suspense>
   )
 }
