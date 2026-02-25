@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
+import { logActividad } from '@/lib/log'
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -47,6 +48,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       where: { id },
       data,
     })
+
+    if (role === 'ADMIN' && body.estado) {
+      logActividad('ADMIN_VALIDACION_' + body.estado, session.user.id, { validacionId: id, tallerId: existing.taller.userId })
+    }
 
     return NextResponse.json(validacion)
   } catch (error) {

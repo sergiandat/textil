@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
+import { logActividad } from '@/lib/log'
 
 function generateOmId() {
   const year = new Date().getFullYear()
@@ -104,6 +105,8 @@ export async function POST(req: NextRequest) {
         montoTotal: Number.isFinite(montoTotal) && montoTotal >= 0 ? montoTotal : 0,
       },
     })
+
+    logActividad('CRUD_PEDIDO_CREADO', session.user.id, { pedidoId: pedido.id, omId: pedido.omId, marcaId: resolvedMarcaId })
 
     return NextResponse.json(pedido, { status: 201 })
   } catch {

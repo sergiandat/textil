@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { aplicarNivel } from '@/lib/nivel'
+import { logActividad } from '@/lib/log'
 
 export async function GET(req: NextRequest) {
   try {
@@ -88,6 +89,8 @@ export async function POST(req: NextRequest) {
 
     // Recalculate taller level after new certificate
     await aplicarNivel(body.tallerId)
+
+    logActividad('CERTIFICADO_EMITIDO', session.user.id, { certificadoId: certificado.id, tallerId: body.tallerId, codigo: body.codigo })
 
     return NextResponse.json(certificado, { status: 201 })
   } catch (error) {

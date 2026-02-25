@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logActividad } from '@/lib/log'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 
@@ -91,6 +92,8 @@ export async function POST(req: NextRequest) {
       },
       select: { id: true, email: true, name: true, role: true },
     })
+
+    logActividad('AUTH_REGISTRO', user.id, { email: data.email, role: data.role })
 
     return NextResponse.json(user, { status: 201 })
   } catch {
