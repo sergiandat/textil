@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { logActividad } from '@/lib/log'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
@@ -96,7 +97,18 @@ export async function POST(req: NextRequest) {
     logActividad('AUTH_REGISTRO', user.id, { email: data.email, role: data.role })
 
     return NextResponse.json(user, { status: 201 })
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      const target = (error.meta?.target as string[]) ?? []
+      if (target.includes('cuit')) {
+        return NextResponse.json({ error: 'El CUIT ingresado ya está registrado' }, { status: 409 })
+      }
+      if (target.includes('email')) {
+        return NextResponse.json({ error: 'El email ya está registrado' }, { status: 409 })
+      }
+      return NextResponse.json({ error: 'Ya existe un registro con esos datos' }, { status: 409 })
+    }
+    console.error('Error en POST /api/auth/registro:', error)
     return NextResponse.json({ error: 'Error al registrar usuario' }, { status: 500 })
   }
 }
