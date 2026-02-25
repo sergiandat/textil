@@ -26,8 +26,11 @@ export default auth((req) => {
 
   // Verificar si es ruta pública (incluyendo rutas dinámicas)
   const isPublicRoute = publicRoutes.some(route => {
+    if (route === '/') {
+      return nextUrl.pathname === '/'
+    }
     if (route.endsWith('/')) {
-      // Para rutas dinámicas como /taller/[id]
+      // Para rutas dinámicas como /perfil/[id]
       return nextUrl.pathname.startsWith(route) && nextUrl.pathname.split('/').length === 3
     }
     return nextUrl.pathname === route || nextUrl.pathname.startsWith(route + '/')
