@@ -10,16 +10,42 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const { id } = await params
+
+    // Cargar validación con taller para verificar ownership
+    const existing = await prisma.validacion.findUnique({
+      where: { id },
+      include: { taller: { select: { userId: true } } },
+    })
+
+    if (!existing) {
+      return NextResponse.json({ error: 'Validación no encontrada' }, { status: 404 })
+    }
+
+    const role = session.user.role
+    const isOwner = existing.taller.userId === session.user.id
+
+    // Solo ADMIN puede cambiar estado (aprobar/rechazar)
+    // Taller solo puede modificar sus propias validaciones (subir docs)
+    if (role !== 'ADMIN' && !isOwner) {
+      return NextResponse.json({ error: 'Sin permisos para esta validación' }, { status: 403 })
+    }
+
     const body = await req.json()
+
+    // Talleres no pueden cambiar el estado (evita self-approve)
+    const data: Record<string, unknown> = {
+      detalle: body.detalle,
+      documentoUrl: body.documentoUrl,
+      fechaVencimiento: body.fechaVencimiento ? new Date(body.fechaVencimiento) : undefined,
+    }
+
+    if (role === 'ADMIN') {
+      data.estado = body.estado
+    }
 
     const validacion = await prisma.validacion.update({
       where: { id },
-      data: {
-        estado: body.estado,
-        detalle: body.detalle,
-        documentoUrl: body.documentoUrl,
-        fechaVencimiento: body.fechaVencimiento ? new Date(body.fechaVencimiento) : undefined,
-      },
+      data,
     })
 
     return NextResponse.json(validacion)
