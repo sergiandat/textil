@@ -226,9 +226,9 @@ Mock in-memory: 6 templates email hardcodeados (bienvenida, verificar email, rec
 
 **GET/POST /api/admin/usuarios** — PARCIAL, ADMIN only. Lista con filtros. POST crea usuario pero NO crea Taller/Marca asociado (a diferencia de /registro). Sin Zod.
 
-**GET/PUT /api/auditorias/[id]** — SIN AUTH. Cualquiera puede leer o actualizar auditorias. Sin validacion body.
+**GET/PUT /api/auditorias/[id]** — OK, ADMIN/ESTADO only. Auth + role check implementado (Sprint 1).
 
-**GET/POST /api/auditorias** — SIN AUTH. Cualquiera puede crear auditorias. Sin validacion.
+**GET/POST /api/auditorias** — OK, ADMIN/ESTADO only. Auth + role check implementado (Sprint 1).
 
 **PUT /api/auth/mi-cuenta** — OK, requiere session. Actualiza nombre/phone y/o password con bcrypt. Falta GET para pre-cargar datos.
 
@@ -236,7 +236,7 @@ Mock in-memory: 6 templates email hardcodeados (bienvenida, verificar email, rec
 
 **GET /api/certificados/[codigo]** — OK, publico (intencionalmente). Lookup por codigo unico.
 
-**GET/POST /api/certificados** — PROBLEMA SEGURIDAD: POST sin auth — cualquiera puede crear certificados. GET sin filtro activo.
+**GET/POST/PATCH /api/certificados** — OK, POST y PATCH requieren ADMIN. Llama aplicarNivel() al crear/revocar (Sprint 1).
 
 **GET/PUT/DELETE /api/colecciones/[id]** — PROBLEMA: DELETE sin auth. PUT solo verifica session sin verificar rol.
 
@@ -244,73 +244,73 @@ Mock in-memory: 6 templates email hardcodeados (bienvenida, verificar email, rec
 
 **GET /api/denuncias/[codigo]** — OK, publico. Solo retorna campos seguros (codigo, tipo, estado).
 
-**GET/POST /api/denuncias** — PROBLEMA: GET sin auth expone todas las denuncias con descripciones. Race condition en generacion de codigo.
+**GET/POST /api/denuncias** — OK, GET requiere ADMIN/ESTADO. POST publico (intencionalmente, para denuncias anonimas) (Sprint 1).
 
-**GET/PUT /api/marcas/[id]** — PROBLEMA: PUT sin verificacion de ownership. Cualquier usuario logueado puede editar cualquier marca.
+**GET/PUT /api/marcas/[id]** — OK, PUT con ownership check (userId match o ADMIN) (Sprint 1).
 
 **GET /api/marcas** — OK, ADMIN only.
 
 **GET/PUT /api/notificaciones** — PROBLEMA: userId viene del client sin validar contra session. Un usuario puede leer notificaciones de otro.
 
-**GET/POST /api/pedidos/[id]/ordenes** — SIN AUTH en ambos metodos.
+**GET/POST /api/pedidos/[id]/ordenes** — OK, auth + ownership via checkPedidoAccess() (Sprint 1).
 
-**GET/PUT /api/pedidos/[id]** — PROBLEMA: GET publico, PUT sin ownership check.
+**GET/PUT /api/pedidos/[id]** — OK, PUT con ownership check (marca.userId match o ADMIN) (Sprint 1).
 
 **GET/POST /api/pedidos** — OK, role-aware (ADMIN ve todo, MARCA ve solo suyas). Taller bloqueado con 403.
 
-**GET/PUT /api/talleres/[id]** — PROBLEMA: PUT sin ownership check. No actualiza relaciones (procesos, prendas, maquinaria).
+**GET/PUT /api/talleres/[id]** — OK, PUT con ownership check (userId match o ADMIN) (Sprint 1). Nota: no actualiza relaciones (procesos, prendas, maquinaria) — se hace via wizard.
 
 **GET /api/talleres** — OK, publico (directorio).
 
-**PUT /api/validaciones/[id]** — PROBLEMA: Sin role check. Un taller puede aprobar sus propias validaciones.
+**PUT /api/validaciones/[id]** — OK, ownership check + solo ADMIN puede cambiar estado (previene self-approve). Talleres solo pueden modificar sus propias validaciones (Sprint 1).
 
-**GET/POST /api/validaciones** — SIN AUTH en ambos metodos.
+**GET/POST /api/validaciones** — OK, GET requiere ADMIN/ESTADO, POST requiere ADMIN (Sprint 1).
 
 ### 2.2 APIs faltantes
 
-| Endpoint | Prio | Para que |
-|----------|------|----------|
-| `POST /api/auth/password-reset` | P1 | Genera token + envia email via SendGrid |
-| `POST /api/auth/password-reset/[token]` | P1 | Valida token, actualiza password |
-| `POST /api/auth/verify-email` | P2 | Confirma email post-registro |
-| `POST /api/arca/verificar-cuit` | P1 | Llama ARCA, retorna razon social + condicion fiscal |
-| `POST /api/validaciones/[id]/approve` | P1 | Admin aprueba documento (con role check) |
-| `POST /api/validaciones/[id]/reject` | P1 | Admin rechaza con motivo |
-| `PATCH /api/talleres/[id]/nivel` | P1 | Recalcula BRONCE/PLATA/ORO desde validaciones |
-| `POST /api/certificados/generate` | P1 | Genera codigo PDT-CERT-YYYY-XXXXXX + QR |
-| `GET /api/certificados/[codigo]/pdf` | P2 | Genera y retorna PDF del certificado |
-| `POST /api/colecciones/[id]/evaluacion/submit` | P2 | Recibe respuestas, calcula score, emite certificado si aprueba |
-| `POST /api/colecciones/[id]/progreso` | P2 | Marca video como visto, actualiza % |
-| `POST /api/auditorias/[id]/informe` | P2 | Checklist + fotos + resultado de auditoria |
-| `GET/POST/PUT/DELETE /api/procesos-productivos` | P2 | CRUD para admin |
-| `GET/POST/PUT/DELETE /api/tipos-documento` | P2 | CRUD para admin |
-| `GET/POST/PUT/DELETE /api/faq` | P3 | CRUD FAQ |
-| `POST /api/admin/notificaciones/send` | P3 | Envio masivo email/WA/in-app |
-| `POST /api/taller/perfil/completar` | P1 | Guarda datos del wizard (12 pasos) |
-| `GET /api/auth/mi-cuenta` | P2 | Pre-carga datos de cuenta (phone, etc.) |
+| Endpoint | Prio | Estado |
+|----------|------|--------|
+| ~~`POST /api/auth/password-reset`~~ | P1 | **HECHO** (Sprint 1) — genera token + envia email via lib/email.ts |
+| ~~`POST /api/auth/password-reset/[token]`~~ | P1 | **HECHO** (Sprint 1) — valida token, actualiza password, borra token |
+| `POST /api/auth/verify-email` | P2 | FALTA — confirma email post-registro |
+| `POST /api/arca/verificar-cuit` | P1 | FALTA — llama ARCA, retorna razon social + condicion fiscal |
+| ~~`POST /api/validaciones/[id]/approve`~~ | P1 | **HECHO** (Sprint 1) — via Server Actions en admin/talleres/[id] |
+| ~~`POST /api/validaciones/[id]/reject`~~ | P1 | **HECHO** (Sprint 1) — via Server Actions en admin/talleres/[id] |
+| ~~`PATCH /api/talleres/[id]/nivel`~~ | P1 | **HECHO** (Sprint 1) — lib/nivel.ts calcularNivel() + aplicarNivel() |
+| `POST /api/certificados/generate` | P1 | FALTA — genera codigo PDT-CERT-YYYY-XXXXXX + QR |
+| `GET /api/certificados/[codigo]/pdf` | P2 | FALTA — genera y retorna PDF del certificado |
+| ~~`POST /api/colecciones/[id]/evaluacion`~~ | P2 | **HECHO** — corrige respuestas, genera certificado si aprueba |
+| ~~`POST /api/colecciones/[id]/progreso`~~ | P2 | **HECHO** — marca video como visto, actualiza % |
+| `POST /api/auditorias/[id]/informe` | P2 | FALTA — checklist + fotos + resultado de auditoria |
+| `GET/POST/PUT/DELETE /api/procesos-productivos` | P2 | FALTA — CRUD para admin |
+| `GET/POST/PUT/DELETE /api/tipos-documento` | P2 | FALTA — CRUD para admin |
+| `GET/POST/PUT/DELETE /api/faq` | P3 | FALTA — CRUD FAQ |
+| `POST /api/admin/notificaciones/send` | P3 | FALTA — envio masivo email/WA/in-app |
+| ~~`POST /api/taller/perfil/completar`~~ | P1 | **HECHO** — via PUT /api/talleres/[id] desde wizard |
+| `GET /api/auth/mi-cuenta` | P2 | FALTA — pre-carga datos de cuenta (phone, etc.) |
 
 ### 2.3 Problemas de seguridad en APIs existentes
 
-| Problema | Endpoints afectados | Prio |
-|----------|---------------------|------|
-| Sin auth | auditorias, validaciones, pedidos/[id]/ordenes, denuncias GET | P0 |
-| Sin ownership check | talleres/[id] PUT, marcas/[id] PUT, pedidos/[id] PUT | P1 |
-| Certificados POST sin auth | /api/certificados POST | P1 |
-| Denuncias GET expone todo | /api/denuncias GET sin auth | P1 |
-| Notificaciones userId no validado | /api/notificaciones | P1 |
-| Colecciones DELETE sin auth | /api/colecciones/[id] DELETE | P1 |
-| Validaciones self-approve | /api/validaciones/[id] PUT sin role check | P1 |
+| Problema | Endpoints afectados | Estado |
+|----------|---------------------|--------|
+| ~~Sin auth~~ | ~~auditorias, validaciones, pedidos/[id]/ordenes, denuncias GET~~ | **RESUELTO** (Sprint 1) |
+| ~~Sin ownership check~~ | ~~talleres/[id] PUT, marcas/[id] PUT, pedidos/[id] PUT~~ | **RESUELTO** (Sprint 1) |
+| ~~Certificados POST sin auth~~ | ~~/api/certificados POST~~ | **RESUELTO** (Sprint 1) |
+| ~~Denuncias GET expone todo~~ | ~~/api/denuncias GET sin auth~~ | **RESUELTO** (Sprint 1) |
+| Notificaciones userId no validado | /api/notificaciones | PENDIENTE P1 |
+| ~~Colecciones DELETE sin auth~~ | ~~/api/colecciones/[id] DELETE~~ | **RESUELTO** (Sprint 1) |
+| ~~Validaciones self-approve~~ | ~~/api/validaciones/[id] PUT sin role check~~ | **RESUELTO** (Sprint 1) |
 
 ### 2.4 Logica de negocio
 
-**Motor calculo nivel** — FALTA — P1
-Automatizar BRONCE/PLATA/ORO basado en validaciones completadas. BRONCE = CUIT verificado. PLATA = BRONCE + empleados + 1 curso. ORO = PLATA + habilitaciones completas + certificaciones.
+**Motor calculo nivel** — **OK** (Sprint 1)
+lib/nivel.ts: calcularNivel() + aplicarNivel(). Calcula BRONCE/PLATA/ORO basado en validaciones + certificados. Se invoca al crear/revocar certificado y al aprobar/rechazar validacion desde admin.
 
-**Progreso formalizacion %** — PARCIAL — P1
-La pagina taller/formalizacion calcula el % desde validaciones reales. Pero el valor no se persiste en taller.puntaje. Falta trigger o recalculo automatico.
+**Progreso formalizacion %** — **OK** (Sprint 1)
+La pagina taller/formalizacion calcula % desde validaciones reales. aplicarNivel() persiste nivel y puntaje en taller.
 
-**Generacion codigo certificado** — FALTA — P1
-Formato PDT-CERT-YYYY-XXXXXX, unico, verificable via QR en /verificar/[codigo].
+**Generacion codigo certificado** — PARCIAL — P1
+Certificados se crean desde academia (evaluacion aprobada) con codigo unico. Falta formato estandarizado PDT-CERT-YYYY-XXXXXX y generacion QR image.
 
 **Scoring/reputacion taller** — FALTA — P2
 Combinar ontimeRate + retrabajoRate + rating + formalizacion % con pesos configurables.
@@ -331,8 +331,8 @@ Tabla log_actividad existe, API GET funciona, pero ninguna ruta escribe logs al 
 **ARCA (ex-AFIP)** — FALTA — P1
 Se necesita: lib/arca.ts con client API (cert-based auth), endpoint POST /api/arca/verificar-cuit, mock para dev, env vars (ARCA_CUIT, ARCA_TOKEN, ARCA_CERT_PATH). Usado en: registro paso 2, admin detalle taller (verificar), formalizacion.
 
-**SendGrid (email)** — FALTA — P1
-Se necesita: lib/email.ts wrapper, 8 templates (bienvenida, reset password, doc aprobado/rechazado, certificado emitido, vencimiento proximo, auditoria programada, notificacion masiva, verificar email). Motor de variables {{nombre}}, {{empresa}}, {{url}}. Env: SENDGRID_API_KEY, EMAIL_FROM.
+**SendGrid (email)** — PARCIAL — P1 (Sprint 1)
+lib/email.ts existe con wrapper SendGrid. Template password-reset implementado. Faltan: bienvenida, doc aprobado/rechazado, certificado emitido, vencimiento proximo, auditoria programada, notificacion masiva, verificar email. Motor de variables {{nombre}}, {{empresa}}, {{url}}. Env: SENDGRID_API_KEY, EMAIL_FROM.
 
 **QR Code** — FALTA — P1
 Package `qrcode`, lib/qr.ts que genera QR apuntando a https://[dominio]/verificar/[codigo]. Usado en: certificado preview/download, pagina publica verificar.
@@ -357,13 +357,13 @@ lib/maps.ts geocoding. Mapa embed en perfil publico taller. Env: GOOGLE_MAPS_API
 
 **Middleware proteccion por roles** — OK. Rutas publicas listadas. /admin→ADMIN, /taller→TALLER, /marca→MARCA, /estado→ESTADO. Redirect a /unauthorized si rol incorrecto. Root / redirige segun rol.
 
-**Password reset completo** — FALTA — P1. Token generation, email sending, /restablecer/[token] page, API validate+update.
+**Password reset completo** — **OK** (Sprint 1). POST /api/auth/password-reset genera token + envia email. POST /api/auth/password-reset/[token] valida y actualiza. Pagina /restablecer/[token] con form completo.
 
 **Verificacion email** — FALTA — P2. Campo emailVerified existe en User. VerificationToken model existe. Flujo no conectado.
 
 **Rate limiting** — FALTA — P2. Endpoints /registro, /login, /arca/verificar-cuit necesitan rate limit. Upstash Redis o similar.
 
-**Upload validation** — FALTA — P2. No hay mecanismo de upload. Cuando se implemente: validar MIME (PDF/JPG/PNG), max 10MB, virus scan opcional.
+**Upload validation** — **OK** (Sprint 1). POST /api/validaciones/[id]/upload con auth + ownership check. Valida MIME (PDF/JPG/PNG/WEBP), max 5MB. Usa Supabase Storage (lib/storage.ts). Graceful fallback si storage no configurado.
 
 **Session max age** — PARCIAL — P2. JWT strategy pero maxAge no configurado explicitamente en auth.ts.
 
@@ -474,50 +474,53 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 
 ---
 
-## RESUMEN GENERAL
+## RESUMEN GENERAL (actualizado 2026-02-25)
 
 | Categoria | OK | PARCIAL | STUB | FALTA |
 |-----------|-----|---------|------|-------|
 | 1. Pantallas (70) | 21 | 9 | 20 | 20 |
-| 2. Backend/API (26 rutas + 18 faltantes) | 8 | 6 | 0 | 18 |
-| 3. Integraciones (7) | 0 | 0 | 0 | 7 |
-| 4. Auth/Seguridad (8) | 3 | 2 | 0 | 3 |
+| 2. Backend/API (26 rutas + 10 faltantes) | 18 | 4 | 0 | 10 |
+| 3. Integraciones (7) | 0 | 1 | 0 | 6 |
+| 4. Auth/Seguridad (8) | 5 | 1 | 0 | 2 |
 | 5. Schema (12 gaps) | — | 2 | 0 | 10 |
 | 6. UX/Frontend (12) | 2 | 5 | 0 | 5 |
 | 7. Testing (12) | 0 | 0 | 0 | 12 |
 | 8. Deploy/Infra (11) | 5 | 2 | 0 | 4 |
 
-**Problemas criticos (P0):** 7 endpoints sin auth exponen datos o permiten mutaciones no autorizadas.
+**Problemas criticos (P0):** ~~7 endpoints sin auth~~ → RESUELTO en Sprint 1. Queda pendiente: notificaciones userId no validado (P1).
 
 ---
 
 ## SPRINTS SUGERIDOS
 
-### Sprint 1 — Seguridad + Flujos criticos
-1. Corregir auth en APIs expuestas (auditorias, validaciones, denuncias, certificados POST, ordenes)
-2. Agregar ownership checks en PUT (talleres, marcas, pedidos)
-3. Password reset completo (API + SendGrid + pagina /restablecer)
-4. ~~Wizard perfil taller: conectar submit a API~~ — RESUELTO (guarda via PUT /api/talleres/[id])
-5. Formalizacion: integrar file-upload component + storage
-6. Admin detalle taller: cargar datos reales + aprobar/rechazar documentos
-7. Motor calculo nivel BRONCE/PLATA/ORO
+### Sprint 1 — Seguridad + Flujos criticos — ✅ COMPLETADO (2026-02-25)
+1. ~~Corregir auth en APIs expuestas (auditorias, validaciones, denuncias, certificados POST, ordenes)~~ ✅
+2. ~~Agregar ownership checks en PUT (talleres, marcas, pedidos, validaciones)~~ ✅
+3. ~~Password reset completo (API + lib/email.ts + pagina /restablecer/[token])~~ ✅
+4. ~~Wizard perfil taller: conectar submit a API~~ ✅ (guarda via PUT /api/talleres/[id])
+5. ~~Formalizacion: integrar file-upload + Supabase Storage~~ ✅
+6. ~~Admin detalle taller: cargar datos reales + aprobar/rechazar documentos (Server Actions)~~ ✅
+7. ~~Motor calculo nivel BRONCE/PLATA/ORO (lib/nivel.ts)~~ ✅
+8. ~~Fix middleware: landing page / accesible sin auth~~ ✅
 
-### Sprint 2 — Integraciones core
-1. SendGrid: lib/email.ts + templates basicos
+### Sprint 2 — Integraciones core (SIGUIENTE)
+1. SendGrid: ampliar lib/email.ts con templates (bienvenida, doc aprobado/rechazado, certificado, vencimiento)
 2. ARCA: lib/arca.ts + verificacion CUIT en registro
 3. QR: lib/qr.ts + generacion certificados
-4. Academia detalle: reescribir con datos Prisma reales + progreso + evaluacion
-5. Verificar certificado: consumir ?code= URL param + mostrar QR
+4. ~~Academia detalle: reescribir con datos Prisma reales + progreso + evaluacion~~ ✅ (ya hecho)
+5. ~~Verificar certificado: consumir ?code= URL param + mostrar QR~~ ✅ (ya hecho)
 6. Dashboard taller con datos reales (pedidos recientes, alertas, progreso)
+7. Notificaciones: fix userId validation contra session
 
 ### Sprint 3 — Admin funcional
-1. Admin talleres/[id] y marcas/[id]: cargar datos reales
-2. Admin colecciones/[id]: pre-cargar datos existentes
-3. Admin evaluaciones: conectar a BD
-4. Admin procesos + documentos: conectar a BD
-5. Admin reportes con datos reales + export PDF/Excel
-6. Logging actividad en mutaciones API
-7. Estado exportar con generacion real
+1. ~~Admin talleres/[id]: cargar datos reales + aprobar/rechazar~~ ✅ (ya hecho)
+2. ~~Admin colecciones/[id]: pre-cargar datos existentes~~ ✅ (ya hecho)
+3. ~~Admin evaluaciones: conectar a BD~~ ✅ (ya hecho)
+4. Admin marcas/[id]: cargar datos reales (actualmente mock)
+5. Admin procesos + documentos: conectar a BD
+6. Admin reportes con datos reales + export PDF/Excel
+7. Logging actividad en mutaciones API
+8. Estado exportar con generacion real
 
 ### Sprint 4 — Polish + Testing
 1. Loading states por seccion
