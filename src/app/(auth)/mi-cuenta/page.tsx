@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { useToast } from '@/components/ui/toast'
 
 const profileSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio'),
@@ -30,6 +31,7 @@ type PasswordData = z.infer<typeof passwordSchema>
 
 export default function MiCuentaPage() {
   const { data: session, update: updateSession } = useSession()
+  const { toast } = useToast()
   const [profileMsg, setProfileMsg] = useState<string | null>(null)
   const [profileError, setProfileError] = useState<string | null>(null)
   const [passwordMsg, setPasswordMsg] = useState<string | null>(null)
@@ -72,6 +74,7 @@ export default function MiCuentaPage() {
         setProfileError(body.error || 'Error al actualizar')
       } else {
         setProfileMsg('Perfil actualizado correctamente')
+        toast('Perfil actualizado')
         // Refrescar sesión para que el nombre se actualice en el header
         await updateSession({ name: data.name })
       }
@@ -97,6 +100,7 @@ export default function MiCuentaPage() {
         setPasswordError(body.error || 'Error al cambiar contraseña')
       } else {
         setPasswordMsg('Contraseña actualizada correctamente')
+        toast('Contrasena actualizada')
         passwordForm.reset()
       }
     } catch {

@@ -1,10 +1,11 @@
 export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { Save } from 'lucide-react'
+import { Suspense } from 'react'
+import { SaveToast } from '@/components/ui/save-toast'
 
 async function updateMarca(formData: FormData) {
   'use server'
@@ -40,7 +41,7 @@ async function updateMarca(formData: FormData) {
     },
   })
 
-  revalidatePath('/marca/perfil')
+  redirect('/marca/perfil?saved=1')
 }
 
 export default async function MarcaPerfilPage() {
@@ -78,6 +79,7 @@ export default async function MarcaPerfilPage() {
 
   return (
     <div className="space-y-6">
+      <Suspense><SaveToast message="Perfil actualizado" /></Suspense>
       <h1 className="font-overpass font-bold text-3xl text-brand-blue">Mi Perfil de Marca</h1>
 
       <div className="grid gap-4 sm:grid-cols-3">

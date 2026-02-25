@@ -31,6 +31,15 @@
   100% { stroke-dashoffset: var(--progress-offset); }
 }
 
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
 :root {
   --brand-blue: #1e2dbe;
   --brand-red: #fa3c4b;
