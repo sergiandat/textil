@@ -17,7 +17,7 @@ const statusVariant: Record<string, 'default' | 'success' | 'warning'> = {
 
 const statusLabel: Record<string, string> = {
   BORRADOR: 'Borrador',
-  EN_EJECUCION: 'En ejecucion',
+  EN_EJECUCION: 'En ejecución',
   ESPERANDO_ENTREGA: 'Esperando entrega',
   COMPLETADO: 'Completado',
   CANCELADO: 'Cancelado',
@@ -106,7 +106,7 @@ export default async function MarcaPedidosPage({
           <p className="font-overpass font-bold text-2xl text-brand-blue">{total}</p>
         </Card>
         <Card className="text-center p-4">
-          <p className="text-xs text-gray-500">En ejecucion</p>
+          <p className="text-xs text-gray-500">En ejecución</p>
           <p className="font-overpass font-bold text-2xl text-brand-blue">{enEjecucion}</p>
         </Card>
         <Card className="text-center p-4">
@@ -145,7 +145,7 @@ export default async function MarcaPedidosPage({
             >
               <option value="">Todos</option>
               <option value="BORRADOR">Borrador</option>
-              <option value="EN_EJECUCION">En ejecucion</option>
+              <option value="EN_EJECUCION">En ejecución</option>
               <option value="ESPERANDO_ENTREGA">Esperando entrega</option>
               <option value="COMPLETADO">Completado</option>
               <option value="CANCELADO">Cancelado</option>

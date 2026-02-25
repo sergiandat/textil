@@ -62,6 +62,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       },
     })
 
+    // Auto-transicionar pedido de BORRADOR → EN_EJECUCION al asignar primer taller
+    const pedido = await prisma.pedido.findUnique({ where: { id }, select: { estado: true } })
+    if (pedido?.estado === 'BORRADOR') {
+      await prisma.pedido.update({ where: { id }, data: { estado: 'EN_EJECUCION' } })
+    }
+
     return NextResponse.json(orden, { status: 201 })
   } catch (error) {
     console.error('Error en POST /api/pedidos/[id]/ordenes:', error)
