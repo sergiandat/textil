@@ -146,7 +146,6 @@ export default async function MarcaPedidosPage({
               <option value="">Todos</option>
               <option value="BORRADOR">Borrador</option>
               <option value="EN_EJECUCION">En ejecución</option>
-              <option value="ESPERANDO_ENTREGA">Esperando entrega</option>
               <option value="COMPLETADO">Completado</option>
               <option value="CANCELADO">Cancelado</option>
             </select>

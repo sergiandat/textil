@@ -53,10 +53,48 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const body = await req.json()
 
+    // Si se intenta cambiar el estado, solo se permite → CANCELADO
+    if (body.estado) {
+      const pedidoActual = await prisma.pedido.findUnique({
+        where: { id },
+        select: { estado: true },
+      })
+
+      if (body.estado !== 'CANCELADO') {
+        return NextResponse.json(
+          { error: 'Solo se permite cancelar manualmente. El resto de estados se calcula automáticamente.' },
+          { status: 400 }
+        )
+      }
+
+      if (pedidoActual?.estado === 'COMPLETADO' || pedidoActual?.estado === 'CANCELADO') {
+        return NextResponse.json(
+          { error: `No se puede cancelar un pedido en estado ${pedidoActual.estado}` },
+          { status: 400 }
+        )
+      }
+
+      // Cancelar pedido + cascadear a ordenes no completadas
+      const [pedido] = await prisma.$transaction([
+        prisma.pedido.update({
+          where: { id },
+          data: { estado: 'CANCELADO' },
+        }),
+        prisma.ordenManufactura.updateMany({
+          where: {
+            pedidoId: id,
+            estado: { notIn: ['COMPLETADO', 'CANCELADO'] },
+          },
+          data: { estado: 'CANCELADO' },
+        }),
+      ])
+
+      return NextResponse.json(pedido)
+    }
+
     const pedido = await prisma.pedido.update({
       where: { id },
       data: {
-        estado: body.estado,
         progresoTotal: body.progresoTotal,
         fechaObjetivo: body.fechaObjetivo ? new Date(body.fechaObjetivo) : undefined,
         montoTotal: body.montoTotal,

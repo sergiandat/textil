@@ -8,12 +8,11 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, Package, Clock, DollarSign, TrendingUp, CheckCircle } from 'lucide-react'
 import { AsignarTaller } from './asignar-taller'
-import { PedidoActions } from './pedido-actions'
+import { CancelarPedido } from './cancelar-pedido'
 
 const statusVariant: Record<string, 'default' | 'success' | 'warning' | 'error'> = {
   BORRADOR: 'default',
   EN_EJECUCION: 'warning',
-  ESPERANDO_ENTREGA: 'warning',
   COMPLETADO: 'success',
   CANCELADO: 'error',
 }
@@ -21,7 +20,6 @@ const statusVariant: Record<string, 'default' | 'success' | 'warning' | 'error'>
 const statusLabel: Record<string, string> = {
   BORRADOR: 'Borrador',
   EN_EJECUCION: 'En ejecución',
-  ESPERANDO_ENTREGA: 'Esperando entrega',
   COMPLETADO: 'Completado',
   CANCELADO: 'Cancelado',
 }
@@ -40,11 +38,10 @@ const ordenStatusVariant: Record<string, 'default' | 'success' | 'warning'> = {
   CANCELADO: 'warning',
 }
 
-// Flujo de estados del pedido
+// Flujo de estados del pedido (3 pasos)
 const FLOW_STEPS = [
   { key: 'BORRADOR', label: 'Borrador' },
   { key: 'EN_EJECUCION', label: 'En ejecución' },
-  { key: 'ESPERANDO_ENTREGA', label: 'Esperando entrega' },
   { key: 'COMPLETADO', label: 'Completado' },
 ]
 
@@ -181,7 +178,9 @@ export default async function MarcaPedidoDetallePage({ params }: { params: Promi
         {pedido.estado === 'BORRADOR' && (
           <AsignarTaller pedidoId={pedido.id} />
         )}
-        <PedidoActions pedidoId={pedido.id} estado={pedido.estado} />
+        {(pedido.estado === 'BORRADOR' || pedido.estado === 'EN_EJECUCION') && (
+          <CancelarPedido pedidoId={pedido.id} />
+        )}
       </div>
 
       {/* Ordenes de manufactura */}

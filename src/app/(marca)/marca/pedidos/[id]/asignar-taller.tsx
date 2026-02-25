@@ -70,6 +70,7 @@ export function AsignarTaller({ pedidoId }: AsignarTallerProps) {
   }
 
   async function confirmarAsignacion() {
+    if (guardando) return
     if (!tallerSeleccionado || !precio) {
       setError('Completá el precio para continuar.')
       return
