@@ -8,9 +8,8 @@
 Frontend + Backend: Next.js 14+ (App Router)
 Base de Datos:      PostgreSQL via Supabase Pro ($25/mes)
 Autenticación:      NextAuth.js
-Pagos:              Placeholder (Mercado Pago en Fase 1)
-Email:              Resend o SendGrid
-WhatsApp:           Twilio (requerido por OIT)
+Email:              SendGrid
+WhatsApp:           wa.me click-to-chat (sin API, links directos)
 Deploy:             Vercel Pro ($20/mes)
 IA Desarrollo:      Claude Max (pagado por devs, no OIT)
 ```
@@ -49,7 +48,7 @@ IA Desarrollo:      Claude Max (pagado por devs, no OIT)
 │  - CRUD pedidos/contratos                                │
 │  - CRUD cursos/certificados                              │
 │  - Verificación AFIP                                     │
-│  - Webhooks Mercado Pago                                 │
+│  - Generación certificados PDF                            │
 └───────────────┬─────────────────────────────────────────┘
                 │
 ┌───────────────┴─────────────────────────────────────────┐
@@ -59,10 +58,10 @@ IA Desarrollo:      Claude Max (pagado por devs, no OIT)
                 │
 ┌───────────────┴─────────────────────────────────────────┐
 │              SERVICIOS EXTERNOS                          │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐        │
-│  │  AFIP   │ │WhatsApp │ │  Email  │ │ Mercado │        │
-│  │  SDK    │ │ Twilio  │ │ Resend  │ │Pago(F1) │        │
-│  └─────────┘ └─────────┘ └─────────┘ └─────────┘        │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐                      │
+│  │  AFIP   │ │WhatsApp │ │  Email  │                      │
+│  │  SDK    │ │  wa.me  │ │SendGrid │                      │
+│  └─────────┘ └─────────┘ └─────────┘                      │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -147,15 +146,6 @@ contratos (
   fecha_firma TIMESTAMP
 )
 
-pagos (
-  id UUID PRIMARY KEY,
-  contrato_id UUID REFERENCES contratos,
-  monto DECIMAL,
-  estado ENUM('pendiente', 'en_escrow', 'liberado', 'disputado'),
-  mp_payment_id VARCHAR,
-  created_at TIMESTAMP
-)
-
 -- APRENDIZAJE (Comunidad)
 cursos (
   id UUID PRIMARY KEY,
@@ -188,32 +178,13 @@ certificados (
 )
 ```
 
-### Diagrama Entidad-Relación
+### Nota sobre modelo de datos
 
-```
-┌─────────┐       ┌─────────┐       ┌─────────┐
-│  users  │───────│ pedidos │───────│contratos│
-└────┬────┘       └────┬────┘       └────┬────┘
-     │                 │                 │
-     │            ┌────┴────┐       ┌────┴────┐
-     │            │cotizac. │       │  pagos  │
-     │            └─────────┘       └─────────┘
-     │
-     ├────────────┐
-     │            │
-┌────┴────┐  ┌────┴────┐
-│ marca   │  │ taller  │
-│ profile │  │ profile │
-└─────────┘  └─────────┘
-
-┌─────────┐       ┌─────────┐       ┌─────────┐
-│  cursos │───────│inscripc.│───────│ certif. │
-└─────────┘       └────┬────┘       └─────────┘
-                       │
-                  ┌────┴────┐
-                  │  users  │
-                  └─────────┘
-```
+> **IMPORTANTE:** Este esquema SQL es una referencia inicial. El modelo de datos real
+> está en el schema Prisma del repo de código (`GIDs/Textil_mvp`).
+> Ver DEC-010 en DECISIONES.md: el schema actual tiene 12 gaps identificados
+> que deben resolverse antes de seguir implementando.
+> Referencia actualizada: `docs/CHECKLIST.md` sección 5.
 
 ---
 
@@ -231,18 +202,20 @@ Ver: [06_INTEGRACIONES.md](06_INTEGRACIONES.md)
 - [x] Autenticación: NextAuth.js
 - [x] Deploy: Vercel Pro ($20/mes)
 - [x] Base de datos: Supabase Pro ($25/mes)
-- [x] WhatsApp: Twilio (requerido por OIT)
+- [x] WhatsApp: wa.me click-to-chat (sin API)
 - [x] AFIP: Afip SDK para verificación CUIT
 - [x] Desarrollo: 100% asistido por Claude Max
 
 ### Cambiado desde propuesta inicial
-- [x] Pagos: **Placeholder en MVP** (registro manual, Mercado Pago en Fase 1)
-- [x] APRENDER: Cursos estáticos, RAG opcional si hay demanda
+- [x] Pagos: **Fuera del MVP** (se gestionan por fuera de la plataforma)
+- [x] ACORDAR: **Fuera del MVP** (acuerdos se gestionan por fuera)
+- [x] WhatsApp: wa.me click-to-chat (sin Twilio, sin API)
+- [x] COMPLIANCE renombrado a ACOMPAÑAR
+- [x] APRENDER: Videos YouTube curados + evaluaciones + certificados
 
 ### Por definir en desarrollo
-- [ ] Estrategia de testing (Jest + Playwright recomendado)
+- [ ] Estrategia de testing (Vitest + Playwright recomendado)
 - [ ] CI/CD en GitHub Actions
-- [ ] Proveedor específico de WhatsApp (Twilio vs alternativas)
 
 ---
 

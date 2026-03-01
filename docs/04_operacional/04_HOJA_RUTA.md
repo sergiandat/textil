@@ -19,10 +19,10 @@ Todo el código en GitHub, blockchain para verificación.
 
 ---
 
-## MVP (Meses 0-6)
+## MVP (5 meses: 2 desarrollo + 3 piloto)
 
 ### Pregunta Clave
-> "¿Pueden 20 talleres y 10 marcas hacer pedidos verificables con trabajo decente, pagos garantizados, y supervisión tripartita, en 6 meses?"
+> "¿Pueden 20 talleres y 10 marcas hacer pedidos verificables con trabajo decente y supervisión tripartita, en 5 meses?"
 
 ### Métricas de Éxito
 
@@ -30,21 +30,22 @@ Todo el código en GitHub, blockchain para verificación.
 |---------|--------------|
 | Talleres registrados | 20 |
 | Marcas activas | 10 |
-| Pedidos completados | 212 |
-| Valor transado | $2.1M USD |
+| Pedidos iniciados | 30 |
+| Pedidos completados | 15 |
 | Tasa de disputa | <5% |
 | Satisfacción | >80% |
 
-### Funciones en MVP (6 de 10)
+### Funciones en MVP (5 de 11)
 
 | Función | Estado | Barrera que resuelve |
 |---------|--------|---------------------|
+| REGISTRACION | ✅ Onboarding marca/taller | Informalidad |
 | ENCONTRAR | ✅ Directorio + búsqueda simple | Falta de clientes |
-| ACORDAR | ✅ Contrato digital básico | Desconfianza |
-| PAGAR | ✅ Escrow con Mercado Pago | Desconfianza |
-| COMPLIANCE | ✅ Verificación CUIT | Formalización |
+| ACOMPAÑAR | ✅ Verificación CUIT + acompañamiento | Formalización |
 | FISCALIZAR | ✅ Dashboard básico | Estado ausente |
 | APRENDER | ✅ Catálogo + certificados | Comunidad de aprendizaje |
+| ACORDAR | ❌ Fase 1 | Desconfianza |
+| PAGAR | ❌ Fase 1 | Desconfianza |
 | EJECUTAR | ❌ Fase 1 | - |
 | VERIFICAR | ❌ Fase 1 | - |
 | LOGÍSTICA | ❌ Fase 1 | - |
@@ -72,10 +73,10 @@ SEMANA 3-4: PEDIDOS + ENCONTRAR
 ├── Dev 2: Dashboard taller + lista pedidos
 └── Claude: Componentes UI, filtros, búsqueda
 
-SEMANA 5-6: ACORDAR + PAGAR
-├── Dev 1: Cotizaciones + contratos digitales
-├── Dev 2: Integración Mercado Pago + escrow
-└── Claude: Lógica de estados, webhooks, notificaciones
+SEMANA 5-6: ACOMPAÑAR + REGISTRACION + INTEGRACIÓN
+├── Dev 1: Flujo acompañamiento, verificación CUIT real (AFIP)
+├── Dev 2: Onboarding completo marca/taller, perfiles comerciales
+└── Claude: Validaciones, estados de registro, tests E2E
 
 SEMANA 7: APRENDER
 ├── Dev 1: Catálogo cursos + inscripciones
@@ -88,7 +89,7 @@ SEMANA 8: FISCALIZAR + INTEGRACIÓN
 └── Claude: Tests E2E, documentación API
 
 ═══════════════════════════════════════════════════════════════
-FASE IMPLEMENTACIÓN Y PRUEBAS: 4 MESES
+FASE IMPLEMENTACIÓN Y PRUEBAS: 3 MESES
 ═══════════════════════════════════════════════════════════════
 
 MES 3: PILOTO INICIAL
@@ -103,44 +104,31 @@ MES 4: EXPANSIÓN PILOTO
 ├── Ajustes UX basados en uso
 └── Capacitación usuarios
 
-MES 5: ESTABILIZACIÓN
+MES 5: ESTABILIZACIÓN + EVALUACIÓN
 ├── 20 talleres + 10 marcas objetivo
 ├── Monitoreo de métricas
 ├── Optimización performance
-└── Documentación para soporte
-
-MES 6: EVALUACIÓN Y CIERRE MVP
 ├── Evaluación métricas vs objetivos
 ├── Documentación de aprendizajes
-├── Plan para Fase 1
 └── Decisión: escalar o iterar
 
-TOTAL: 6 MESES
+TOTAL: 5 MESES
 ```
 
-### Pantallas MVP (10 pantallas)
+### Pantallas MVP (70 pantallas + 6 modales)
 
-| # | Pantalla | Rol | Función |
-|---|----------|-----|---------|
-| 1 | Landing/Login | Todos | Auth |
-| 2 | Perfil | Todos | Compliance |
-| 3 | Dashboard Marca | Marca | - |
-| 4 | Crear Pedido | Marca | Encontrar |
-| 5 | Ver Talleres | Marca | Encontrar |
-| 6 | Dashboard Taller | Taller | - |
-| 7 | Aceptar Pedido | Taller | Acordar |
-| 8 | Catálogo Cursos | Taller | Aprender |
-| 9 | Mis Certificados | Taller | Aprender |
-| 10 | Dashboard Inspector | Estado | Fiscalizar |
+> **Ver `PANTALLAS_MVP.md` para detalle completo.**
+
+Las 70 pantallas cubren los 5 roles del sistema (Marca, Taller, Inspector, Admin, Publico) y las 5 funciones del MVP (REGISTRACION, ENCONTRAR, ACOMPAÑAR, FISCALIZAR, APRENDER).
 
 ---
 
-## Fase 1 (Meses 7-12)
+## Fase 1 (Meses 6-12)
 
 ### Objetivos
 - Escalar de 20 a 100 talleres
 - Escalar de 10 a 50 marcas
-- Agregar funciones faltantes (EJECUTAR, VERIFICAR, LOGÍSTICA, GOBERNAR)
+- Agregar funciones faltantes (ACORDAR, PAGAR, EJECUTAR, VERIFICAR, LOGÍSTICA, GOBERNAR)
 - Integrar blockchain real (Polygon)
 - IA para matching avanzado
 - Certificados avanzados con blockchain
@@ -217,20 +205,20 @@ TOTAL: 6 MESES
 | 15 | Notificaciones | Emails nuevo pedido | UI notificaciones | Templates email |
 | 16 | Cierre etapa | Testing, fixes | Documentación | Tests E2E pedidos |
 
-#### Etapa 3: Acordar + Pagar (10 días)
+#### Etapa 3: Acompañar + Registracion completa (10 días)
 
 | Día | Tarea | Dev 1 | Dev 2 | Claude |
 |-----|-------|-------|-------|--------|
-| 17 | Cotizaciones | CRUD cotizaciones | UI cotizar pedido | Validaciones precio |
-| 18 | Negociación | Chat/mensajes básico | UI conversación | Componentes chat |
-| 19 | Contrato | Modelo contrato | Generación términos | Template contrato |
-| 20 | Firma digital | Firma marca | Firma taller | Validación firmas |
-| 21 | Mercado Pago setup | SDK, credenciales | Checkout Pro | Documentación MP |
-| 22 | Escrow | Crear preferencia | Webhook recepción | Manejo estados |
-| 23 | Liberación pago | Confirmar entrega | Liberar fondos | Notificaciones |
-| 24 | Historial pagos | API historial | UI mis pagos | Reportes básicos |
-| 25 | Disputas básico | Flag disputa | UI reportar problema | Estados disputa |
-| 26 | Cierre etapa | Testing MP sandbox | Documentación | Tests E2E pagos |
+| 17 | Onboarding marca | Flujo registro marca completo | UI paso a paso | Validaciones negocio |
+| 18 | Onboarding taller | Flujo registro taller completo | UI capacidades, maquinaria | Validaciones taller |
+| 19 | Verificación CUIT | Integración AFIP real | UI estados verificación | Manejo errores AFIP |
+| 20 | Perfiles comerciales | Galería productos marca | Portfolio taller | Componentes galería |
+| 21 | Acompañamiento | Plan de regularización | UI checklist formalización | Estados progreso |
+| 22 | Notificaciones | Sistema notificaciones | UI centro de notificaciones | Templates email |
+| 23 | Niveles verificación | Lógica bronce/plata/oro | UI badges + progreso | Reglas de negocio |
+| 24 | Dashboard admin | Panel administración | Gestión usuarios | Reportes básicos |
+| 25 | Mejoras UX | Responsive, accesibilidad | Testing cross-browser | Optimización performance |
+| 26 | Cierre etapa | Testing integración | Documentación | Tests E2E registro |
 
 #### Etapa 4: Aprender (6 días)
 
@@ -256,14 +244,14 @@ TOTAL: 6 MESES
 
 | Etapa | Días | Función | Entregable |
 |-------|------|---------|------------|
-| 1. Setup + Auth | 8 | COMPLIANCE | Login, perfiles, verificación CUIT |
-| 2. Pedidos | 8 | ENCONTRAR | Crear pedidos, buscar talleres |
-| 3. Acordar + Pagar | 10 | ACORDAR + PAGAR | Contratos, Mercado Pago, escrow |
+| 1. Setup + Auth | 8 | REGISTRACION | Login, perfiles, verificación CUIT |
+| 2. Pedidos + Encontrar | 8 | ENCONTRAR | Crear pedidos, buscar talleres |
+| 3. Acompañar + Registracion | 10 | ACOMPAÑAR + REGISTRACION | Onboarding completo, verificación AFIP, perfiles comerciales |
 | 4. Aprender | 6 | APRENDER | Cursos, certificados PDF |
 | 5. Fiscalizar | 4 | FISCALIZAR | Dashboard inspector, alertas |
-| **TOTAL** | **36** | **6 funciones** | **MVP completo** |
+| **TOTAL** | **36** | **5 funciones** | **MVP completo** |
 
-### Detalle Infraestructura (6 meses)
+### Detalle Infraestructura (5 meses)
 
 | Servicio | Plan | $/mes USD | Total ARS |
 |----------|------|-----------|-----------|

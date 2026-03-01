@@ -2,7 +2,9 @@
 
 ## Resumen
 
-De los **50 casos de uso** documentados, **13 son prioritarios para el MVP** (6 funciones):
+De los **50 casos de uso** documentados, **10 son prioritarios para el MVP** (5 funciones):
+
+> Nota: REGISTRACION no tiene casos de uso formales con ID asignado en este documento. El flujo de registro se describe en la seccion "Flujo Principal del MVP" pero no esta representado como CU-Rxx. Queda pendiente formalizarlo si se requiere trazabilidad completa.
 
 ---
 
@@ -20,12 +22,14 @@ De los **50 casos de uso** documentados, **13 son prioritarios para el MVP** (6 
 | CU-E06 | Trabajador busca taller | Trabajador | ❌ |
 | CU-E07 | Consumidor busca marcas éticas | Consumidor | ❌ |
 
-### ACORDAR (5 casos totales, 2 en MVP)
+### ACORDAR (5 casos totales, 0 en MVP)
+
+> ACORDAR no entra en MVP. Los acuerdos se gestionan fuera de la plataforma.
 
 | ID | Caso | Actor | MVP |
 |----|------|-------|-----|
-| CU-A01 | Marca y taller firman contrato | Marca + Taller | ✅ |
-| CU-A02 | Precio justo con calculadora | Marca | ✅ |
+| CU-A01 | Marca y taller firman contrato | Marca + Taller | ❌ |
+| CU-A02 | Precio justo con calculadora | Marca | ❌ |
 | CU-A03 | Contrato multi-parte (cooperativas) | Cooperativas | ❌ |
 | CU-A04 | Estado firma contrato compra pública | Estado | ❌ |
 | CU-A05 | Renegociación de condiciones | Marca + Taller | ❌ |
@@ -39,16 +43,18 @@ De los **50 casos de uso** documentados, **13 son prioritarios para el MVP** (6 
 | CU-X03 | Sistema detecta retraso y alerta | Sistema | ❌ |
 | CU-X04 | Producción distribuida entre talleres | Cooperativas | ❌ |
 
-### PAGAR (4 casos totales, 1 en MVP)
+### PAGAR (4 casos totales, 0 en MVP)
+
+> PAGAR no entra en MVP. Los pagos se gestionan fuera de la plataforma.
 
 | ID | Caso | Actor | MVP |
 |----|------|-------|-----|
-| CU-P01 | Pago por hitos completados | Marca + Taller | ✅ |
+| CU-P01 | Pago por hitos completados | Marca + Taller | ❌ |
 | CU-P02 | Escrow garantiza fondos | Sistema | ❌ |
 | CU-P03 | Disputa de calidad | Marca + Taller | ❌ |
 | CU-P04 | Historial para crédito bancario | Taller + Banco | ❌ |
 
-### COMPLIANCE (8 casos totales, 2 en MVP)
+### ACOMPAÑAR (8 casos totales, 2 en MVP)
 
 | ID | Caso | Actor | MVP |
 |----|------|-------|-----|
@@ -116,22 +122,22 @@ FLUJO TRANSACCIONAL:
    → Filtra por: formalización, capacidad, ubicación
    → Notifica a talleres por WhatsApp + Email
 
-3. TALLER cotiza y acepta (ACORDAR)
-   → Sistema muestra precio de referencia
+3. TALLER cotiza y acepta [FUERA DE PLATAFORMA]
+   → ACORDAR no entra en MVP
+   → La negociacion y acuerdo se resuelven por WhatsApp/email
 
-4. CONTRATO se firma digitalmente (ACORDAR)
-   → Condiciones, hitos, pagos
-   → Notificación por WhatsApp a ambas partes
+4. CONTRATO se gestiona fuera de la plataforma [FUERA DE PLATAFORMA]
+   → ACORDAR no entra en MVP
+   → Condiciones, hitos y pagos se pactan por fuera
 
 5. TALLER produce y entrega
    → Marca avance manualmente
    → Sube foto de entrega
 
-6. MARCA confirma recepción (PAGAR)
-   → Marca registra que pagó (fuera del sistema)
-   → Taller confirma recepción de pago
-   → Pedido completado
-   → (Fase 1: Mercado Pago con escrow automático)
+6. PAGO se gestiona fuera de la plataforma [FUERA DE PLATAFORMA]
+   → PAGAR no entra en MVP
+   → Marca paga por transferencia/efectivo
+   → La plataforma no interviene en el cobro
 
 7. ESTADO monitorea (FISCALIZAR)
    → Dashboard con alertas de anomalías
@@ -150,6 +156,8 @@ FLUJO PARALELO - COMUNIDAD DE APRENDIZAJE:
     → Aparece en su perfil público
 ```
 
+> Nota: ACORDAR y PAGAR no entran en MVP. Los acuerdos y pagos se gestionan fuera de la plataforma.
+
 ---
 
 ## Criterios de Aceptación MVP
@@ -159,17 +167,7 @@ FLUJO PARALELO - COMUNIDAD DE APRENDIZAJE:
 - [ ] Sistema devuelve ≥3 talleres compatibles en <10 segundos
 - [ ] Taller recibe notificación de oportunidad
 
-### Para ACORDAR
-- [ ] Contrato incluye: alcance, precio, plazo, hitos
-- [ ] Ambas partes firman digitalmente
-- [ ] Precio de referencia se muestra automáticamente
-
-### Para PAGAR
-- [ ] Marca puede pagar vía plataforma
-- [ ] Taller recibe notificación de pago
-- [ ] Historial de pagos visible para ambos
-
-### Para COMPLIANCE
+### Para ACOMPAÑAR
 - [ ] Taller ve checklist con % completado
 - [ ] Sistema valida CUIT en AFIP automáticamente
 - [ ] Muestra qué falta para subir de nivel

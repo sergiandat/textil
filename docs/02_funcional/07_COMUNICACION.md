@@ -7,7 +7,7 @@ La plataforma utiliza **4 canales de comunicación** para conectar marcas, talle
 | Canal | Tecnología | Uso principal |
 |-------|------------|---------------|
 | **Portal Web** | Next.js (responsive) | Interface principal |
-| **WhatsApp** | Twilio | Notificaciones urgentes |
+| **WhatsApp** | wa.me click-to-chat | Contacto directo (links) |
 | **Email** | Resend/SendGrid | Confirmaciones y documentos |
 | **In-App** | Notificaciones UI | Alertas en tiempo real |
 
@@ -226,10 +226,15 @@ El usuario puede configurar cómo recibir notificaciones:
 
 | Componente | Tecnología | Costo |
 |------------|------------|-------|
-| WhatsApp | Twilio API | ~$0.05/mensaje |
-| Email | Resend | $20/mes (incluido) |
+| WhatsApp | wa.me click-to-chat | Sin costo (links directos) |
+| Email | SendGrid | Free tier (100/día) |
 | In-App | Supabase Realtime | Incluido en Pro |
 | Cola de mensajes | Supabase Edge Functions | Incluido |
+
+> **Nota (DEC-004):** WhatsApp se implementa como links wa.me, no como API
+> programática. No hay envío automático de mensajes, solo se abre WhatsApp
+> del usuario con un mensaje pre-armado. Los templates de abajo son
+> referencia para Fase 1 si se decide integrar API.
 
 ### Rate limiting
 
