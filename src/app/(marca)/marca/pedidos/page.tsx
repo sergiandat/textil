@@ -10,7 +10,6 @@ import Link from 'next/link'
 const statusVariant: Record<string, 'default' | 'success' | 'warning'> = {
   BORRADOR: 'default',
   EN_EJECUCION: 'warning',
-  ESPERANDO_ENTREGA: 'warning',
   COMPLETADO: 'success',
   CANCELADO: 'warning',
 }
@@ -18,12 +17,11 @@ const statusVariant: Record<string, 'default' | 'success' | 'warning'> = {
 const statusLabel: Record<string, string> = {
   BORRADOR: 'Borrador',
   EN_EJECUCION: 'En ejecución',
-  ESPERANDO_ENTREGA: 'Esperando entrega',
   COMPLETADO: 'Completado',
   CANCELADO: 'Cancelado',
 }
 
-const allowedEstados = ['BORRADOR', 'EN_EJECUCION', 'ESPERANDO_ENTREGA', 'COMPLETADO', 'CANCELADO'] as const
+const allowedEstados = ['BORRADOR', 'EN_EJECUCION', 'COMPLETADO', 'CANCELADO'] as const
 
 type SearchParams = {
   q?: string

@@ -26,7 +26,6 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       where: { pedidoId: id },
       include: {
         taller: { select: { id: true, nombre: true, nivel: true } },
-        hitos: true,
       },
       orderBy: { createdAt: 'asc' },
     })

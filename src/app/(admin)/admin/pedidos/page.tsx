@@ -25,7 +25,6 @@ const estadoVariant: Record<string, 'success' | 'warning' | 'default'> = {
   COMPLETADO: 'success',
   EN_EJECUCION: 'warning',
   BORRADOR: 'default',
-  ESPERANDO_ENTREGA: 'warning',
   CANCELADO: 'warning',
 }
 
@@ -84,7 +83,6 @@ export default function AdminPedidosPage() {
             { value: '', label: 'Todos los estados' },
             { value: 'BORRADOR', label: 'Borrador' },
             { value: 'EN_EJECUCION', label: 'En ejecución' },
-            { value: 'ESPERANDO_ENTREGA', label: 'Esperando entrega' },
             { value: 'COMPLETADO', label: 'Completado' },
             { value: 'CANCELADO', label: 'Cancelado' },
           ]}

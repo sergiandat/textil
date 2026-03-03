@@ -13,7 +13,6 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
         ordenes: {
           include: {
             taller: { select: { id: true, nombre: true } },
-            hitos: true,
           },
           orderBy: { createdAt: 'asc' },
         },

@@ -18,7 +18,6 @@ async function main() {
   await prisma.video.deleteMany()
   await prisma.coleccion.deleteMany()
   await prisma.validacion.deleteMany()
-  await prisma.escrowHito.deleteMany()
   await prisma.ordenManufactura.deleteMany()
   await prisma.pedido.deleteMany()
   await prisma.maquinaria.deleteMany()
@@ -176,13 +175,6 @@ async function main() {
       moId: 'MO-1', pedidoId: pedido.id, tallerId: taller1.id, proceso: 'Corte + Confección',
       estado: 'EN_EJECUCION', progreso: 75, precio: 850000, plazoDias: 12, diasTranscurridos: 9, verificacionSst: true,
     },
-  })
-
-  await prisma.escrowHito.createMany({
-    data: [
-      { ordenManufacturaId: orden.id, nombre: 'Corte', porcentaje: 50, monto: 425000, estado: 'PENDIENTE' },
-      { ordenManufacturaId: orden.id, nombre: 'Confección', porcentaje: 50, monto: 425000, estado: 'PENDIENTE' },
-    ],
   })
 
   // ============================================

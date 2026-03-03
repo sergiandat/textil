@@ -28,7 +28,6 @@ enum NivelTaller {
 enum EstadoPedido {
   BORRADOR
   EN_EJECUCION
-  ESPERANDO_ENTREGA
   COMPLETADO
   CANCELADO
 }
@@ -38,13 +37,6 @@ enum EstadoOrdenManufactura {
   EN_EJECUCION
   COMPLETADO
   CANCELADO
-}
-
-enum EstadoEscrow {
-  BLOQUEADO
-  PENDIENTE
-  LIBERADO
-  DISPUTADO
 }
 
 enum EstadoValidacion {
@@ -152,6 +144,7 @@ model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+  type       String   @default("EMAIL_VERIFICATION")
 
   @@unique([identifier, token])
   @@map("verification_tokens")
@@ -372,22 +365,8 @@ model OrdenManufactura {
 
   pedido          Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
   taller          Taller   @relation(fields: [tallerId], references: [id])
-  hitos           EscrowHito[]
 
   @@map("ordenes_manufactura")
-}
-
-model EscrowHito {
-  id                  String       @id @default(cuid())
-  ordenManufacturaId  String
-  nombre              String
-  porcentaje          Float
-  monto               Float
-  estado              EstadoEscrow @default(BLOQUEADO)
-
-  ordenManufactura OrdenManufactura @relation(fields: [ordenManufacturaId], references: [id], onDelete: Cascade)
-
-  @@map("escrow_hitos")
 }
 
 // ============================================
