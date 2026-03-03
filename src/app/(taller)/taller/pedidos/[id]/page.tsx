@@ -42,7 +42,7 @@ export default async function TallerOrdenDetallePage({
     include: {
       pedido: {
         include: {
-          marca: { select: { nombre: true } },
+          marca: { select: { nombre: true, user: { select: { phone: true } } } },
         },
       },
     },
@@ -159,6 +159,26 @@ export default async function TallerOrdenDetallePage({
           />
         </div>
       )}
+
+      {/* Contacto marca */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+        <h2 className="font-overpass font-semibold text-gray-700 text-sm uppercase mb-3">
+          Contacto marca
+        </h2>
+        <p className="text-sm font-medium text-gray-800 mb-3">{pedido.marca.nombre}</p>
+        {pedido.marca.user.phone ? (
+          <a
+            href={`https://wa.me/${pedido.marca.user.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola, te contacto por la orden ${orden.moId} del pedido ${pedido.omId}.`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+          >
+            Contactar por WhatsApp
+          </a>
+        ) : (
+          <p className="text-sm text-gray-400">La marca no tiene teléfono registrado.</p>
+        )}
+      </div>
 
       {orden.estado === 'COMPLETADO' && (
         <div className="rounded-xl bg-green-50 border border-green-200 p-4 text-center">
