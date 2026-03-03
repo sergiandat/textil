@@ -1,0 +1,461 @@
+/* ===========================================
+   SISTEMA DE FEEDBACK INTEGRADO - MVP v1.1
+   Estilos para botón flotante, panel lateral y modales
+   =========================================== */
+
+/* Botón flotante */
+.feedback-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sky-600) 0%, var(--sky-700) 100%);
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+  z-index: 999;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+}
+
+.feedback-button:active {
+  transform: scale(0.95);
+}
+
+.feedback-button.has-responses {
+  background: linear-gradient(135deg, var(--emerald-600) 0%, var(--emerald-700) 100%);
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.4);
+}
+
+/* Badge contador de respuestas */
+.feedback-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--red-600);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+/* Panel lateral */
+.feedback-panel {
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 450px;
+  height: 100vh;
+  background: white;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback-panel.open {
+  right: 0;
+}
+
+/* Header del panel */
+.feedback-panel-header {
+  background: var(--sky-600);
+  color: white;
+  padding: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-panel-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-panel-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.feedback-panel-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Contenido del panel */
+.feedback-panel-content {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.feedback-section {
+  margin-bottom: 2rem;
+}
+
+.feedback-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Preguntas */
+.feedback-question {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--slate-50);
+  border-radius: 0.75rem;
+  border: 1px solid var(--slate-200);
+}
+
+.feedback-question-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--slate-900);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.feedback-question-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--slate-300);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background: white;
+  transition: all 0.2s;
+}
+
+.feedback-question-input:focus {
+  outline: none;
+  border-color: var(--sky-500);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.feedback-question-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Checkboxes y radios */
+.feedback-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feedback-option {
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.feedback-option:hover {
+  background: white;
+}
+
+.feedback-option input[type="checkbox"],
+.feedback-option input[type="radio"] {
+  margin-top: 0.25rem;
+  cursor: pointer;
+}
+
+.feedback-option-label {
+  font-size: 0.875rem;
+  color: var(--slate-700);
+  cursor: pointer;
+  flex: 1;
+}
+
+/* Estado guardado */
+.feedback-saved-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--emerald-700);
+  background: var(--emerald-50);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Footer del panel */
+.feedback-panel-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--slate-200);
+  background: var(--slate-50);
+  position: sticky;
+  bottom: 0;
+}
+
+.feedback-save-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--sky-600);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.feedback-save-btn:hover {
+  background: var(--sky-700);
+}
+
+.feedback-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modal contextual */
+.feedback-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  animation: fadeIn 0.2s ease;
+}
+
+.feedback-modal {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.feedback-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--slate-900);
+  margin-bottom: 0.5rem;
+}
+
+.feedback-modal-subtitle {
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  margin-bottom: 1.5rem;
+}
+
+.feedback-modal-content {
+  margin-bottom: 1.5rem;
+}
+
+.feedback-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.feedback-modal-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.feedback-modal-btn-cancel {
+  background: var(--slate-200);
+  color: var(--slate-700);
+}
+
+.feedback-modal-btn-cancel:hover {
+  background: var(--slate-300);
+}
+
+.feedback-modal-btn-save {
+  background: var(--sky-600);
+  color: white;
+}
+
+.feedback-modal-btn-save:hover {
+  background: var(--sky-700);
+}
+
+/* Toast de confirmación */
+.feedback-toast {
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  background: var(--emerald-600);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1002;
+  animation: slideInRight 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.feedback-toast.error {
+  background: var(--red-600);
+}
+
+/* Exportar feedback */
+.feedback-export-section {
+  padding: 1.5rem;
+  background: var(--sky-50);
+  border: 2px dashed var(--sky-300);
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.feedback-export-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--slate-900);
+  margin-bottom: 0.5rem;
+}
+
+.feedback-export-subtitle {
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  margin-bottom: 1rem;
+}
+
+.feedback-export-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--sky-600);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-export-btn:hover {
+  background: var(--sky-700);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+/* Contador de respuestas */
+.feedback-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  margin-top: 1rem;
+}
+
+.feedback-count-number {
+  font-weight: 600;
+  color: var(--sky-600);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feedback-panel {
+    width: 100%;
+    right: -100%;
+  }
+
+  .feedback-button {
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+
+  .feedback-modal {
+    width: 95%;
+    padding: 1.5rem;
+  }
+}
