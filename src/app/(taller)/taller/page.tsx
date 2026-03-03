@@ -202,13 +202,14 @@ export default async function TallerDashboardPage() {
           </div>
           <div className="space-y-3">
             {taller.ordenesManufactura.map((orden) => (
-              <div
+              <Link
                 key={orden.id}
-                className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center justify-between"
+                href={`/taller/pedidos/${orden.id}`}
+                className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center justify-between hover:border-brand-blue hover:shadow-md transition-all"
               >
                 <div>
-                  <p className="font-semibold text-gray-800 text-sm">{orden.pedido.omId}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{orden.pedido.tipoPrenda}</p>
+                  <p className="font-semibold text-gray-800 text-sm">{orden.moId}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{orden.pedido.omId} · {orden.pedido.tipoPrenda}</p>
                 </div>
                 <span
                   className={`text-xs font-semibold px-3 py-1 rounded-full ${
@@ -219,7 +220,7 @@ export default async function TallerDashboardPage() {
                 >
                   {orden.estado === 'EN_EJECUCION' ? 'En ejecución' : 'Pendiente'}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
