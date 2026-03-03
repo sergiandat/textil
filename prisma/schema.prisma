@@ -105,6 +105,7 @@ model User {
   sessions      Session[]
   notificaciones Notificacion[]
   logs          LogActividad[]
+  auditorias    Auditoria[]    @relation("AuditoriaInspector")
 
   @@map("users")
 }
@@ -242,8 +243,9 @@ model ProcesoProductivo {
   tiempoEstimado500u String?
   activo      Boolean  @default(true)
 
-  talleres    TallerProceso[]
+  talleres       TallerProceso[]
   prendaProcesos PrendaProceso[]
+  ordenes        OrdenManufactura[]
 
   @@map("procesos_productivos")
 }
@@ -257,6 +259,7 @@ model TipoPrenda {
 
   talleres        TallerPrenda[]
   procesos        PrendaProceso[]
+  pedidos         Pedido[]
 
   @@map("tipos_prenda")
 }
@@ -332,6 +335,7 @@ model Pedido {
   omId          String       @unique
   marcaId       String
   tipoPrenda    String
+  tipoPrendaId  String?
   cantidad      Int
   fechaCreacion DateTime     @default(now())
   fechaObjetivo DateTime?
@@ -342,6 +346,7 @@ model Pedido {
   updatedAt     DateTime     @updatedAt
 
   marca         Marca        @relation(fields: [marcaId], references: [id])
+  tipoPrendaRel TipoPrenda?  @relation(fields: [tipoPrendaId], references: [id])
   ordenes       OrdenManufactura[]
 
   @@map("pedidos")
@@ -353,6 +358,7 @@ model OrdenManufactura {
   pedidoId        String
   tallerId        String
   proceso         String
+  procesoId       String?
   estado          EstadoOrdenManufactura   @default(PENDIENTE)
   progreso        Float                    @default(0)
   precio          Float                    @default(0)
@@ -363,8 +369,9 @@ model OrdenManufactura {
   createdAt       DateTime                 @default(now())
   updatedAt       DateTime                 @updatedAt
 
-  pedido          Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
-  taller          Taller   @relation(fields: [tallerId], references: [id])
+  pedido          Pedido            @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  taller          Taller            @relation(fields: [tallerId], references: [id])
+  procesoRel      ProcesoProductivo? @relation(fields: [procesoId], references: [id])
 
   @@map("ordenes_manufactura")
 }
@@ -374,17 +381,19 @@ model OrdenManufactura {
 // ============================================
 
 model Validacion {
-  id              String           @id @default(cuid())
-  tallerId        String
-  tipo            String
-  estado          EstadoValidacion @default(NO_INICIADO)
-  detalle         String?
-  documentoUrl    String?
+  id               String           @id @default(cuid())
+  tallerId         String
+  tipo             String
+  tipoDocumentoId  String?
+  estado           EstadoValidacion @default(NO_INICIADO)
+  detalle          String?
+  documentoUrl     String?
   fechaVencimiento DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
-  taller Taller @relation(fields: [tallerId], references: [id], onDelete: Cascade)
+  taller        Taller         @relation(fields: [tallerId], references: [id], onDelete: Cascade)
+  tipoDocumento TipoDocumento? @relation(fields: [tipoDocumentoId], references: [id])
 
   @@unique([tallerId, tipo])
   @@map("validaciones")
@@ -396,6 +405,8 @@ model TipoDocumento {
   descripcion String?
   requerido   Boolean @default(true)
   activo      Boolean @default(true)
+
+  validaciones Validacion[]
 
   @@map("tipos_documento")
 }
@@ -496,7 +507,8 @@ model Auditoria {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
-  taller      Taller @relation(fields: [tallerId], references: [id])
+  taller      Taller  @relation(fields: [tallerId], references: [id])
+  inspector   User?   @relation("AuditoriaInspector", fields: [inspectorId], references: [id])
   acciones    AccionCorrectiva[]
 
   @@map("auditorias")

@@ -18,6 +18,7 @@ async function main() {
   await prisma.video.deleteMany()
   await prisma.coleccion.deleteMany()
   await prisma.validacion.deleteMany()
+  await prisma.tipoDocumento.deleteMany()
   await prisma.ordenManufactura.deleteMany()
   await prisma.pedido.deleteMany()
   await prisma.maquinaria.deleteMany()
@@ -161,18 +162,33 @@ async function main() {
   })
 
   // ============================================
+  // TIPOS DE DOCUMENTO
+  // ============================================
+  const tiposDoc = await Promise.all([
+    prisma.tipoDocumento.create({ data: { nombre: 'CUIT', descripcion: 'Clave Única de Identificación Tributaria', requerido: true } }),
+    prisma.tipoDocumento.create({ data: { nombre: 'HABILITACION_MUNICIPAL', descripcion: 'Habilitación del municipio correspondiente', requerido: true } }),
+    prisma.tipoDocumento.create({ data: { nombre: 'ART', descripcion: 'Aseguradora de Riesgos del Trabajo', requerido: true } }),
+    prisma.tipoDocumento.create({ data: { nombre: 'EMPLEADOS_REGISTRADOS', descripcion: 'Nómina de empleados registrados', requerido: true } }),
+    prisma.tipoDocumento.create({ data: { nombre: 'CERTIFICACION_INTI', descripcion: 'Certificación de calidad del INTI', requerido: false } }),
+  ])
+  const tipoDocMap: Record<string, string> = Object.fromEntries(tiposDoc.map(t => [t.nombre, t.id]))
+
+  // ============================================
   // PEDIDO DE EJEMPLO
   // ============================================
   const pedido = await prisma.pedido.create({
     data: {
-      omId: 'OM-2025-00045', marcaId: marca1.id, tipoPrenda: 'Jean', cantidad: 500,
-      fechaObjetivo: new Date('2025-07-30'), estado: 'EN_EJECUCION', progresoTotal: 60, montoTotal: 2006400,
+      omId: 'OM-2025-00045', marcaId: marca1.id,
+      tipoPrenda: 'Jean/Vaquero', tipoPrendaId: prendas[0].id,
+      cantidad: 500, fechaObjetivo: new Date('2025-07-30'),
+      estado: 'EN_EJECUCION', progresoTotal: 60, montoTotal: 2006400,
     },
   })
 
   const orden = await prisma.ordenManufactura.create({
     data: {
-      moId: 'MO-1', pedidoId: pedido.id, tallerId: taller1.id, proceso: 'Corte + Confección',
+      moId: 'MO-1', pedidoId: pedido.id, tallerId: taller1.id,
+      proceso: 'Corte', procesoId: procesos[0].id,
       estado: 'EN_EJECUCION', progreso: 75, precio: 850000, plazoDias: 12, diasTranscurridos: 9, verificacionSst: true,
     },
   })
@@ -182,13 +198,13 @@ async function main() {
   // ============================================
   await prisma.validacion.createMany({
     data: [
-      { tallerId: taller1.id, tipo: 'CUIT', estado: 'COMPLETADO', detalle: 'Verificado con ARCA - 30-71234567-8' },
-      { tallerId: taller1.id, tipo: 'HABILITACION_MUNICIPAL', estado: 'COMPLETADO', detalle: 'Certificado vigente' },
-      { tallerId: taller1.id, tipo: 'ART', estado: 'COMPLETADO', detalle: 'ART vigente hasta 15/08/2026' },
-      { tallerId: taller1.id, tipo: 'EMPLEADOS_REGISTRADOS', estado: 'COMPLETADO', detalle: '12 empleados registrados' },
-      { tallerId: taller2.id, tipo: 'CUIT', estado: 'COMPLETADO', detalle: 'Verificado con ARCA' },
-      { tallerId: taller2.id, tipo: 'HABILITACION_MUNICIPAL', estado: 'PENDIENTE' },
-      { tallerId: taller2.id, tipo: 'ART', estado: 'COMPLETADO', detalle: 'ART vigente' },
+      { tallerId: taller1.id, tipo: 'CUIT', tipoDocumentoId: tipoDocMap['CUIT'], estado: 'COMPLETADO', detalle: 'Verificado con ARCA - 30-71234567-8' },
+      { tallerId: taller1.id, tipo: 'HABILITACION_MUNICIPAL', tipoDocumentoId: tipoDocMap['HABILITACION_MUNICIPAL'], estado: 'COMPLETADO', detalle: 'Certificado vigente' },
+      { tallerId: taller1.id, tipo: 'ART', tipoDocumentoId: tipoDocMap['ART'], estado: 'COMPLETADO', detalle: 'ART vigente hasta 15/08/2026' },
+      { tallerId: taller1.id, tipo: 'EMPLEADOS_REGISTRADOS', tipoDocumentoId: tipoDocMap['EMPLEADOS_REGISTRADOS'], estado: 'COMPLETADO', detalle: '12 empleados registrados' },
+      { tallerId: taller2.id, tipo: 'CUIT', tipoDocumentoId: tipoDocMap['CUIT'], estado: 'COMPLETADO', detalle: 'Verificado con ARCA' },
+      { tallerId: taller2.id, tipo: 'HABILITACION_MUNICIPAL', tipoDocumentoId: tipoDocMap['HABILITACION_MUNICIPAL'], estado: 'PENDIENTE' },
+      { tallerId: taller2.id, tipo: 'ART', tipoDocumentoId: tipoDocMap['ART'], estado: 'COMPLETADO', detalle: 'ART vigente' },
     ],
   })
 
@@ -220,19 +236,6 @@ async function main() {
       ],
       puntajeMinimo: 60,
     },
-  })
-
-  // ============================================
-  // TIPOS DE DOCUMENTO
-  // ============================================
-  await prisma.tipoDocumento.createMany({
-    data: [
-      { nombre: 'CUIT', descripcion: 'Clave Única de Identificación Tributaria', requerido: true },
-      { nombre: 'Habilitación Municipal', descripcion: 'Habilitación del municipio correspondiente', requerido: true },
-      { nombre: 'ART', descripcion: 'Aseguradora de Riesgos del Trabajo', requerido: true },
-      { nombre: 'Registro Empleados', descripcion: 'Nómina de empleados registrados', requerido: true },
-      { nombre: 'Certificación INTI', descripcion: 'Certificación de calidad del INTI', requerido: false },
-    ],
   })
 
   console.log('Seed completed successfully!')
