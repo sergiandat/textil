@@ -498,6 +498,7 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 ## SPRINTS SUGERIDOS
 
 ### Sprint 1 — Seguridad + Flujos criticos — ✅ COMPLETADO (2026-02-25)
+
 1. ~~Corregir auth en APIs expuestas (auditorias, validaciones, denuncias, certificados POST, ordenes)~~ ✅
 2. ~~Agregar ownership checks en PUT (talleres, marcas, pedidos, validaciones)~~ ✅
 3. ~~Password reset completo (API + lib/email.ts + pagina /restablecer/[token])~~ ✅
@@ -507,7 +508,7 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 7. ~~Motor calculo nivel BRONCE/PLATA/ORO (lib/nivel.ts)~~ ✅
 8. ~~Fix middleware: landing page / accesible sin auth~~ ✅
 
-### Sprint 2 — Integraciones core (EN CURSO — 2026-03-04)
+### Sprint 2 — Integraciones core (Sergio: ✅ COMPLETO — 2026-03-04)
 1. SendGrid: ampliar lib/email.ts con templates (bienvenida, doc aprobado/rechazado, certificado, vencimiento)
 2. ARCA: lib/arca.ts + verificacion CUIT en registro
 3. QR: lib/qr.ts + generacion certificados
@@ -520,6 +521,7 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 10. ~~Detalle orden /taller/pedidos/[id]: card contacto WhatsApp marca~~ ✅ S2-05
 11. ~~Fix registro: validar CUIT (11 digitos), checkbox terminos, persistir datos entre pasos~~ ✅ S2-11 (ya committeado)
 12. ~~Schema IntentoEvaluacion + integrar en POST evaluacion~~ ✅ S2-09
+13. ~~Reemplazar procesos hardcodeados en asignar-taller por catalogo BD~~ ✅ S2-12
 
 ### Sprint 3 — Admin funcional
 1. ~~Admin talleres/[id]: cargar datos reales + aprobar/rechazar~~ ✅ (ya hecho)
