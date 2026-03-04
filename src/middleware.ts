@@ -21,7 +21,8 @@ export default auth((req) => {
     '/privacidad',
     '/verificar',
     '/directorio',
-    '/perfil/',  // Perfil público /perfil/[id]
+    '/perfil/',        // Perfil público taller /perfil/[id]
+    '/perfil-marca/',  // Perfil público marca /perfil-marca/[id]
   ]
 
   // Verificar si es ruta pública (incluyendo rutas dinámicas)
