@@ -87,6 +87,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const calificacion = Math.round((correctas / preguntas.length) * 100)
     const aprobado = calificacion >= coleccion.evaluacion.puntajeMinimo
 
+    // Guardar intento (aprobado o no)
+    await prisma.intentoEvaluacion.create({
+      data: { tallerId: taller.id, coleccionId, respuestas, calificacion, aprobado },
+    })
+
     if (aprobado) {
       // Generar certificado
       const codigo = `PDT-${taller.id.slice(0, 6).toUpperCase()}-${coleccionId.slice(0, 6).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`
