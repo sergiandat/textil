@@ -12,8 +12,8 @@ Prioridad: P0 = bloqueante | P1 = critico | P2 = importante | P3 = deseable
 **Login** `/login` — **OK**
 Form con email + password, validacion Zod, signIn('credentials') via NextAuth. Muestra banner verde si viene de registro (?registered=true). Maneja callbackUrl para redirect post-login. Bug menor: password min 6 en frontend pero API exige min 8.
 
-**Registro** `/registro` — **PARCIAL** — P1
-Wizard de 3 pasos implementado en UI (contradice CLAUDE.md que dice "1 paso"): Paso 1 elige rol (TALLER/MARCA), Paso 2 datos personales (nombre, email, password, phone), Paso 3 datos de taller o marca (nombre, CUIT, ubicacion, capacidad/tipo). POST a /api/auth/registro crea User + Taller/Marca en transaccion. Falta: CUIT no valida formato (acepta cualquier string), ubicacion es texto libre sin selector de provincia/ciudad, no hay checkbox terminos y condiciones, password min 6 en frontend vs 8 en API causa error confuso, si se vuelve del paso 3 al 2 y se avanza se pierden los datos del paso 3.
+**Registro** `/registro` — **OK** ✅ Sprint 2 (S2-11)
+Wizard de 3 pasos: Paso 1 elige rol (TALLER/MARCA), Paso 2 datos personales, Paso 3 datos de taller o marca. POST a /api/auth/registro crea User + Taller/Marca en transaccion. CUIT validado con regex (11 digitos, acepta XX-XXXXXXXX-X o sin guiones). Password min 8 alineado con API. Checkbox terminos obligatorio con Zod refine. Datos del paso 2 se preservan al volver del paso 3 via defaultValues. Pendiente: ubicacion sigue siendo texto libre (sin selector provincia/ciudad).
 
 **Registro Paso 2 (CUIT)** — **FALTA** — P1
 El wireframe MVP pide un paso dedicado a verificacion CUIT contra ARCA. Actualmente CUIT se pide como texto libre en paso 3. Requiere integracion ARCA.
@@ -392,7 +392,7 @@ lib/maps.ts geocoding. Mapa embed en perfil publico taller. Env: GOOGLE_MAPS_API
 | ~~TipoDocumento sin relacion a Validacion~~ | P2 | **RESUELTO** Sprint 2 (S2-04) — agregado tipoDocumentoId FK nullable + nombres normalizados a SNAKE_UPPER |
 | Modelo FAQ | P3 | No existe. Necesita: pregunta, respuesta, categoria, orden, activo |
 | Modelo NotaInterna | P3 | Para notas admin en talleres/marcas |
-| Modelo IntentoEvaluacion | P2 | Tracking multiples intentos quiz por taller por coleccion — pendiente S2-09 |
+| ~~Modelo IntentoEvaluacion~~ | P2 | **RESUELTO** Sprint 2 (S2-09) — modelo + back-relations en Taller/Coleccion + persist en POST evaluacion |
 | Modelo CampanaNotificacion | P3 | Tracking envio masivo (sent/delivered/opened/clicked) |
 | Relacion MarcaTallerFavorito | P3 | M:M para favoritos |
 | Modelo ESTADO profile | P3 | TALLER tiene Taller, MARCA tiene Marca, ESTADO no tiene perfil |
@@ -482,11 +482,11 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 
 | Categoria | OK | PARCIAL | STUB | FALTA |
 |-----------|-----|---------|------|-------|
-| 1. Pantallas (70) | 24 | 7 | 20 | 19 |
+| 1. Pantallas (70) | 25 | 6 | 20 | 19 |
 | 2. Backend/API (26 rutas + 10 faltantes) | 18 | 4 | 0 | 10 |
 | 3. Integraciones (7) | 0 | 1 | 0 | 6 |
 | 4. Auth/Seguridad (8) | 5 | 1 | 0 | 2 |
-| 5. Schema (13 gaps, 6 resueltos Sprint 2) | — | 0 | 0 | 7 |
+| 5. Schema (13 gaps, 7 resueltos Sprint 2) | — | 0 | 0 | 6 |
 | 6. UX/Frontend (12) | 2 | 5 | 0 | 5 |
 | 7. Testing (12) | 0 | 0 | 0 | 12 |
 | 8. Deploy/Infra (11) | 5 | 2 | 0 | 4 |
@@ -498,6 +498,7 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 ## SPRINTS SUGERIDOS
 
 ### Sprint 1 — Seguridad + Flujos criticos — ✅ COMPLETADO (2026-02-25)
+
 1. ~~Corregir auth en APIs expuestas (auditorias, validaciones, denuncias, certificados POST, ordenes)~~ ✅
 2. ~~Agregar ownership checks en PUT (talleres, marcas, pedidos, validaciones)~~ ✅
 3. ~~Password reset completo (API + lib/email.ts + pagina /restablecer/[token])~~ ✅
@@ -507,7 +508,7 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 7. ~~Motor calculo nivel BRONCE/PLATA/ORO (lib/nivel.ts)~~ ✅
 8. ~~Fix middleware: landing page / accesible sin auth~~ ✅
 
-### Sprint 2 — Integraciones core (EN CURSO — 2026-03-04)
+### Sprint 2 — Integraciones core (Sergio: ✅ COMPLETO — 2026-03-04)
 1. SendGrid: ampliar lib/email.ts con templates (bienvenida, doc aprobado/rechazado, certificado, vencimiento)
 2. ARCA: lib/arca.ts + verificacion CUIT en registro
 3. QR: lib/qr.ts + generacion certificados
@@ -518,8 +519,9 @@ No existe ningun test en el proyecto. No hay directorio __tests__, no hay archiv
 8. ~~Schema: VerificationToken.type, EscrowHito removido, FKs normalizadas~~ ✅ S2-01/02/04
 9. ~~Perfil publico marca /perfil-marca/[id] (sin auth, con WhatsApp)~~ ✅ S2-10
 10. ~~Detalle orden /taller/pedidos/[id]: card contacto WhatsApp marca~~ ✅ S2-05
-11. Fix registro: validar CUIT (11 digitos), checkbox terminos, persistir datos entre pasos — pendiente S2-11
-12. Schema IntentoEvaluacion + integrar en POST evaluacion — pendiente S2-09
+11. ~~Fix registro: validar CUIT (11 digitos), checkbox terminos, persistir datos entre pasos~~ ✅ S2-11 (ya committeado)
+12. ~~Schema IntentoEvaluacion + integrar en POST evaluacion~~ ✅ S2-09
+13. ~~Reemplazar procesos hardcodeados en asignar-taller por catalogo BD~~ ✅ S2-12
 
 ### Sprint 3 — Admin funcional
 1. ~~Admin talleres/[id]: cargar datos reales + aprobar/rechazar~~ ✅ (ya hecho)
